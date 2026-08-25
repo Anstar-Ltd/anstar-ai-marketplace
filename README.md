@@ -1,6 +1,6 @@
 # Anstar AI Marketplace
 
-Private MVP marketplace for Anstar plugins, MCP connections, and skills used by ChatGPT Desktop and Codex.
+Public marketplace for Anstar plugins, MCP connections, and skills used by ChatGPT Desktop and Codex. The code and connection metadata are public; CRM access still requires an authorized Anstar Microsoft identity.
 
 ## Current plugin
 
@@ -21,17 +21,17 @@ The MVP connects to Anstar's official Microsoft Dataverse MCP endpoint and suppl
 
 > **MVP limitation:** the upstream Dataverse server still advertises write tools. Codex tool policy hides/disables those tools locally, but this is not a server-side authorization boundary. Users must retain genuinely read-only Dataverse permissions. A filtered Anstar gateway remains a later hardening task.
 
-## Local install
+## Install in the ChatGPT/Codex app
 
-```bash
-codex plugin marketplace add /absolute/path/to/anstar-ai-marketplace
-codex plugin add anstar-sales-crm@anstar-ai
-codex mcp login anstar-dataverse
-```
+1. Open **Plugins Directory** in Work or Codex mode.
+2. Choose **Add marketplace**.
+3. Use source `https://github.com/Anstar-Ltd/anstar-ai-marketplace.git` and Git ref `main`.
+4. Select **Anstar AI**, then install **Anstar Sales CRM**.
+5. Complete Microsoft sign-in and start a new chat.
 
-Then merge the plugin-scoped policy from `config/codex-readonly-policy.toml` into `~/.codex/config.toml` and restart ChatGPT Desktop/Codex.
+The plugin bundles its OAuth client settings, Dataverse scope, and four-tool read policy. Users do not need to edit configuration files. See `docs/INSTALL-FOR-EVERYONE.md` for the click-by-click guide.
 
-For a GitHub-backed install later:
+CLI equivalent for technical testing:
 
 ```bash
 codex plugin marketplace add Anstar-Ltd/anstar-ai-marketplace --ref main
@@ -48,7 +48,7 @@ codex mcp get anstar-dataverse
 
 The first real CRM test was completed through the already-authorized Hermes Dataverse client: `describe` plus a bounded `read_query` returned the newest three accessible opportunities. Do not test by creating or updating a record.
 
-Fresh Codex OAuth remains blocked until its callback and requested `mcp.tools` scope are made compatible with an approved Entra public-client registration.
+Fresh Codex OAuth requires the derived callback in `docs/ENTRA-ADMIN-HANDOFF.md` to be added to the approved Entra public-client registration.
 
 ## Repository scope
 
