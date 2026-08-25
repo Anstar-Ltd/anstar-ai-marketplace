@@ -34,7 +34,7 @@ Then merge the plugin-scoped policy from `config/codex-readonly-policy.toml` int
 For a GitHub-backed install later:
 
 ```bash
-codex plugin marketplace add OWNER/anstar-ai-marketplace --ref main
+codex plugin marketplace add Anstar-Ltd/anstar-ai-marketplace --ref main
 codex plugin add anstar-sales-crm@anstar-ai
 ```
 
