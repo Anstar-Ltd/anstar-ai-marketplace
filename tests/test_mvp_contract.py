@@ -39,6 +39,11 @@ class MvpContractTests(unittest.TestCase):
             "https://anstar-prod.crm11.dynamics.com/api/mcp/mcp.tools",
             server["scopes"],
         )
+        self.assertNotIn(
+            "oauth_resource",
+            server,
+            "Dataverse discovery already supplies the OAuth resource indicator",
+        )
 
     def test_skill_frontmatter_and_read_only_wording(self):
         skills = sorted((PLUGIN / "skills").glob("*/SKILL.md"))
