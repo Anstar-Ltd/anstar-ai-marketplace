@@ -28,6 +28,13 @@ class MvpContractTests(unittest.TestCase):
             {"read_query", "search", "search_data", "describe"},
         )
         self.assertEqual(server["default_tools_approval_mode"], "approve")
+        self.assertEqual(
+            server["oauth"],
+            {
+                "clientId": "65649345-8fb7-477a-820b-5604b5e2afe3",
+                "callbackPort": 8765,
+            },
+        )
         self.assertIn(
             "https://anstar-prod.crm11.dynamics.com/api/mcp/mcp.tools",
             server["scopes"],

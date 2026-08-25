@@ -4,6 +4,10 @@
       "type": "http",
       "url": "https://anstar-prod.crm11.dynamics.com/api/mcp",
       "oauth_resource": "https://anstar-prod.crm11.dynamics.com/api/mcp",
+      "oauth": {
+        "clientId": "65649345-8fb7-477a-820b-5604b5e2afe3",
+        "callbackPort": 8765
+      },
       "scopes": [
         "openid",
         "profile",
