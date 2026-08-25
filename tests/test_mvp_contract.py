@@ -20,6 +20,19 @@ class MvpContractTests(unittest.TestCase):
         for key in ("skills", "mcpServers"):
             self.assertTrue((PLUGIN / manifest[key]).resolve().exists(), key)
 
+    def test_bundled_mcp_policy_is_read_only(self):
+        config = json.loads((PLUGIN / ".mcp.json").read_text())
+        server = config["mcpServers"]["anstar-dataverse"]
+        self.assertEqual(
+            set(server["enabled_tools"]),
+            {"read_query", "search", "search_data", "describe"},
+        )
+        self.assertEqual(server["default_tools_approval_mode"], "approve")
+        self.assertIn(
+            "https://anstar-prod.crm11.dynamics.com/api/mcp/mcp.tools",
+            server["scopes"],
+        )
+
     def test_skill_frontmatter_and_read_only_wording(self):
         skills = sorted((PLUGIN / "skills").glob("*/SKILL.md"))
         self.assertEqual(len(skills), 3)
