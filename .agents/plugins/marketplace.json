@@ -1,0 +1,20 @@
+{
+  "name": "anstar-ai",
+  "interface": {
+    "displayName": "Anstar AI"
+  },
+  "plugins": [
+    {
+      "name": "anstar-sales-crm",
+      "source": {
+        "source": "local",
+        "path": "./plugins/anstar-sales-crm"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

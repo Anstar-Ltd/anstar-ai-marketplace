@@ -1,0 +1,19 @@
+# Merge this policy into the installed plugin's Codex configuration.
+# It is defence-in-depth for the MVP, not a server-side security boundary.
+
+[plugins."anstar-sales-crm@anstar-ai".mcp_servers.anstar-dataverse]
+enabled = true
+default_tools_approval_mode = "prompt"
+enabled_tools = ["read_query", "search", "search_data", "describe"]
+
+[plugins."anstar-sales-crm@anstar-ai".mcp_servers.anstar-dataverse.tools.read_query]
+approval_mode = "approve"
+
+[plugins."anstar-sales-crm@anstar-ai".mcp_servers.anstar-dataverse.tools.search]
+approval_mode = "approve"
+
+[plugins."anstar-sales-crm@anstar-ai".mcp_servers.anstar-dataverse.tools.search_data]
+approval_mode = "approve"
+
+[plugins."anstar-sales-crm@anstar-ai".mcp_servers.anstar-dataverse.tools.describe]
+approval_mode = "approve"

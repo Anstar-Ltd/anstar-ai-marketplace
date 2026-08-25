@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "anstar-dataverse": {
+      "type": "http",
+      "url": "https://anstar-prod.crm11.dynamics.com/api/mcp",
+      "oauth_resource": "https://anstar-prod.crm11.dynamics.com/api/mcp"
+    }
+  }
+}
