@@ -7,7 +7,7 @@ This guide is for non-technical Anstar users. No Terminal or GitHub account is r
 - Install or update the ChatGPT desktop app.
 - Sign in with the ChatGPT workspace/account you use for work.
 - Your Anstar Microsoft account must have the intended CRM read permissions.
-- An Entra administrator must complete the callback setup described in `ENTRA-ADMIN-HANDOFF.md` before Microsoft sign-in can finish.
+- The shared Entra callback configuration is already complete.
 
 ## Add the Anstar marketplace
 
@@ -63,7 +63,7 @@ It must not create, update, or delete CRM records.
 
 - **Anstar AI does not appear:** quit with **⌘Q**, reopen the app, then return to Plugins Directory.
 - **Marketplace already added:** select the existing **Anstar AI** source rather than adding it again.
-- **Microsoft says the redirect URI is invalid:** the Entra admin callback has not been completed.
+- **Microsoft says the redirect URI is invalid:** record the exact message and app version for IT; do not try another account or paste login data into chat.
 - **No CRM records appear:** confirm that the signed-in Anstar user can see those records in Dynamics CRM.
 - **The plugin changed but looks old:** use the marketplace actions to upgrade/refresh **Anstar AI**, then restart the app.
 

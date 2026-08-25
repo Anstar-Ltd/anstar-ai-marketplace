@@ -48,7 +48,7 @@ codex mcp get anstar-dataverse
 
 The first real CRM test was completed through the already-authorized Hermes Dataverse client: `describe` plus a bounded `read_query` returned the newest three accessible opportunities. Do not test by creating or updating a record.
 
-Fresh Codex OAuth requires the derived callback in `docs/ENTRA-ADMIN-HANDOFF.md` to be added to the approved Entra public-client registration.
+Codex OAuth and a bounded live Dataverse read have been verified with the registered callbacks documented in `docs/ENTRA-ADMIN-HANDOFF.md`.
 
 ## Repository scope
 
