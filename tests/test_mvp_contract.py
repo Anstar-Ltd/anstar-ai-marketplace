@@ -47,7 +47,17 @@ class MvpContractTests(unittest.TestCase):
 
     def test_skill_frontmatter_and_read_only_wording(self):
         skills = sorted((PLUGIN / "skills").glob("*/SKILL.md"))
-        self.assertEqual(len(skills), 3)
+        expected = {
+            "analyze-account-signals",
+            "crm-read-safety",
+            "crm-research-router",
+            "index",
+            "prepare-for-meeting",
+            "prioritize-accounts",
+            "sales-help",
+            "weekly-pipeline-review",
+        }
+        self.assertEqual({skill.parent.name for skill in skills}, expected)
         for skill in skills:
             text = skill.read_text()
             match = re.match(r"^---\n(?P<frontmatter>.*?)\n---\n", text, re.S)
@@ -57,6 +67,52 @@ class MvpContractTests(unittest.TestCase):
             self.assertIn("name:", frontmatter)
             self.assertIn("description:", frontmatter)
             self.assertIn("read-only", text.lower(), skill)
+
+    def test_sales_index_routes_every_bounded_mvp_intent(self):
+        index = (PLUGIN / "skills/index/SKILL.md").read_text().lower()
+        routes = {
+            "help": "sales-help",
+            "signals": "analyze-account-signals",
+            "priorities": "prioritize-accounts",
+            "meeting": "prepare-for-meeting",
+            "pipeline": "weekly-pipeline-review",
+            "free-form crm": "crm-research-router",
+        }
+        for intent, skill_name in routes.items():
+            with self.subTest(intent=intent):
+                self.assertIn(skill_name, index)
+        self.assertIn("crm-read-safety", index)
+
+    def test_workflows_compose_the_shared_crm_source_and_safety_policy(self):
+        workflows = {
+            "analyze-account-signals",
+            "crm-research-router",
+            "prepare-for-meeting",
+            "prioritize-accounts",
+            "weekly-pipeline-review",
+        }
+        for name in workflows:
+            with self.subTest(skill=name):
+                text = (PLUGIN / f"skills/{name}/SKILL.md").read_text()
+                self.assertIn("anstar-dataverse", text)
+                self.assertIn("crm-read-safety", text)
+
+    def test_adaptation_carries_openai_mit_notice(self):
+        notice = (ROOT / "THIRD_PARTY_NOTICES.md").read_text()
+        self.assertIn("openai/role-specific-plugins", notice)
+        self.assertIn("Copyright (c) 2026 OpenAI", notice)
+        self.assertIn("MIT License", notice)
+
+    def test_manifest_orients_users_to_the_role_mvp(self):
+        manifest = json.loads((PLUGIN / ".codex-plugin/plugin.json").read_text())
+        self.assertEqual(manifest["version"], "0.2.0-mvp.1")
+        prompts = " ".join(manifest["interface"]["defaultPrompt"]).lower()
+        for phrase in ("what can you do", "what changed", "focus on", "meeting"):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, prompts)
+        serialized = json.dumps(manifest).lower()
+        for irrelevant_provider in ("salesforce", "hubspot", "gong", "zoominfo"):
+            self.assertNotIn(irrelevant_provider, serialized)
 
     def test_codex_policy_enables_only_approved_read_tools(self):
         policy = (ROOT / "config/codex-readonly-policy.toml").read_text()
