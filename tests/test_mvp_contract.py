@@ -97,6 +97,21 @@ class MvpContractTests(unittest.TestCase):
                 self.assertIn("anstar-dataverse", text)
                 self.assertIn("crm-read-safety", text)
 
+    def test_safety_skill_carries_verified_sensitive_field_exclusions(self):
+        safety = (PLUGIN / "skills/crm-read-safety/SKILL.md").read_text().lower()
+        for exclusion in (
+            "activity/email bodies",
+            "recipient/address fields",
+            "notes",
+            "attachments",
+            "mobile/phone numbers",
+            "personal email",
+            "postal addresses",
+        ):
+            with self.subTest(exclusion=exclusion):
+                self.assertIn(exclusion, safety)
+        self.assertIn("not proof of row or secured-field permission", safety)
+
     def test_adaptation_carries_openai_mit_notice(self):
         notice = (ROOT / "THIRD_PARTY_NOTICES.md").read_text()
         self.assertIn("openai/role-specific-plugins", notice)
