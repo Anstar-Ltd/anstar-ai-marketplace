@@ -8,9 +8,13 @@ Public marketplace for Anstar plugins, MCP connections, and skills used by ChatG
 
 Read-only workflows for:
 
-- customer/account briefs;
+- seller help and orientation through a Sales index/router;
+- account-signal analysis and account prioritisation;
+- CRM-backed preparation for a named meeting or account;
 - weekly pipeline review;
-- bounded CRM research with explicit evidence and honest blanks.
+- bounded free-form CRM research with explicit evidence and honest blanks.
+
+The role architecture is a deliberately small adaptation of OpenAI's MIT-licensed Sales role plugin. It keeps focused workflow composition while mapping CRM directly to the existing `anstar-dataverse` MCP; provider placeholders and write-oriented workflows are excluded. Every CRM workflow composes the shared `crm-read-safety` policy. See `THIRD_PARTY_NOTICES.md` for attribution.
 
 The MVP connects to Anstar's official Microsoft Dataverse MCP endpoint and supplies a Codex policy that enables only:
 

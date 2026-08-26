@@ -14,9 +14,11 @@ Capture these without expanding the first installability/read-access proof.
 
 ## Product improvements after MVP feedback
 
-- Dedicated opportunity-review skill.
+- Dedicated opportunity-review skill beyond the bounded weekly review.
 - Better account-name disambiguation.
 - Deterministic stale-opportunity and next-action rules based on live schema.
+- Calendar, email, transcript, messaging, enrichment, and public-research sources where approved; the current role MVP intentionally uses only Dataverse.
+- Follow-up, deal strategy, business cases, forecasting, coaching, outreach, monitoring automations, and CRM writeback remain excluded rather than copied from the upstream Sales plugin.
 - Optional compact table/widget for pipeline review.
 - Usage evaluation set based on Ed's real prompts and expected records.
 - Marketplace branding, icons, privacy policy, terms, release notes, and version upgrade guidance.

@@ -1,16 +1,17 @@
 ---
 name: weekly-pipeline-review
-description: Review pipeline changes and priorities from Anstar CRM.
+description: Review Anstar pipeline risks from read-only CRM evidence.
 ---
 
-Use this read-only skill when a Sales user asks what changed, what needs attention, or where to focus this week.
+# Weekly Pipeline Review
 
-1. Confirm the review period; default to the previous seven days when the user says “this week” without another range.
-2. Use only `search`, `search_data`, `describe`, and `read_query`.
-3. Resolve the authenticated user's ownership/team scope from accessible CRM data; do not assume access to the whole organisation.
-4. Use bounded, explicit-field queries to collect open opportunities and recent relevant activities or modifications.
-5. Prioritise using visible evidence such as stale activity, approaching expected close date, overdue next step, material recent change, or missing key information. Label these as deterministic signals, not a predictive score.
-6. Return a short ordered list with account, opportunity, reason, supporting dates/records, and a suggested next step.
-7. Separate CRM facts from recommendations and state any incomplete data.
+Use this read-only workflow when a seller asks what changed, what needs attention, or where to focus this week. Compose `crm-read-safety` and use `anstar-dataverse` as the pipeline source.
 
-Never mutate CRM. Never infer that a customer was contacted unless an accessible activity proves it.
+1. Confirm the review period; default to the previous seven days when “this week” is otherwise ambiguous.
+2. Resolve the authenticated user's accessible ownership or team scope. Do not assume organisation-wide access.
+3. Use bounded, explicit-field queries for open opportunities and relevant recent activities or modifications; default to 50 opportunities and narrow before expanding.
+4. Assess visible deterministic signals: stale activity, approaching or missed expected close date, overdue or missing next step, stage inconsistency, material recent change, and missing key information. This is not a predictive forecast.
+5. Return: scope and period; pipeline snapshot; ordered opportunities needing attention; meaningful changes; evidence gaps; and suggested planning-only next steps.
+6. Show account, opportunity, owner, stage/status, close date, reason, supporting date/record, and confidence when available.
+
+Never mutate CRM or infer contact without an accessible activity proving it. Separate CRM facts from recommendations.

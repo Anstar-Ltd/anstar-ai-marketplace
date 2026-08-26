@@ -1,7 +1,7 @@
 {
   "name": "anstar-sales-crm",
-  "version": "0.1.0-mvp.3",
-  "description": "Read-only Sales CRM workflows for Anstar.",
+  "version": "0.2.0-mvp.1",
+  "description": "Bounded read-only Sales workflows for Anstar CRM.",
   "author": {
     "name": "Anstar",
     "url": "https://anstar.com"
@@ -13,16 +13,18 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Anstar Sales CRM",
-    "shortDescription": "Read-only account and pipeline research",
-    "longDescription": "Review Anstar CRM accounts, opportunities and activity using evidence-backed read-only workflows.",
+    "shortDescription": "Read-only Sales preparation and priorities",
+    "longDescription": "Use accessible Anstar CRM evidence to analyse account signals, prioritise existing accounts, prepare for named meetings, review weekly pipeline risk, and answer bounded CRM questions without changing records.",
     "developerName": "Anstar",
     "category": "Productivity",
     "capabilities": ["Read"],
     "websiteURL": "https://anstar.com",
     "defaultPrompt": [
-      "Give me a CRM account brief before my next customer call.",
-      "What opportunities need my attention this week?",
-      "Summarise meaningful CRM changes since last week."
+      "What can you do for an Anstar seller?",
+      "What changed for this account in the last 14 days?",
+      "Which accounts should I focus on this week, and why?",
+      "Prepare me for my meeting with this customer.",
+      "Review my open pipeline for the previous seven days."
     ],
     "brandColor": "#0B5CAD"
   }
