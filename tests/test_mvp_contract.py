@@ -5,9 +5,91 @@ import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PLUGIN = ROOT / "plugins" / "anstar-sales-crm"
+DATAVERSE_PLUGIN = ROOT / "plugins" / "anstar-dataverse"
 
 
 class MvpContractTests(unittest.TestCase):
+    def test_dataverse_plugin_owns_the_shared_mcp_connection(self):
+        manifest = json.loads(
+            (DATAVERSE_PLUGIN / ".codex-plugin/plugin.json").read_text()
+        )
+        self.assertEqual(manifest["name"], "anstar-dataverse")
+        self.assertEqual(manifest["mcpServers"], "./.mcp.json")
+        self.assertTrue((DATAVERSE_PLUGIN / manifest["mcpServers"]).exists())
+        self.assertTrue((DATAVERSE_PLUGIN / manifest["skills"]).is_dir())
+
+        serialized = json.dumps(manifest).lower()
+        for sales_only_phrase in ("seller", "meeting", "pipeline", "prioritize"):
+            self.assertNotIn(sales_only_phrase, serialized)
+
+    def test_dataverse_plugin_preserves_the_proven_read_policy(self):
+        config = json.loads((DATAVERSE_PLUGIN / ".mcp.json").read_text())
+        server = config["mcpServers"]["anstar-dataverse"]
+        self.assertEqual(
+            server["url"],
+            "https://anstar-prod.crm11.dynamics.com/api/mcp",
+        )
+        self.assertEqual(
+            set(server["enabled_tools"]),
+            {"read_query", "search", "search_data", "describe"},
+        )
+        self.assertEqual(server["default_tools_approval_mode"], "approve")
+        self.assertEqual(
+            server["oauth"],
+            {
+                "clientId": "65649345-8fb7-477a-820b-5604b5e2afe3",
+                "callbackPort": 8765,
+            },
+        )
+        self.assertEqual(
+            server["scopes"],
+            [
+                "openid",
+                "profile",
+                "offline_access",
+                "https://anstar-prod.crm11.dynamics.com/api/mcp/mcp.tools",
+            ],
+        )
+        self.assertNotIn("oauth_resource", server)
+
+    def test_dataverse_plugin_has_role_neutral_source_skills(self):
+        expected = {"index", "crm-read-safety", "dataverse-research"}
+        skills = sorted((DATAVERSE_PLUGIN / "skills").glob("*/SKILL.md"))
+        self.assertEqual({skill.parent.name for skill in skills}, expected)
+        for skill in skills:
+            text = skill.read_text()
+            match = re.match(r"^---\n(?P<frontmatter>.*?)\n---\n", text, re.S)
+            if match is None:
+                self.fail(f"Missing frontmatter: {skill}")
+            self.assertIn("name:", match.group("frontmatter"))
+            self.assertIn("description:", match.group("frontmatter"))
+            self.assertIn("read-only", text.lower(), skill)
+
+        source_text = "\n".join(skill.read_text().lower() for skill in skills)
+        for sales_only_phrase in (
+            "meeting preparation",
+            "prioritize accounts",
+            "weekly pipeline",
+        ):
+            self.assertNotIn(sales_only_phrase, source_text)
+
+    def test_dataverse_safety_carries_sensitive_field_exclusions(self):
+        safety = (
+            DATAVERSE_PLUGIN / "skills/crm-read-safety/SKILL.md"
+        ).read_text().lower()
+        for exclusion in (
+            "activity/email bodies",
+            "recipient/address fields",
+            "notes",
+            "attachments",
+            "mobile/phone numbers",
+            "personal email",
+            "postal addresses",
+        ):
+            with self.subTest(exclusion=exclusion):
+                self.assertIn(exclusion, safety)
+        self.assertIn("not proof of row or secured-field permission", safety)
+
     def test_marketplace_points_to_existing_plugin(self):
         marketplace = json.loads((ROOT / ".agents/plugins/marketplace.json").read_text())
         entry = marketplace["plugins"][0]
