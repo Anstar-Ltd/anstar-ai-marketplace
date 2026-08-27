@@ -1,0 +1,30 @@
+{
+  "name": "anstar-sales",
+  "version": "0.1.0-mvp.1",
+  "description": "Bounded read-only workflows for Anstar sellers.",
+  "author": {
+    "name": "Anstar",
+    "url": "https://anstar.com"
+  },
+  "homepage": "https://anstar.com",
+  "license": "UNLICENSED",
+  "keywords": ["anstar", "sales", "crm", "read-only"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Anstar Sales",
+    "shortDescription": "Preparation and priorities for sellers",
+    "longDescription": "Use approved customer evidence to analyse account signals, prioritise accounts, prepare for named meetings, review weekly pipeline risk, and answer bounded Sales questions without changing records.",
+    "developerName": "Anstar",
+    "category": "Productivity",
+    "capabilities": ["Read"],
+    "websiteURL": "https://anstar.com",
+    "defaultPrompt": [
+      "What can you do for an Anstar seller?",
+      "What changed for this account in the last 14 days?",
+      "Which accounts should I focus on this week, and why?",
+      "Prepare me for my meeting with this customer.",
+      "Review my open pipeline for the previous seven days."
+    ],
+    "brandColor": "#0B5CAD"
+  }
+}
