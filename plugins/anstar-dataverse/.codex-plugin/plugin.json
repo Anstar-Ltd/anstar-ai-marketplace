@@ -1,0 +1,29 @@
+{
+  "name": "anstar-dataverse",
+  "version": "0.1.0-mvp.1",
+  "description": "Bounded read-only access to Anstar Dataverse.",
+  "author": {
+    "name": "Anstar",
+    "url": "https://anstar.com"
+  },
+  "homepage": "https://anstar.com",
+  "license": "UNLICENSED",
+  "keywords": ["anstar", "dataverse", "crm", "read-only"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Anstar Dataverse",
+    "shortDescription": "Read approved Dataverse evidence",
+    "longDescription": "Inspect schemas and answer bounded questions from Dataverse data available to the signed-in Anstar user without changing records.",
+    "developerName": "Anstar",
+    "category": "Productivity",
+    "capabilities": ["Read"],
+    "websiteURL": "https://anstar.com",
+    "defaultPrompt": [
+      "What can Anstar Dataverse help me research?",
+      "Describe the available schema for this business question.",
+      "Answer this bounded Dataverse question using explicit evidence."
+    ],
+    "brandColor": "#0B5CAD"
+  }
+}

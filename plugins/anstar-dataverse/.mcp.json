@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "anstar-dataverse": {
+      "type": "http",
+      "url": "https://anstar-prod.crm11.dynamics.com/api/mcp",
+      "oauth": {
+        "clientId": "65649345-8fb7-477a-820b-5604b5e2afe3",
+        "callbackPort": 8765
+      },
+      "scopes": [
+        "openid",
+        "profile",
+        "offline_access",
+        "https://anstar-prod.crm11.dynamics.com/api/mcp/mcp.tools"
+      ],
+      "enabled_tools": ["read_query", "search", "search_data", "describe"],
+      "default_tools_approval_mode": "approve"
+    }
+  }
+}
