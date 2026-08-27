@@ -62,8 +62,25 @@ Coexistence is technically tolerated but is not recommended for normal use becau
 
 ## Security and privacy
 
-No OAuth login, live CRM query, customer name, record identifier, token, client secret, or returned CRM value was used or retained. The endpoint, public client ID, scope, plugin versions, tool names, and package paths are public connection/package metadata.
+The clean-install and coexistence phases used no OAuth login or live CRM query. The later bounded verification used per-user OAuth and a live read, but retained no customer name, record identifier, token, client secret, or returned CRM value. The endpoint, public client ID, scope, plugin versions, tool names, and package paths are public connection/package metadata.
 
 ## Verdict
 
-**PASS for clean package composition.** Anstar Dataverse and Anstar Sales can be installed independently or together; the source plugin owns the single MCP server and the role plugin supplies workflows. Proceed to a bounded authenticated prompt test before changing the recommended legacy-package migration status.
+**PASS for clean package composition and bounded live use.** Anstar Dataverse and Anstar Sales can be installed independently or together; the source plugin owns the single MCP server and the role plugin supplies workflows.
+
+## Bounded authenticated verification
+
+A disposable Codex home used the existing Anstar pool API route so the test did not consume or depend on the normal ChatGPT subscription quota. The disposable home installed both public plugins, completed per-user Dataverse OAuth, and was deleted after the run.
+
+The live prompt requested at most three accessible open opportunities and prohibited sensitive output and all writes. Codex reported:
+
+- result: `PASS`;
+- Sales skill followed: `weekly-pipeline-review`;
+- Dataverse skill followed: `crm-read-safety`;
+- MCP tools called: `describe`, then `read_query`;
+- accessible rows returned: yes;
+- selected evidence contained a blank: yes, preserved honestly;
+- blocker class: none;
+- mutation tools called: none.
+
+No customer or opportunity names, record identifiers, emails, phone/address data, notes, bodies, attachments, tokens, secrets, or raw records are retained in this evidence. This verifies prompt-level cross-plugin skill composition, not merely package installation.

@@ -187,6 +187,19 @@ class MvpContractTests(unittest.TestCase):
         self.assertIn("legacy", migration.lower())
         self.assertIn("anstar-sales-crm", migration)
 
+    def test_composition_spike_records_sanitized_live_verification(self):
+        spike = (
+            ROOT / "spikes/002-dataverse-sales-composition/README.md"
+        ).read_text().lower()
+        for expected in (
+            "result: `pass`",
+            "`weekly-pipeline-review`",
+            "`crm-read-safety`",
+            "`describe`, then `read_query`",
+            "mutation tools called: none",
+        ):
+            self.assertIn(expected, spike)
+
     def test_plugin_manifest_paths_resolve(self):
         manifest = json.loads((PLUGIN / ".codex-plugin/plugin.json").read_text())
         self.assertEqual(manifest["interface"]["capabilities"], ["Read"])
