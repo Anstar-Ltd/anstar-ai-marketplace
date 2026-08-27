@@ -1,45 +1,58 @@
 # Anstar AI Marketplace
 
-Public marketplace for Anstar plugins, MCP connections, and skills used by ChatGPT Desktop and Codex. The code and connection metadata are public; CRM access still requires an authorized Anstar Microsoft identity.
+Public marketplace for Anstar plugins, MCP connections, and skills used by ChatGPT Desktop and Codex. The code and connection metadata are public; live data access still requires an authorized Anstar Microsoft identity.
 
-## Current plugin
+## Current products
 
-### Anstar Sales CRM
+### Anstar Dataverse
 
-Read-only workflows for:
+Reusable read-only source plugin for:
 
-- seller help and orientation through a Sales index/router;
-- account-signal analysis and account prioritisation;
-- CRM-backed preparation for a named meeting or account;
-- weekly pipeline review;
-- bounded free-form CRM research with explicit evidence and honest blanks.
+- Microsoft’s official Dataverse MCP endpoint;
+- per-user Microsoft OAuth;
+- schema-first bounded Dataverse research;
+- shared CRM evidence, privacy, blank-handling, and read-safety rules.
 
-The role architecture is a deliberately small adaptation of OpenAI's MIT-licensed Sales role plugin. It keeps focused workflow composition while mapping CRM directly to the existing `anstar-dataverse` MCP; provider placeholders and write-oriented workflows are excluded. Every CRM workflow composes the shared `crm-read-safety` policy. See `THIRD_PARTY_NOTICES.md` for attribution.
-
-The MVP connects to Anstar's official Microsoft Dataverse MCP endpoint and supplies a Codex policy that enables only:
+Its local Codex policy enables only:
 
 - `read_query`
 - `search`
 - `search_data`
 - `describe`
 
-> **MVP limitation:** the upstream Dataverse server still advertises write tools. Codex tool policy hides/disables those tools locally, but this is not a server-side authorization boundary. Users must retain genuinely read-only Dataverse permissions. A filtered Anstar gateway remains a later hardening task.
+### Anstar Sales
 
-## Install in the ChatGPT/Codex app
+Role-first seller workflows for:
+
+- help and orientation through a Sales index/router;
+- account-signal analysis and account prioritisation;
+- preparation for a named customer or prospect meeting;
+- weekly pipeline review;
+- bounded free-form CRM research.
+
+Anstar Sales is a deliberately small adaptation of OpenAI’s MIT-licensed Sales role plugin. It resolves the abstract `CRM` source through the installed **Anstar Dataverse** plugin and does not duplicate OAuth or MCP configuration. See `THIRD_PARTY_NOTICES.md` for attribution.
+
+### Legacy migration package
+
+**Anstar Sales CRM** (`anstar-sales-crm`) is the previous combined package. It remains available temporarily for migration but is not the recommended path for new installs. See `docs/PLUGIN-MIGRATION.md`.
+
+## Install in ChatGPT Desktop or Codex
 
 1. Open **Plugins Directory** in Work or Codex mode.
 2. Choose **Add marketplace**.
 3. Use source `https://github.com/Anstar-Ltd/anstar-ai-marketplace.git` and Git ref `main`.
-4. Select **Anstar AI**, then install **Anstar Sales CRM**.
-5. Complete Microsoft sign-in and start a new chat.
+4. Install **Anstar Dataverse** and complete normal-user Microsoft sign-in.
+5. Install **Anstar Sales**.
+6. Start a new chat.
 
-The plugin bundles its OAuth client settings, Dataverse scope, and four-tool read policy. Users do not need to edit configuration files. See `docs/INSTALL-FOR-EVERYONE.md` for the click-by-click guide.
+See `docs/INSTALL-FOR-EVERYONE.md` for the click-by-click guide.
 
 CLI equivalent for technical testing:
 
 ```bash
 codex plugin marketplace add Anstar-Ltd/anstar-ai-marketplace --ref main
-codex plugin add anstar-sales-crm@anstar-ai
+codex plugin add anstar-dataverse@anstar-ai
+codex plugin add anstar-sales@anstar-ai
 ```
 
 ## Verification
@@ -47,13 +60,17 @@ codex plugin add anstar-sales-crm@anstar-ai
 ```bash
 python3 -m unittest tests/test_mvp_contract.py -v
 codex plugin list
-codex mcp get anstar-dataverse
+codex mcp get anstar-dataverse --json
 ```
 
-The first real CRM test was completed through the already-authorized Hermes Dataverse client: `describe` plus a bounded `read_query` returned the newest three accessible opportunities. Do not test by creating or updating a record.
+A bounded live Dataverse read was previously verified through Codex with the normal delegated Anstar identity. Do not verify by creating or updating a CRM record.
 
-Codex OAuth and a bounded live Dataverse read have been verified with the registered callbacks documented in `docs/ENTRA-ADMIN-HANDOFF.md`. Version `0.1.0-mvp.3` also avoids sending a duplicate OAuth resource indicator on clean installations.
+> **MVP limitation:** the upstream Microsoft Dataverse server advertises additional tools. The packaged local policy enables only the four approved reads, while the signed-in user’s Dataverse roles remain the actual data-access boundary.
+
+## ChatGPT web
+
+The two-plugin split currently targets the proven local marketplace/Codex path. A future `.app.json` binding will be added only after a ChatGPT-registered Dataverse app has non-empty action discovery and a verified normal-user read. No zero-action draft ID is packaged.
 
 ## Repository scope
 
-This repository currently proves packaging, installation, skills, the Dataverse connection, and a local read-tool policy. It deliberately does not yet include a production gateway, public deployment, complete privacy/legal metadata, UI, telemetry, or automated role provisioning.
+This repository proves packaging, installation, source/role composition, skills, connection metadata, and bounded read workflows. It does not yet imply a production gateway, public ChatGPT app publication, complete legal metadata, UI, telemetry, automated role provisioning, or an Ed pilot outcome.
