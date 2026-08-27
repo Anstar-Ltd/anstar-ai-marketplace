@@ -5,6 +5,30 @@
   },
   "plugins": [
     {
+      "name": "anstar-dataverse",
+      "source": {
+        "source": "local",
+        "path": "./plugins/anstar-dataverse"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "anstar-sales",
+      "source": {
+        "source": "local",
+        "path": "./plugins/anstar-sales"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Productivity"
+    },
+    {
       "name": "anstar-sales-crm",
       "source": {
         "source": "local",

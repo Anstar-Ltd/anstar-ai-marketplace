@@ -160,9 +160,32 @@ class MvpContractTests(unittest.TestCase):
 
     def test_marketplace_points_to_existing_plugin(self):
         marketplace = json.loads((ROOT / ".agents/plugins/marketplace.json").read_text())
-        entry = marketplace["plugins"][0]
-        self.assertEqual(entry["name"], "anstar-sales-crm")
-        self.assertTrue((ROOT / entry["source"]["path"]).is_dir())
+        entries = {entry["name"]: entry for entry in marketplace["plugins"]}
+        self.assertEqual(
+            set(entries),
+            {"anstar-dataverse", "anstar-sales", "anstar-sales-crm"},
+        )
+        for entry in entries.values():
+            self.assertTrue((ROOT / entry["source"]["path"]).is_dir())
+            self.assertEqual(entry["category"], "Productivity")
+
+        self.assertEqual(
+            entries["anstar-dataverse"]["policy"]["authentication"],
+            "ON_INSTALL",
+        )
+        self.assertEqual(
+            entries["anstar-sales"]["policy"]["authentication"],
+            "ON_USE",
+        )
+
+    def test_public_docs_install_dataverse_before_sales(self):
+        readme = (ROOT / "README.md").read_text()
+        install = (ROOT / "docs/INSTALL-FOR-EVERYONE.md").read_text()
+        migration = (ROOT / "docs/PLUGIN-MIGRATION.md").read_text()
+        for text in (readme, install, migration):
+            self.assertLess(text.find("Anstar Dataverse"), text.find("Anstar Sales"))
+        self.assertIn("legacy", migration.lower())
+        self.assertIn("anstar-sales-crm", migration)
 
     def test_plugin_manifest_paths_resolve(self):
         manifest = json.loads((PLUGIN / ".codex-plugin/plugin.json").read_text())
