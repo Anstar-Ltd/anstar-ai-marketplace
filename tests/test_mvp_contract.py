@@ -6,9 +6,77 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PLUGIN = ROOT / "plugins" / "anstar-sales-crm"
 DATAVERSE_PLUGIN = ROOT / "plugins" / "anstar-dataverse"
+SALES_PLUGIN = ROOT / "plugins" / "anstar-sales"
 
 
 class MvpContractTests(unittest.TestCase):
+    def test_sales_plugin_owns_workflows_but_not_the_crm_connection(self):
+        manifest = json.loads((SALES_PLUGIN / ".codex-plugin/plugin.json").read_text())
+        self.assertEqual(manifest["name"], "anstar-sales")
+        self.assertEqual(manifest["skills"], "./skills/")
+        self.assertNotIn("mcpServers", manifest)
+        self.assertFalse((SALES_PLUGIN / ".mcp.json").exists())
+
+    def test_sales_plugin_routes_bounded_workflows_through_crm(self):
+        expected = {
+            "index",
+            "sales-help",
+            "analyze-account-signals",
+            "prioritize-accounts",
+            "prepare-for-meeting",
+            "weekly-pipeline-review",
+            "crm-research-router",
+        }
+        skills = sorted((SALES_PLUGIN / "skills").glob("*/SKILL.md"))
+        self.assertEqual({skill.parent.name for skill in skills}, expected)
+        for skill in skills:
+            text = skill.read_text()
+            match = re.match(r"^---\n(?P<frontmatter>.*?)\n---\n", text, re.S)
+            if match is None:
+                self.fail(f"Missing frontmatter: {skill}")
+            frontmatter = match.group("frontmatter")
+            self.assertIn("name:", frontmatter)
+            self.assertIn("description:", frontmatter)
+            description = re.search(r"^description:\s*(.+)$", frontmatter, re.M)
+            if description is None:
+                self.fail(f"Missing description value: {skill}")
+            self.assertLessEqual(len(description.group(1).strip('"')), 60)
+            self.assertIn("read-only", text.lower(), skill)
+
+        index = (SALES_PLUGIN / "skills/index/SKILL.md").read_text().lower()
+        for route in expected - {"index"}:
+            self.assertIn(route, index)
+        self.assertIn("crm", index)
+        self.assertIn("anstar-dataverse", index)
+        self.assertIn("missing", index)
+        self.assertIn("browser automation", index)
+
+        crm_workflows = expected - {"index", "sales-help"}
+        for name in crm_workflows:
+            with self.subTest(skill=name):
+                text = (SALES_PLUGIN / f"skills/{name}/SKILL.md").read_text()
+                self.assertIn("CRM", text)
+                self.assertIn("anstar-dataverse", text)
+                self.assertIn("crm-read-safety", text)
+
+    def test_sales_plugin_contains_no_provider_or_oauth_binding(self):
+        manifest = json.loads((SALES_PLUGIN / ".codex-plugin/plugin.json").read_text())
+        serialized = json.dumps(manifest).lower()
+        for forbidden in (
+            "clientid",
+            "callbackport",
+            "mcp.tools",
+            "salesforce",
+            "hubspot",
+            "gong",
+            "zoominfo",
+        ):
+            self.assertNotIn(forbidden, serialized)
+        notice = (ROOT / "THIRD_PARTY_NOTICES.md").read_text()
+        self.assertIn("openai/role-specific-plugins", notice)
+        self.assertIn("fe5608d2512a7d6a7b9821ce8a88c48464ecd6e4", notice)
+        self.assertIn("MIT License", notice)
+
     def test_dataverse_plugin_owns_the_shared_mcp_connection(self):
         manifest = json.loads(
             (DATAVERSE_PLUGIN / ".codex-plugin/plugin.json").read_text()
