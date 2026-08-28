@@ -7,6 +7,8 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 PLUGIN = ROOT / "plugins" / "anstar-sales-crm"
 DATAVERSE_PLUGIN = ROOT / "plugins" / "anstar-dataverse"
 SALES_PLUGIN = ROOT / "plugins" / "anstar-sales"
+TEAMS_PLUGIN = ROOT / "plugins" / "teams"
+SHAREPOINT_PLUGIN = ROOT / "plugins" / "sharepoint"
 
 
 class MvpContractTests(unittest.TestCase):
@@ -163,11 +165,18 @@ class MvpContractTests(unittest.TestCase):
         entries = {entry["name"]: entry for entry in marketplace["plugins"]}
         self.assertEqual(
             set(entries),
-            {"anstar-dataverse", "anstar-sales", "anstar-sales-crm"},
+            {
+                "anstar-dataverse",
+                "anstar-sales",
+                "anstar-sales-crm",
+                "teams",
+                "sharepoint",
+            },
         )
         for entry in entries.values():
             self.assertTrue((ROOT / entry["source"]["path"]).is_dir())
-            self.assertEqual(entry["category"], "Productivity")
+        self.assertEqual(entries["teams"]["category"], "Communication")
+        self.assertEqual(entries["sharepoint"]["category"], "Productivity")
 
         self.assertEqual(
             entries["anstar-dataverse"]["policy"]["authentication"],
@@ -177,6 +186,40 @@ class MvpContractTests(unittest.TestCase):
             entries["anstar-sales"]["policy"]["authentication"],
             "ON_USE",
         )
+        for name in ("teams", "sharepoint"):
+            self.assertEqual(entries[name]["policy"]["authentication"], "ON_INSTALL")
+
+    def test_official_teams_and_sharepoint_packages_match_pinned_upstream(self):
+        expected = {
+            "teams": {
+                "root": TEAMS_PLUGIN,
+                "version": "0.1.8",
+                "connector": "connector_246af0940da3457da0e751171dc1ce60",
+            },
+            "sharepoint": {
+                "root": SHAREPOINT_PLUGIN,
+                "version": "0.1.7",
+                "connector": "connector_1e4f6a44acf14e3ca1d96672f8c945bc",
+            },
+        }
+        for name, contract in expected.items():
+            with self.subTest(plugin=name):
+                root = contract["root"]
+                manifest = json.loads((root / ".codex-plugin/plugin.json").read_text())
+                apps = json.loads((root / ".app.json").read_text())
+                self.assertEqual(manifest["name"], name)
+                self.assertEqual(manifest["version"], contract["version"])
+                self.assertEqual(manifest["license"], "MIT")
+                self.assertEqual(manifest["author"]["name"], "OpenAI")
+                self.assertEqual(manifest["apps"], "./.app.json")
+                self.assertEqual(apps["apps"][name]["id"], contract["connector"])
+                self.assertTrue((root / manifest["interface"]["logo"]).is_file())
+
+        notice = (ROOT / "THIRD_PARTY_NOTICES.md").read_text()
+        self.assertIn("openai/plugins", notice)
+        self.assertIn("6d99ee149c9fe3c7a55b96cab062cadc1ad36a9d", notice)
+        self.assertIn("Teams", notice)
+        self.assertIn("SharePoint", notice)
 
     def test_public_docs_install_dataverse_before_sales(self):
         readme = (ROOT / "README.md").read_text()
