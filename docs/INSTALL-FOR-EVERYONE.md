@@ -70,6 +70,15 @@ Neither plugin should create, update, or delete CRM records.
 
 **Anstar Sales CRM** (`anstar-sales-crm`) is the legacy combined package. Do not remove it until the new Anstar Dataverse + Anstar Sales pair has been verified. Follow `docs/PLUGIN-MIGRATION.md` for the migration sequence.
 
+## Optional Teams and SharePoint plugins
+
+The **Anstar AI** marketplace also includes OpenAI's official **Teams** and **SharePoint** connector packages. Install either one when a workflow needs that source, then complete its normal Microsoft sign-in.
+
+- Teams adds Teams chats, channels, meetings, and follow-up capabilities exposed by the official connector.
+- SharePoint adds sites, pages, files, and related document workflows exposed by the official connector.
+
+These are optional sources; Anstar Dataverse and Anstar Sales do not require them for CRM-only workflows. The existing Anstar Entra SharePoint MCP app is not needed for the standard OpenAI SharePoint connector and should only be reused later if a custom Anstar connector is required.
+
 ## If it does not work
 
 - **Anstar AI does not appear:** quit with **⌘Q**, reopen the app, then return to Plugins Directory.

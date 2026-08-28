@@ -36,6 +36,15 @@ Anstar Sales is a deliberately small adaptation of OpenAI’s MIT-licensed Sales
 
 **Anstar Sales CRM** (`anstar-sales-crm`) is the previous combined package. It remains available temporarily for migration but is not the recommended path for new installs. See `docs/PLUGIN-MIGRATION.md`.
 
+### Official Microsoft collaboration plugins
+
+The marketplace also carries pinned copies of OpenAI's MIT-licensed official connector packages:
+
+- **Teams** — summarize chats, extract actions, and draft follow-ups through OpenAI's Microsoft Teams connector.
+- **SharePoint** — summarize sites, pages, and files and plan safe updates through OpenAI's Microsoft SharePoint connector.
+
+These packages preserve OpenAI's official connector IDs and require each user to connect the relevant Microsoft account when prompted. They do not embed Anstar tenant credentials. An existing Anstar Entra SharePoint MCP registration remains a fallback for a future custom connector if the standard OpenAI connector cannot satisfy the tenant's needs.
+
 ## Install in ChatGPT Desktop or Codex
 
 1. Open **Plugins Directory** in Work or Codex mode.

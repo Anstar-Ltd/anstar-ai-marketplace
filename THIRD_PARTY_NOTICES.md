@@ -25,3 +25,13 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## OpenAI Teams and SharePoint Plugins
+
+The Teams and SharePoint plugin packages are reproduced from
+[`openai/plugins`](https://github.com/openai/plugins) at revision
+`6d99ee149c9fe3c7a55b96cab062cadc1ad36a9d`. Their manifests declare the MIT
+License and OpenAI as the author. The packages retain the official connector
+IDs, metadata, and logo assets without Anstar-specific modifications.
+
+The MIT License text above applies to these packages as well.
