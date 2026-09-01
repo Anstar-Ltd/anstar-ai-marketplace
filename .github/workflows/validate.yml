@@ -22,6 +22,6 @@ jobs:
       - name: Run repository tests
         run: python -m unittest discover -s tests -p "test_*.py" -v
       - name: Scan committed content for secrets
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
