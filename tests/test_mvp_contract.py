@@ -175,6 +175,7 @@ class MvpContractTests(unittest.TestCase):
                 "clickup",
                 "github",
                 "plaud",
+                "talenthr",
             },
         )
         for entry in entries.values():

@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "talenthr": {
+      "command": "node",
+      "args": [
+        "./mcp/server.mjs"
+      ],
+      "cwd": ".",
+      "env_vars": [
+        "TALENTHR_API_KEY",
+        "TALENTHR_API_PASSWORD"
+      ],
+      "startup_timeout_sec": 30,
+      "tool_timeout_sec": 120,
+      "default_tools_approval_mode": "writes",
+      "tools": {
+        "talenthr_write": {
+          "approval_mode": "approve"
+        }
+      }
+    }
+  }
+}

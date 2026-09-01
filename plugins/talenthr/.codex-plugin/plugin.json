@@ -1,0 +1,40 @@
+{
+  "name": "talenthr",
+  "version": "0.1.0",
+  "description": "Use TalentHR through an allow-listed MCP wrapper for its public API.",
+  "author": {
+    "name": "Anstar Ltd",
+    "url": "https://anstar.com/"
+  },
+  "homepage": "https://apidocs.talenthr.io/",
+  "repository": "https://github.com/Anstar-Ltd/anstar-ai-marketplace",
+  "license": "UNLICENSED",
+  "keywords": [
+    "talenthr",
+    "human-resources",
+    "employees",
+    "time-off",
+    "time-tracking",
+    "mcp"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "TalentHR",
+    "shortDescription": "Work with TalentHR through its API",
+    "longDescription": "Search and call documented TalentHR API operations for employee records, leave, time tracking, assets, surveys, applicant tracking and reports. Read calls are bounded; create, update and delete calls require approval.",
+    "developerName": "Anstar Ltd",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://apidocs.talenthr.io/",
+    "defaultPrompt": [
+      "Check my TalentHR connection",
+      "Find a documented TalentHR operation",
+      "Show the current TalentHR employee directory"
+    ]
+  }
+}
