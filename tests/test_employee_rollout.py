@@ -54,9 +54,29 @@ class EmployeeRolloutTests(unittest.TestCase):
         clickup = self.load_server("clickup", "clickup")
         github = self.load_server("github", "github")
         self.assertEqual(clickup["url"], "https://mcp.clickup.com/mcp")
-        self.assertEqual(github["url"], "https://api.githubcopilot.com/mcp/x/all/readonly")
+        self.assertEqual(github["url"], "https://api.githubcopilot.com/mcp/x/all")
+        self.assertEqual(github["default_tools_approval_mode"], "writes")
         self.assertNotIn("command", clickup)
         self.assertNotIn("command", github)
+
+        github_manifest = json.loads(
+            (ROOT / "plugins/github/.codex-plugin/plugin.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertIn("Write", github_manifest["interface"]["capabilities"])
+        self.assertEqual(github_manifest["skills"], "./skills/")
+
+        github_skill = (
+            ROOT / "plugins/github/skills/github-first/SKILL.md"
+        ).read_text(encoding="utf-8").lower()
+        for wording in (
+            "before opening a browser or using github cli",
+            "mcp__github__get_me",
+            "still exposing the read-only endpoint",
+            "search for an existing pull request",
+        ):
+            self.assertIn(wording, github_skill)
 
         clickup_manifest = json.loads(
             (ROOT / "plugins/clickup/.codex-plugin/plugin.json").read_text(

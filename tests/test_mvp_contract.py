@@ -232,8 +232,9 @@ class MvpContractTests(unittest.TestCase):
         self.assertEqual(github["type"], "http")
         self.assertEqual(
             github["url"],
-            "https://api.githubcopilot.com/mcp/x/all/readonly",
+            "https://api.githubcopilot.com/mcp/x/all",
         )
+        self.assertEqual(github["default_tools_approval_mode"], "writes")
         self.assertNotIn("command", github)
 
         plaud = json.loads((PLAUD_PLUGIN / ".mcp.json").read_text())["mcpServers"]["plaud"]
@@ -250,6 +251,12 @@ class MvpContractTests(unittest.TestCase):
             self.assertEqual(manifest["mcpServers"], "./.mcp.json")
             self.assertTrue((root / manifest["mcpServers"]).is_file())
             self.assertLessEqual(len(manifest["interface"]["defaultPrompt"]), 3)
+
+        github_manifest = json.loads(
+            (GITHUB_PLUGIN / ".codex-plugin/plugin.json").read_text()
+        )
+        self.assertIn("Write", github_manifest["interface"]["capabilities"])
+        self.assertEqual(github_manifest["skills"], "./skills/")
 
     def test_public_docs_install_dataverse_before_sales(self):
         readme = (ROOT / "README.md").read_text()

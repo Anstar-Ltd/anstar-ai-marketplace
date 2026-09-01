@@ -1,7 +1,7 @@
 {
   "name": "github",
-  "version": "0.1.0",
-  "description": "Read GitHub repositories through GitHub's official remote MCP server.",
+  "version": "0.2.0+codex.20260901224940",
+  "description": "Read and update GitHub repositories through GitHub's official remote MCP server.",
   "author": {
     "name": "GitHub",
     "url": "https://github.com/"
@@ -14,25 +14,27 @@
     "repositories",
     "issues",
     "pull-requests",
-    "read-only",
+    "automation",
     "mcp"
   ],
   "mcpServers": "./.mcp.json",
+  "skills": "./skills/",
   "interface": {
     "displayName": "GitHub",
-    "shortDescription": "Read repositories, issues and pull requests",
-    "longDescription": "Use GitHub's official hosted MCP server in enforced read-only mode. Each user authenticates with their own GitHub account and can access only repositories available to that identity.",
+    "shortDescription": "Work with repositories, issues and pull requests",
+    "longDescription": "Use GitHub's official hosted MCP server for repository reads and approval-gated writes. Each user authenticates with their own GitHub account, and every operation remains limited by that identity's GitHub permissions and repository rules.",
     "developerName": "GitHub",
     "category": "Developer Tools",
     "capabilities": [
       "Interactive",
-      "Read"
+      "Read",
+      "Write"
     ],
     "websiteURL": "https://github.com/github/github-mcp-server",
     "defaultPrompt": [
       "Summarise this GitHub repository",
-      "Show open issues for this repository",
-      "Review recent pull requests without changing anything"
+      "Create a pull request for my current branch",
+      "Update this issue after showing me the proposed change"
     ],
     "brandColor": "#24292F"
   }

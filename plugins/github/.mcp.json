@@ -2,8 +2,8 @@
   "mcpServers": {
     "github": {
       "type": "http",
-      "url": "https://api.githubcopilot.com/mcp/x/all/readonly",
-      "default_tools_approval_mode": "approve"
+      "url": "https://api.githubcopilot.com/mcp/x/all",
+      "default_tools_approval_mode": "writes"
     }
   }
 }
