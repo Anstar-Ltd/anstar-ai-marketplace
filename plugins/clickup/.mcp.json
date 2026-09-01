@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "clickup": {
+      "type": "http",
+      "url": "https://mcp.clickup.com/mcp",
+      "default_tools_approval_mode": "writes",
+      "tools": {
+        "clickup_update_task": {
+          "approval_mode": "approve"
+        }
+      }
+    }
+  }
+}

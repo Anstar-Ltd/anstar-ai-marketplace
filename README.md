@@ -36,14 +36,16 @@ Anstar Sales is a deliberately small adaptation of OpenAI’s MIT-licensed Sales
 
 **Anstar Sales CRM** (`anstar-sales-crm`) is the previous combined package. It remains available temporarily for migration but is not the recommended path for new installs. See `docs/PLUGIN-MIGRATION.md`.
 
-### Official Microsoft collaboration plugins
+### Shared productivity plugins
 
-The marketplace also carries pinned copies of OpenAI's MIT-licensed official connector packages:
+The marketplace packages Anstar's portable MCP connections as installable plugins:
 
-- **Teams** — summarize chats, extract actions, and draft follow-ups through OpenAI's Microsoft Teams connector.
-- **SharePoint** — summarize sites, pages, and files and plan safe updates through OpenAI's Microsoft SharePoint connector.
+- **Softeria Microsoft 365** — Microsoft 365 access through Softeria's MCP server, pinned to version `0.148.1`; each user signs in with their own Microsoft account.
+- **ClickUp** — ClickUp's hosted MCP endpoint with per-user authentication and explicit approval for task updates.
+- **GitHub** — GitHub's official hosted MCP endpoint in enforced read-only mode.
+- **Plaud** — Plaud recordings, transcripts, and notes through the npm MCP package pinned to version `0.3.10`.
 
-These packages preserve OpenAI's official connector IDs and require each user to connect the relevant Microsoft account when prompted. They do not embed Anstar tenant credentials. An existing Anstar Entra SharePoint MCP registration remains a fallback for a future custom connector if the standard OpenAI connector cannot satisfy the tenant's needs.
+These wrappers contain no user credentials or access tokens. Authentication and effective data access remain tied to each employee's account. Business Central is intentionally excluded from this marketplace release.
 
 ## Install in ChatGPT Desktop or Codex
 
@@ -62,6 +64,10 @@ CLI equivalent for technical testing:
 codex plugin marketplace add Anstar-Ltd/anstar-ai-marketplace --ref main
 codex plugin add anstar-dataverse@anstar-ai
 codex plugin add anstar-sales@anstar-ai
+codex plugin add ms-365-mcp-server@anstar-ai
+codex plugin add clickup@anstar-ai
+codex plugin add github@anstar-ai
+codex plugin add plaud@anstar-ai
 ```
 
 ## Verification

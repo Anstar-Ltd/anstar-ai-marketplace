@@ -6,3 +6,5 @@ node_modules/
 coverage/
 dist/
 *.log
+__pycache__/
+*.py[cod]

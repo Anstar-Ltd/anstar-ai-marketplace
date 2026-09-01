@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "plaud": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@plaud-ai/mcp@0.3.10"
+      ],
+      "startup_timeout_sec": 120,
+      "tool_timeout_sec": 120,
+      "default_tools_approval_mode": "approve"
+    }
+  }
+}

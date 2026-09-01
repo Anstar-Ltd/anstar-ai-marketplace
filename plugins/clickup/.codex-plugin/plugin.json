@@ -1,0 +1,36 @@
+{
+  "name": "clickup",
+  "version": "0.1.0",
+  "description": "Connect Codex to ClickUp through ClickUp's hosted MCP server.",
+  "author": {
+    "name": "ClickUp",
+    "url": "https://clickup.com/"
+  },
+  "homepage": "https://clickup.com/",
+  "keywords": [
+    "clickup",
+    "tasks",
+    "projects",
+    "productivity",
+    "mcp"
+  ],
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "ClickUp",
+    "shortDescription": "Work with ClickUp tasks and projects",
+    "longDescription": "Use ClickUp's hosted MCP server to inspect and manage accessible tasks, projects and workspace information. Each user completes their own ClickUp authentication.",
+    "developerName": "ClickUp",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://clickup.com/",
+    "defaultPrompt": [
+      "Show my overdue ClickUp tasks",
+      "Find a task in ClickUp",
+      "Summarise my current ClickUp priorities"
+    ],
+    "brandColor": "#7B68EE"
+  }
+}

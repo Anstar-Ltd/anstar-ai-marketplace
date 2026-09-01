@@ -1,4 +1,4 @@
-# Install Anstar Dataverse and Anstar Sales
+# Install Anstar AI plugins
 
 This guide is for non-technical Anstar users. No Terminal or GitHub account is required.
 
@@ -70,20 +70,23 @@ Neither plugin should create, update, or delete CRM records.
 
 **Anstar Sales CRM** (`anstar-sales-crm`) is the legacy combined package. Do not remove it until the new Anstar Dataverse + Anstar Sales pair has been verified. Follow `docs/PLUGIN-MIGRATION.md` for the migration sequence.
 
-## Optional Teams and SharePoint plugins
+## Optional productivity plugins
 
-The **Anstar AI** marketplace also includes OpenAI's official **Teams** and **SharePoint** connector packages. Install either one when a workflow needs that source, then complete its normal Microsoft sign-in.
+The **Anstar AI** marketplace also packages the portable MCP connections used by Anstar. Install only the sources needed for the employee's role:
 
-- Teams adds Teams chats, channels, meetings, and follow-up capabilities exposed by the official connector.
-- SharePoint adds sites, pages, files, and related document workflows exposed by the official connector.
+- **Softeria Microsoft 365** — complete Microsoft sign-in with the employee's normal account. Their Microsoft 365 permissions remain the access boundary.
+- **ClickUp** — complete ClickUp sign-in. Changes to tasks require explicit approval.
+- **GitHub** — complete GitHub sign-in. This packaged endpoint enforces read-only mode.
+- **Plaud** — complete Plaud authentication for the employee's own recordings, transcripts, and notes.
 
-These are optional sources; Anstar Dataverse and Anstar Sales do not require them for CRM-only workflows. The existing Anstar Entra SharePoint MCP app is not needed for the standard OpenAI SharePoint connector and should only be reused later if a custom Anstar connector is required.
+These plugins contain connection metadata only; they do not include passwords, access tokens, tenant secrets, or shared user identities. Business Central is not included in this release.
 
 ## If it does not work
 
 - **Anstar AI does not appear:** quit with **⌘Q**, reopen the app, then return to Plugins Directory.
 - **Marketplace already added:** select the existing **Anstar AI** source instead of adding it again.
 - **Anstar Sales cannot find CRM:** confirm **Anstar Dataverse** is installed, enabled, and authenticated.
+- **A productivity plugin cannot connect:** confirm the employee completed that service's own sign-in and is entitled to use the account.
 - **Microsoft says the redirect URI is invalid:** record the exact message and app version for IT; do not try another account or paste login data into chat.
 - **No CRM records appear:** confirm the signed-in Anstar user can see those records in Dynamics CRM.
 - **The plugin changed but looks old:** upgrade or refresh **Anstar AI**, then restart the app.

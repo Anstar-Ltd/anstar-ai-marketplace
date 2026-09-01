@@ -7,8 +7,10 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 PLUGIN = ROOT / "plugins" / "anstar-sales-crm"
 DATAVERSE_PLUGIN = ROOT / "plugins" / "anstar-dataverse"
 SALES_PLUGIN = ROOT / "plugins" / "anstar-sales"
-TEAMS_PLUGIN = ROOT / "plugins" / "teams"
-SHAREPOINT_PLUGIN = ROOT / "plugins" / "sharepoint"
+MS365_PLUGIN = ROOT / "plugins" / "ms-365-mcp-server"
+CLICKUP_PLUGIN = ROOT / "plugins" / "clickup"
+GITHUB_PLUGIN = ROOT / "plugins" / "github"
+PLAUD_PLUGIN = ROOT / "plugins" / "plaud"
 
 
 class MvpContractTests(unittest.TestCase):
@@ -169,14 +171,15 @@ class MvpContractTests(unittest.TestCase):
                 "anstar-dataverse",
                 "anstar-sales",
                 "anstar-sales-crm",
-                "teams",
-                "sharepoint",
+                "ms-365-mcp-server",
+                "clickup",
+                "github",
+                "plaud",
             },
         )
         for entry in entries.values():
             self.assertTrue((ROOT / entry["source"]["path"]).is_dir())
-        self.assertEqual(entries["teams"]["category"], "Communication")
-        self.assertEqual(entries["sharepoint"]["category"], "Productivity")
+        self.assertEqual(entries["github"]["category"], "Developer Tools")
 
         self.assertEqual(
             entries["anstar-dataverse"]["policy"]["authentication"],
@@ -186,40 +189,51 @@ class MvpContractTests(unittest.TestCase):
             entries["anstar-sales"]["policy"]["authentication"],
             "ON_USE",
         )
-        for name in ("teams", "sharepoint"):
+        for name in ("ms-365-mcp-server", "clickup", "github", "plaud"):
             self.assertEqual(entries[name]["policy"]["authentication"], "ON_INSTALL")
 
-    def test_official_teams_and_sharepoint_packages_match_pinned_upstream(self):
-        expected = {
-            "teams": {
-                "root": TEAMS_PLUGIN,
-                "version": "0.1.8",
-                "connector": "connector_246af0940da3457da0e751171dc1ce60",
-            },
-            "sharepoint": {
-                "root": SHAREPOINT_PLUGIN,
-                "version": "0.1.7",
-                "connector": "connector_1e4f6a44acf14e3ca1d96672f8c945bc",
-            },
-        }
-        for name, contract in expected.items():
-            with self.subTest(plugin=name):
-                root = contract["root"]
-                manifest = json.loads((root / ".codex-plugin/plugin.json").read_text())
-                apps = json.loads((root / ".app.json").read_text())
-                self.assertEqual(manifest["name"], name)
-                self.assertEqual(manifest["version"], contract["version"])
-                self.assertEqual(manifest["license"], "MIT")
-                self.assertEqual(manifest["author"]["name"], "OpenAI")
-                self.assertEqual(manifest["apps"], "./.app.json")
-                self.assertEqual(apps["apps"][name]["id"], contract["connector"])
-                self.assertTrue((root / manifest["interface"]["logo"]).is_file())
+    def test_shared_productivity_plugins_are_portable_and_bounded(self):
+        marketplace = json.loads((ROOT / ".agents/plugins/marketplace.json").read_text())
+        names = {entry["name"] for entry in marketplace["plugins"]}
+        self.assertNotIn("teams", names)
+        self.assertNotIn("sharepoint", names)
+        self.assertNotIn("businesscentral", " ".join(sorted(names)).lower())
 
-        notice = (ROOT / "THIRD_PARTY_NOTICES.md").read_text()
-        self.assertIn("openai/plugins", notice)
-        self.assertIn("6d99ee149c9fe3c7a55b96cab062cadc1ad36a9d", notice)
-        self.assertIn("Teams", notice)
-        self.assertIn("SharePoint", notice)
+        ms365 = json.loads((MS365_PLUGIN / ".mcp.json").read_text())["mcpServers"]["ms365"]
+        self.assertEqual(ms365["command"], "cmd")
+        self.assertIn("@softeria/ms-365-mcp-server@0.148.1", ms365["args"])
+
+        clickup = json.loads((CLICKUP_PLUGIN / ".mcp.json").read_text())["mcpServers"]["clickup"]
+        self.assertEqual(clickup["type"], "http")
+        self.assertEqual(clickup["url"], "https://mcp.clickup.com/mcp")
+        self.assertEqual(
+            clickup["tools"]["clickup_update_task"]["approval_mode"],
+            "approve",
+        )
+
+        github = json.loads((GITHUB_PLUGIN / ".mcp.json").read_text())["mcpServers"]["github"]
+        self.assertEqual(github["type"], "http")
+        self.assertEqual(
+            github["url"],
+            "https://api.githubcopilot.com/mcp/x/all/readonly",
+        )
+        self.assertNotIn("command", github)
+
+        plaud = json.loads((PLAUD_PLUGIN / ".mcp.json").read_text())["mcpServers"]["plaud"]
+        self.assertEqual(plaud["command"], "cmd")
+        self.assertIn("@plaud-ai/mcp@0.3.10", plaud["args"])
+
+        for name, root in {
+            "ms-365-mcp-server": MS365_PLUGIN,
+            "clickup": CLICKUP_PLUGIN,
+            "github": GITHUB_PLUGIN,
+            "plaud": PLAUD_PLUGIN,
+        }.items():
+            manifest = json.loads((root / ".codex-plugin/plugin.json").read_text())
+            self.assertEqual(manifest["name"], name)
+            self.assertEqual(manifest["mcpServers"], "./.mcp.json")
+            self.assertTrue((root / manifest["mcpServers"]).is_file())
+            self.assertLessEqual(len(manifest["interface"]["defaultPrompt"]), 3)
 
     def test_public_docs_install_dataverse_before_sales(self):
         readme = (ROOT / "README.md").read_text()

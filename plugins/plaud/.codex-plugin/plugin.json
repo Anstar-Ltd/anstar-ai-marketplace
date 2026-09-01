@@ -1,0 +1,36 @@
+{
+  "name": "plaud",
+  "version": "0.3.10",
+  "description": "Connect Codex to recordings and notes in Plaud.",
+  "author": {
+    "name": "Plaud AI",
+    "url": "https://www.plaud.ai/"
+  },
+  "homepage": "https://www.plaud.ai/",
+  "keywords": [
+    "plaud",
+    "recordings",
+    "transcripts",
+    "meeting-notes",
+    "mcp"
+  ],
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Plaud",
+    "shortDescription": "Access Plaud recordings and notes",
+    "longDescription": "Use Plaud's MCP server to find and analyse recordings, transcripts and notes available to the authenticated Plaud account.",
+    "developerName": "Plaud AI",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read"
+    ],
+    "websiteURL": "https://www.plaud.ai/",
+    "defaultPrompt": [
+      "Find my recent Plaud recordings",
+      "Summarise a Plaud transcript",
+      "Extract actions from my latest Plaud meeting"
+    ],
+    "brandColor": "#111111"
+  }
+}

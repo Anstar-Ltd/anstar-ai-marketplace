@@ -1,0 +1,39 @@
+{
+  "name": "ms-365-mcp-server",
+  "version": "0.148.1",
+  "description": "Connect Codex to Microsoft 365 through Softeria's MCP server.",
+  "author": {
+    "name": "Softeria",
+    "url": "https://github.com/Softeria/ms-365-mcp-server"
+  },
+  "homepage": "https://github.com/Softeria/ms-365-mcp-server",
+  "repository": "https://github.com/Softeria/ms-365-mcp-server",
+  "license": "MIT",
+  "keywords": [
+    "microsoft-365",
+    "microsoft-graph",
+    "outlook",
+    "teams",
+    "sharepoint",
+    "mcp"
+  ],
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Softeria Microsoft 365",
+    "shortDescription": "Connect Codex to Microsoft 365",
+    "longDescription": "Use Softeria's MCP server to work with supported Microsoft 365 services through Microsoft Graph. Each user authenticates with their own Microsoft account and remains subject to that account's permissions.",
+    "developerName": "Softeria",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/Softeria/ms-365-mcp-server",
+    "defaultPrompt": [
+      "Check my Microsoft 365 connection",
+      "Summarise my recent Outlook emails",
+      "Find a file in Microsoft 365"
+    ],
+    "brandColor": "#0078D4"
+  }
+}
