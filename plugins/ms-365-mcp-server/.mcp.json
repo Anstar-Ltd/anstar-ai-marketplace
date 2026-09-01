@@ -1,12 +1,11 @@
 {
   "mcpServers": {
     "ms365": {
-      "command": "cmd",
+      "command": "npx",
       "args": [
-        "/c",
-        "npx",
         "-y",
-        "@softeria/ms-365-mcp-server@0.148.1"
+        "@softeria/ms-365-mcp-server@0.148.1",
+        "--org-mode"
       ],
       "startup_timeout_sec": 120,
       "tool_timeout_sec": 120,

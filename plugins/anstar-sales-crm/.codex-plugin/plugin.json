@@ -1,6 +1,6 @@
 {
   "name": "anstar-sales-crm",
-  "version": "0.2.0-mvp.1",
+  "version": "0.2.0-mvp.1+codex.20260901151133",
   "description": "Bounded read-only Sales workflows for Anstar CRM.",
   "author": {
     "name": "Anstar",
@@ -21,10 +21,8 @@
     "websiteURL": "https://anstar.com",
     "defaultPrompt": [
       "What can you do for an Anstar seller?",
-      "What changed for this account in the last 14 days?",
-      "Which accounts should I focus on this week, and why?",
-      "Prepare me for my meeting with this customer.",
-      "Review my open pipeline for the previous seven days."
+      "What changed for this account, and which accounts should I focus on this week?",
+      "Prepare me for this meeting, then review my open pipeline for the previous seven days."
     ],
     "brandColor": "#0B5CAD"
   }

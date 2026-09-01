@@ -200,8 +200,14 @@ class MvpContractTests(unittest.TestCase):
         self.assertNotIn("businesscentral", " ".join(sorted(names)).lower())
 
         ms365 = json.loads((MS365_PLUGIN / ".mcp.json").read_text())["mcpServers"]["ms365"]
-        self.assertEqual(ms365["command"], "cmd")
-        self.assertIn("@softeria/ms-365-mcp-server@0.148.1", ms365["args"])
+        self.assertEqual(ms365["command"], "npx")
+        self.assertEqual(
+            ms365["args"][:2],
+            ["-y", "@softeria/ms-365-mcp-server@0.148.1"],
+        )
+        self.assertIn("--org-mode", ms365["args"])
+        self.assertNotIn("--read-only", ms365["args"])
+        self.assertNotIn("env", ms365)
 
         clickup = json.loads((CLICKUP_PLUGIN / ".mcp.json").read_text())["mcpServers"]["clickup"]
         self.assertEqual(clickup["type"], "http")
@@ -220,8 +226,8 @@ class MvpContractTests(unittest.TestCase):
         self.assertNotIn("command", github)
 
         plaud = json.loads((PLAUD_PLUGIN / ".mcp.json").read_text())["mcpServers"]["plaud"]
-        self.assertEqual(plaud["command"], "cmd")
-        self.assertIn("@plaud-ai/mcp@0.3.10", plaud["args"])
+        self.assertEqual(plaud["command"], "npx")
+        self.assertEqual(plaud["args"], ["-y", "@plaud-ai/mcp@0.3.10"])
 
         for name, root in {
             "ms-365-mcp-server": MS365_PLUGIN,
@@ -363,7 +369,7 @@ class MvpContractTests(unittest.TestCase):
 
     def test_manifest_orients_users_to_the_role_mvp(self):
         manifest = json.loads((PLUGIN / ".codex-plugin/plugin.json").read_text())
-        self.assertEqual(manifest["version"], "0.2.0-mvp.1")
+        self.assertTrue(manifest["version"].startswith("0.2.0-mvp.1+codex."))
         prompts = " ".join(manifest["interface"]["defaultPrompt"]).lower()
         for phrase in ("what can you do", "what changed", "focus on", "meeting"):
             with self.subTest(phrase=phrase):

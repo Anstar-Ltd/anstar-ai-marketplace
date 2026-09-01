@@ -21,7 +21,6 @@ Capture these without expanding the first installability/read-access proof.
 - Follow-up, deal strategy, business cases, forecasting, coaching, outreach, monitoring automations, and CRM writeback remain excluded rather than copied from the upstream Sales plugin.
 - Optional compact table/widget for pipeline review.
 - Usage evaluation set based on Ed's real prompts and expected records.
-- Marketplace branding, icons, privacy policy, terms, release notes, and version upgrade guidance.
-- GitHub Actions for manifest/skill validation and secret scanning.
+- Marketplace branding, icons, privacy policy, terms, and fuller release notes.
 
 These are candidates for future ClickUp tasks or subtasks after the local proof and Ed's initial feedback; none are claimed complete by the MVP.

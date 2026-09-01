@@ -1,10 +1,8 @@
 {
   "mcpServers": {
     "plaud": {
-      "command": "cmd",
+      "command": "npx",
       "args": [
-        "/c",
-        "npx",
         "-y",
         "@plaud-ai/mcp@0.3.10"
       ],

@@ -1,7 +1,7 @@
 {
   "name": "ms-365-mcp-server",
-  "version": "0.148.1",
-  "description": "Connect Codex to Microsoft 365 through Softeria's MCP server.",
+  "version": "0.148.1+codex.20260901151130",
+  "description": "Connect Codex to delegated Anstar Microsoft 365 services through Softeria's MCP server.",
   "author": {
     "name": "Softeria",
     "url": "https://github.com/Softeria/ms-365-mcp-server"
@@ -21,13 +21,10 @@
   "interface": {
     "displayName": "Softeria Microsoft 365",
     "shortDescription": "Connect Codex to Microsoft 365",
-    "longDescription": "Use Softeria's MCP server to work with supported Microsoft 365 services through Microsoft Graph. Each user authenticates with their own Microsoft account and remains subject to that account's permissions.",
+    "longDescription": "Use Softeria's MCP server in organisation mode for Outlook, Teams, SharePoint and other supported Microsoft 365 services. Each employee authenticates with their own delegated Microsoft account and can access only resources permitted to that identity.",
     "developerName": "Softeria",
     "category": "Productivity",
-    "capabilities": [
-      "Interactive",
-      "Write"
-    ],
+    "capabilities": ["Interactive", "Write"],
     "websiteURL": "https://github.com/Softeria/ms-365-mcp-server",
     "defaultPrompt": [
       "Check my Microsoft 365 connection",

@@ -40,12 +40,18 @@ Anstar Sales is a deliberately small adaptation of OpenAI’s MIT-licensed Sales
 
 The marketplace packages Anstar's portable MCP connections as installable plugins:
 
-- **Softeria Microsoft 365** — Microsoft 365 access through Softeria's MCP server, pinned to version `0.148.1`; each user signs in with their own Microsoft account.
+- **Softeria Microsoft 365** — delegated work-account access through Softeria's MCP server in organisation mode, pinned to version `0.148.1`; each employee signs in with their own Microsoft account and retains the same Microsoft 365 access boundary.
 - **ClickUp** — ClickUp's hosted MCP endpoint with per-user authentication and explicit approval for task updates.
 - **GitHub** — GitHub's official hosted MCP endpoint in enforced read-only mode.
 - **Plaud** — Plaud recordings, transcripts, and notes through the npm MCP package pinned to version `0.3.10`.
 
 These wrappers contain no user credentials or access tokens. Authentication and effective data access remain tied to each employee's account. Business Central is intentionally excluded from this marketplace release.
+
+### Microsoft 365 employee boundary
+
+The Softeria plugin uses interactive delegated authentication. It does not contain an Anstar client secret, an application-only token, or a shared service identity. Microsoft Graph evaluates every Outlook, Teams, SharePoint and OneDrive request as the employee who signed in. A user cannot use this plugin to read a SharePoint site or file that their Microsoft account cannot access normally.
+
+Organisation mode preserves Softeria's current read and write capabilities. Codex still applies approval handling to write tools, and Microsoft 365 permissions remain the final authorization boundary.
 
 ## Install in ChatGPT Desktop or Codex
 
@@ -70,10 +76,24 @@ codex plugin add github@anstar-ai
 codex plugin add plaud@anstar-ai
 ```
 
+## Updating employee installations
+
+Softeria and Plaud use reviewed, pinned npm releases. ClickUp and GitHub use vendor-hosted MCP endpoints. After a marketplace release, refresh **Anstar AI**, fully quit and reopen the desktop app, then start a new chat.
+
+CLI equivalent:
+
+```bash
+codex plugin marketplace upgrade anstar-ai
+```
+
+Existing authentication normally remains local to the employee. A vendor permissions change may require that person to sign in or consent again.
+
 ## Verification
 
 ```bash
+python3 scripts/validate_plugins.py
 python3 -m unittest tests/test_mvp_contract.py -v
+python3 -m unittest tests/test_employee_rollout.py -v
 codex plugin list
 codex mcp get anstar-dataverse --json
 ```
@@ -88,4 +108,4 @@ The two-plugin split currently targets the proven local marketplace/Codex path. 
 
 ## Repository scope
 
-This repository proves packaging, installation, source/role composition, skills, connection metadata, and bounded read workflows. It does not yet imply a production gateway, public ChatGPT app publication, complete legal metadata, UI, telemetry, automated role provisioning, or an Ed pilot outcome.
+This repository proves packaging, installation, source/role composition, skills, connection metadata, automated package validation, and bounded read workflows. It does not yet imply a production gateway, public ChatGPT app publication, complete legal metadata, UI, telemetry, automated role provisioning, or a completed employee-wide pilot.

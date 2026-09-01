@@ -1,0 +1,23 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/(^|/)plugins/.*/\\.mcp\\.json$/"],
+      "matchStrings": [
+        "\"(?<depName>@(?:softeria/ms-365-mcp-server|plaud-ai/mcp))@(?<currentValue>\\d+\\.\\d+\\.\\d+)\""
+      ],
+      "datasourceTemplate": "npm",
+      "versioningTemplate": "npm"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["custom.regex"],
+      "groupName": "MCP package updates",
+      "automerge": false,
+      "labels": ["dependencies", "mcp"]
+    }
+  ]
+}
