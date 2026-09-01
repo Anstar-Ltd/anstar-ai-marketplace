@@ -91,6 +91,8 @@ These plugins contain connection metadata only; they do not include passwords, a
 4. Ask Codex to verify the connection.
 5. Test one Teams item or SharePoint file that you already know you can access.
 
+The plugin includes a `microsoft-365-first` skill. In a new task, Codex should check Softeria before using browser or desktop automation for Outlook, Teams, SharePoint, OneDrive and other Microsoft 365 requests. If Softeria cannot complete the request, Codex should state whether the limitation is availability, authentication, permission or missing capability before suggesting a fallback.
+
 The plugin runs Softeria in organisation mode using delegated Microsoft authentication. It does not use an application secret, an application-only identity, or an administrator account. Microsoft Graph evaluates each request as the signed-in employee:
 
 - if the employee can access a SharePoint site or file normally, the plugin can request it;

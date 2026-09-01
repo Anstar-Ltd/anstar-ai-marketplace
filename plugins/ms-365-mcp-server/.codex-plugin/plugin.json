@@ -1,6 +1,6 @@
 {
   "name": "ms-365-mcp-server",
-  "version": "0.148.1+codex.20260901151130",
+  "version": "0.148.2+codex.20260901215545",
   "description": "Connect Codex to delegated Anstar Microsoft 365 services through Softeria's MCP server.",
   "author": {
     "name": "Softeria",
@@ -17,6 +17,7 @@
     "sharepoint",
     "mcp"
   ],
+  "skills": "./skills/",
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Softeria Microsoft 365",

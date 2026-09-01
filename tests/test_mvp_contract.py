@@ -200,10 +200,10 @@ class MvpContractTests(unittest.TestCase):
         self.assertNotIn("businesscentral", " ".join(sorted(names)).lower())
 
         ms365 = json.loads((MS365_PLUGIN / ".mcp.json").read_text())["mcpServers"]["ms365"]
-        self.assertEqual(ms365["command"], "npx")
+        self.assertEqual(ms365["command"], "cmd")
         self.assertEqual(
-            ms365["args"][:2],
-            ["-y", "@softeria/ms-365-mcp-server@0.148.1"],
+            ms365["args"][:4],
+            ["/c", "npx", "-y", "@softeria/ms-365-mcp-server@0.148.2"],
         )
         self.assertIn("--org-mode", ms365["args"])
         self.assertNotIn("--read-only", ms365["args"])

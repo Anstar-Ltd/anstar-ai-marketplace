@@ -40,7 +40,7 @@ Anstar Sales is a deliberately small adaptation of OpenAI’s MIT-licensed Sales
 
 The marketplace packages Anstar's portable MCP connections as installable plugins:
 
-- **Softeria Microsoft 365** — delegated work-account access through Softeria's MCP server in organisation mode, pinned to version `0.148.1`; each employee signs in with their own Microsoft account and retains the same Microsoft 365 access boundary.
+- **Softeria Microsoft 365** — delegated work-account access through Softeria's MCP server in organisation mode, pinned to version `0.148.2`; each employee signs in with their own Microsoft account and retains the same Microsoft 365 access boundary.
 - **ClickUp** — ClickUp's official Codex app binding and hosted MCP endpoint with per-user authentication and Codex approval handling for task updates.
 - **GitHub** — GitHub's official hosted MCP endpoint in enforced read-only mode.
 - **Plaud** — Plaud recordings, transcripts, and notes through the npm MCP package pinned to version `0.3.10`.
@@ -52,6 +52,8 @@ These wrappers contain no user credentials or access tokens. Authentication and 
 The Softeria plugin uses interactive delegated authentication. It does not contain an Anstar client secret, an application-only token, or a shared service identity. Microsoft Graph evaluates every Outlook, Teams, SharePoint and OneDrive request as the employee who signed in. A user cannot use this plugin to read a SharePoint site or file that their Microsoft account cannot access normally.
 
 Organisation mode preserves Softeria's current read and write capabilities. Codex still applies approval handling to write tools, and Microsoft 365 permissions remain the final authorization boundary.
+
+The bundled `microsoft-365-first` skill tells Codex to check Softeria before browser or desktop automation for Outlook, Teams, SharePoint, OneDrive and other Microsoft 365 work. It also requires Codex to explain any connection, authentication, permission or capability limitation before using a fallback.
 
 ## Install in ChatGPT Desktop or Codex
 
