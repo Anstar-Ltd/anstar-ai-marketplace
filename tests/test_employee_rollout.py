@@ -41,6 +41,22 @@ class EmployeeRolloutTests(unittest.TestCase):
         self.assertNotIn("command", clickup)
         self.assertNotIn("command", github)
 
+        clickup_manifest = json.loads(
+            (ROOT / "plugins/clickup/.codex-plugin/plugin.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        self.assertEqual(clickup_manifest["apps"], "./.app.json")
+        self.assertNotIn("mcpServers", clickup_manifest)
+        clickup_app = json.loads(
+            (ROOT / "plugins/clickup/.app.json").read_text(encoding="utf-8")
+        )["apps"]["clickup"]
+        self.assertEqual(
+            clickup_app["id"],
+            "asdk_app_69431e6d26b88191b4029488aeb42f5b",
+        )
+        self.assertTrue(clickup_app["required"])
+
     def test_employee_guide_documents_identity_and_update_boundaries(self):
         guide = (ROOT / "docs/INSTALL-FOR-EVERYONE.md").read_text(encoding="utf-8").lower()
         for wording in (

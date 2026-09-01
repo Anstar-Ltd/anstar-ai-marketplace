@@ -1,6 +1,6 @@
 {
   "name": "clickup",
-  "version": "0.1.0",
+  "version": "0.1.0+codex.20260901163708",
   "description": "Connect Codex to ClickUp through ClickUp's hosted MCP server.",
   "author": {
     "name": "ClickUp",
@@ -14,7 +14,7 @@
     "productivity",
     "mcp"
   ],
-  "mcpServers": "./.mcp.json",
+  "apps": "./.app.json",
   "interface": {
     "displayName": "ClickUp",
     "shortDescription": "Work with ClickUp tasks and projects",

@@ -24,7 +24,7 @@ codex plugin marketplace upgrade anstar-ai
 
 ## Hosted MCP plugins
 
-ClickUp and GitHub update their hosted services independently. Changes to their endpoint URL, OAuth behaviour, tool surface or authorization boundary still require a reviewed marketplace release and an employee-account smoke test.
+ClickUp and GitHub update their hosted services independently. ClickUp also depends on its official Codex app binding in `.app.json`. Changes to an endpoint URL, app identifier, OAuth behaviour, tool surface or authorization boundary still require a reviewed marketplace release and an employee-account smoke test.
 
 ## Microsoft 365 access invariant
 

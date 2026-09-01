@@ -41,7 +41,7 @@ Anstar Sales is a deliberately small adaptation of OpenAI’s MIT-licensed Sales
 The marketplace packages Anstar's portable MCP connections as installable plugins:
 
 - **Softeria Microsoft 365** — delegated work-account access through Softeria's MCP server in organisation mode, pinned to version `0.148.1`; each employee signs in with their own Microsoft account and retains the same Microsoft 365 access boundary.
-- **ClickUp** — ClickUp's hosted MCP endpoint with per-user authentication and explicit approval for task updates.
+- **ClickUp** — ClickUp's official Codex app binding and hosted MCP endpoint with per-user authentication and Codex approval handling for task updates.
 - **GitHub** — GitHub's official hosted MCP endpoint in enforced read-only mode.
 - **Plaud** — Plaud recordings, transcripts, and notes through the npm MCP package pinned to version `0.3.10`.
 

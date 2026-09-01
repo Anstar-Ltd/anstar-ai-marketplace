@@ -212,10 +212,21 @@ class MvpContractTests(unittest.TestCase):
         clickup = json.loads((CLICKUP_PLUGIN / ".mcp.json").read_text())["mcpServers"]["clickup"]
         self.assertEqual(clickup["type"], "http")
         self.assertEqual(clickup["url"], "https://mcp.clickup.com/mcp")
-        self.assertEqual(
-            clickup["tools"]["clickup_update_task"]["approval_mode"],
-            "approve",
+        self.assertNotIn("command", clickup)
+
+        clickup_manifest = json.loads(
+            (CLICKUP_PLUGIN / ".codex-plugin/plugin.json").read_text()
         )
+        self.assertEqual(clickup_manifest["apps"], "./.app.json")
+        self.assertNotIn("mcpServers", clickup_manifest)
+        clickup_app = json.loads((CLICKUP_PLUGIN / ".app.json").read_text())["apps"][
+            "clickup"
+        ]
+        self.assertEqual(
+            clickup_app["id"],
+            "asdk_app_69431e6d26b88191b4029488aeb42f5b",
+        )
+        self.assertTrue(clickup_app["required"])
 
         github = json.loads((GITHUB_PLUGIN / ".mcp.json").read_text())["mcpServers"]["github"]
         self.assertEqual(github["type"], "http")
@@ -231,7 +242,6 @@ class MvpContractTests(unittest.TestCase):
 
         for name, root in {
             "ms-365-mcp-server": MS365_PLUGIN,
-            "clickup": CLICKUP_PLUGIN,
             "github": GITHUB_PLUGIN,
             "plaud": PLAUD_PLUGIN,
         }.items():
