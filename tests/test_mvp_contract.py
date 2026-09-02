@@ -212,6 +212,8 @@ class MvpContractTests(unittest.TestCase):
         )
         self.assertIn("--org-mode", ms365["args"])
         self.assertNotIn("--read-only", ms365["args"])
+        self.assertNotIn("--auth-browser", ms365["args"])
+        self.assertNotIn("--login", ms365["args"])
         self.assertNotIn("env", ms365)
 
         clickup = json.loads((CLICKUP_PLUGIN / ".mcp.json").read_text())["mcpServers"]["clickup"]

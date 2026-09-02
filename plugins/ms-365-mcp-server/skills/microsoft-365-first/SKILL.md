@@ -10,9 +10,9 @@ For a task involving a Microsoft 365 service, inspect and use the Softeria tools
 ## Route the request
 
 1. Check that Softeria tools are available in the current task. If connection or account state is unclear, use `mcp__ms365__verify_login`. Do not stop at an unauthenticated result.
-2. If verification says the user is not logged in, or the user asks to connect or sign in, call `mcp__ms365__login` with `force: false`. The login tool checks for a valid cached session before starting a new device-code flow.
+2. If verification says the user is not logged in, or the user asks to connect or sign in, call `mcp__ms365__login` with `force: false`. The login tool checks for a valid cached session before starting Softeria's device-code flow. Do not replace this with browser-callback authentication or add `--auth-browser`: its random localhost redirect can fail with Microsoft error `AADSTS50011`.
 3. When the login tool returns `device_code_required`, show the Microsoft verification URL and one-time device code to the current user exactly once. Tell them to open the URL, enter the code and sign in with their own Anstar Microsoft account. Never ask them to paste their password or the completed code back into chat.
-4. Pause while the user completes the Microsoft page. After they confirm it is complete, call `mcp__ms365__verify_login`. Do not report the plugin as connected until that check returns success. If Microsoft requests administrator approval, stop and report the exact consent requirement to Anstar IT; do not switch to an administrator account.
+4. Pause while the user completes the Microsoft page. After they confirm it is complete, call `mcp__ms365__verify_login`. Do not report the plugin as connected until that check returns success. If Microsoft requests administrator approval, stop and report the exact consent requirement to Anstar IT; do not switch the employee's login flow to an administrator account. An administrator may grant tenant consent separately, after which the employee repeats the device-code sign-in with their own account.
 5. When multiple accounts are configured, use `mcp__ms365__list_accounts` and ask which account to use if the request does not identify one. Do not guess.
 6. Select the narrowest tool that performs the requested operation. Treat each tool's current description and parameter schema as the source of truth.
 7. If the server exposes discovery tools instead of named Microsoft Graph tools, use `mcp__ms365__search_tools`, then `mcp__ms365__get_tool_schema`, then `mcp__ms365__execute_tool`. Search again with shorter service or action terms if the first query finds nothing.
@@ -27,6 +27,12 @@ Typical routing includes:
 - Excel workbooks, OneNote, Planner and Microsoft To Do
 
 Teams and SharePoint require Softeria organisation mode. If Outlook or OneDrive tools are present but Teams or SharePoint tools are missing, report that the plugin may be running in personal mode and recommend refreshing the Anstar AI marketplace plugin, restarting Codex and testing in a new task.
+
+## Authentication invariant
+
+- Keep the plugin in local stdio mode and omit `--auth-browser`. Device-code authentication is Softeria's stdio default and does not depend on a registered localhost redirect URI.
+- Do not add `--login` to the MCP startup arguments because that would block normal server startup. Start authentication through `mcp__ms365__login` only when verification or the user's request requires it.
+- If a user reports `AADSTS50011` or another localhost redirect mismatch, stop the browser-callback attempt and restart authentication through `mcp__ms365__login`. Do not retry the faulty redirect with an administrator account.
 
 ## Access and changes
 
