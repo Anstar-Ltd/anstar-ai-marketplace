@@ -200,10 +200,10 @@ class MvpContractTests(unittest.TestCase):
         self.assertNotIn("businesscentral", " ".join(sorted(names)).lower())
 
         ms365 = json.loads((MS365_PLUGIN / ".mcp.json").read_text())["mcpServers"]["ms365"]
-        self.assertEqual(ms365["command"], "npx")
+        self.assertEqual(ms365["command"], "cmd")
         self.assertEqual(
-            ms365["args"][:2],
-            ["-y", "@softeria/ms-365-mcp-server@0.148.1"],
+            ms365["args"][:4],
+            ["/c", "npx", "-y", "@softeria/ms-365-mcp-server@0.148.2"],
         )
         self.assertIn("--org-mode", ms365["args"])
         self.assertNotIn("--read-only", ms365["args"])
@@ -232,8 +232,9 @@ class MvpContractTests(unittest.TestCase):
         self.assertEqual(github["type"], "http")
         self.assertEqual(
             github["url"],
-            "https://api.githubcopilot.com/mcp/x/all/readonly",
+            "https://api.githubcopilot.com/mcp/x/all",
         )
+        self.assertEqual(github["default_tools_approval_mode"], "writes")
         self.assertNotIn("command", github)
 
         plaud = json.loads((PLAUD_PLUGIN / ".mcp.json").read_text())["mcpServers"]["plaud"]
@@ -250,6 +251,12 @@ class MvpContractTests(unittest.TestCase):
             self.assertEqual(manifest["mcpServers"], "./.mcp.json")
             self.assertTrue((root / manifest["mcpServers"]).is_file())
             self.assertLessEqual(len(manifest["interface"]["defaultPrompt"]), 3)
+
+        github_manifest = json.loads(
+            (GITHUB_PLUGIN / ".codex-plugin/plugin.json").read_text()
+        )
+        self.assertIn("Write", github_manifest["interface"]["capabilities"])
+        self.assertEqual(github_manifest["skills"], "./skills/")
 
     def test_public_docs_install_dataverse_before_sales(self):
         readme = (ROOT / "README.md").read_text()

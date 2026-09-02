@@ -78,7 +78,7 @@ The **Anstar AI** marketplace also packages the portable MCP connections used by
 
 - **Softeria Microsoft 365** — delegated access to Outlook, Teams, SharePoint and other supported Microsoft 365 services.
 - **ClickUp** — ClickUp's hosted connection. Changes to tasks require explicit approval.
-- **GitHub** — GitHub's hosted connection in enforced read-only mode.
+- **GitHub** — GitHub's hosted connection for repository reads and approval-gated writes, including issues, file changes and pull requests.
 - **Plaud** — the employee's own Plaud recordings, transcripts and notes.
 
 These plugins contain connection metadata only; they do not include passwords, access tokens, tenant secrets, or shared user identities. Business Central is not included in this release.
@@ -90,6 +90,8 @@ These plugins contain connection metadata only; they do not include passwords, a
 3. If sign-in is required, use the URL and one-time code shown by the login tool. Complete the Microsoft page yourself using your normal Anstar account.
 4. Ask Codex to verify the connection.
 5. Test one Teams item or SharePoint file that you already know you can access.
+
+The plugin includes a `microsoft-365-first` skill. In a new task, Codex should check Softeria before using browser or desktop automation for Outlook, Teams, SharePoint, OneDrive and other Microsoft 365 requests. If Softeria cannot complete the request, Codex should state whether the limitation is availability, authentication, permission or missing capability before suggesting a fallback.
 
 The plugin runs Softeria in organisation mode using delegated Microsoft authentication. It does not use an application secret, an application-only identity, or an administrator account. Microsoft Graph evaluates each request as the signed-in employee:
 
@@ -112,8 +114,9 @@ Some delegated Microsoft Graph scopes may require Anstar tenant administrator co
 1. Install **GitHub**.
 2. Complete GitHub OAuth using the employee's own GitHub account.
 3. Start a new chat and ask it to read a repository that the employee can access.
+4. For a write-capability check, ask Codex to describe the GitHub MCP action it would use to create a pull request in a test repository. Approve an actual change only when you intend to make it.
 
-The marketplace endpoint is read-only. GitHub CLI authentication is separate from the GitHub MCP plugin's OAuth and does not sign the plugin in automatically.
+The plugin uses GitHub's official read/write MCP endpoint. Codex approval handling applies to write tools, while the employee's GitHub permissions, branch protection and repository rules remain the final boundary. The bundled `github-first` skill tells Codex to use GitHub MCP before a browser or GitHub CLI and to explain any availability, authentication or capability limitation before suggesting a fallback. GitHub CLI authentication is separate from the GitHub MCP plugin's OAuth and does not sign the plugin in automatically.
 
 ### Connect Plaud
 
