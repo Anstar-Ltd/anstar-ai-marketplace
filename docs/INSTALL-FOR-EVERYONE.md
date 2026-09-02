@@ -8,7 +8,7 @@ This guide is for non-technical Anstar users. No Terminal or GitHub account is r
 - Sign in with the ChatGPT workspace/account you use for work.
 - Your normal Anstar Microsoft account must have the intended Dataverse permissions.
 - Do not use an Entra administrator account for normal CRM work.
-- Use only your own Microsoft, ClickUp, GitHub and Plaud accounts. Plugins do not contain shared credentials.
+- Use only credentials assigned to you for Microsoft 365, ClickUp, GitHub, Plaud and TalentHR. Plugins do not contain shared credentials.
 - Never send a password, access token, client secret or device code to another person or paste one into chat.
 
 ## Add the Anstar marketplace
@@ -80,6 +80,7 @@ The **Anstar AI** marketplace also packages the portable MCP connections used by
 - **ClickUp** — ClickUp's hosted connection. Changes to tasks require explicit approval.
 - **GitHub** — GitHub's hosted connection for repository reads and approval-gated writes, including issues, file changes and pull requests.
 - **Plaud** — the employee's own Plaud recordings, transcripts and notes.
+- **TalentHR** — TalentHR's documented public API through a bounded local wrapper. Reads are permission-scoped and writes require explicit approval.
 
 These plugins contain connection metadata only; they do not include passwords, access tokens, tenant secrets, or shared user identities. Business Central is not included in this release.
 
@@ -124,6 +125,14 @@ The plugin uses GitHub's official read/write MCP endpoint. Codex approval handli
 2. Start a new chat and ask: “Find my recent Plaud recordings.”
 3. Complete Plaud authentication if prompted.
 4. Confirm that results belong to the employee's own Plaud account.
+
+### Connect TalentHR
+
+1. An authorised TalentHR administrator should issue a least-privilege API key appropriate to the user's role under **Settings > Domain settings > API**.
+2. Expose the key to Codex as the `TALENTHR_API_KEY` environment variable. Never paste it into chat, source files, logs or support messages.
+3. Install **TalentHR** from **Anstar AI**, fully quit and reopen Codex, then start a new chat.
+4. Ask: “Check my TalentHR connection using the time-zones endpoint. Do not access employee data.”
+5. Before broader use, confirm that reads and writes remain within the expected TalentHR permissions. Writes require Codex approval and cannot exceed the API key's permissions.
 
 ## Update an existing installation
 

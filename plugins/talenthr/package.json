@@ -1,0 +1,13 @@
+{
+  "name": "@anstar/talenthr-codex-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node tests/server.test.mjs",
+    "update-api": "node scripts/update-api-catalogue.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

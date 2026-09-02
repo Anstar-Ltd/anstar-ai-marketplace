@@ -1,6 +1,6 @@
 # Anstar AI Marketplace
 
-Public marketplace for Anstar plugins, MCP connections, and skills used by ChatGPT Desktop and Codex. The code and connection metadata are public; live data access still requires an authorized Anstar Microsoft identity.
+Public marketplace for Anstar plugins, MCP connections, and skills used by ChatGPT Desktop and Codex. The code and connection metadata are public; live data access still requires authorised credentials for the relevant service.
 
 ## Current products
 
@@ -44,6 +44,7 @@ The marketplace packages Anstar's portable MCP connections as installable plugin
 - **ClickUp** — ClickUp's official Codex app binding and hosted MCP endpoint with per-user authentication and Codex approval handling for task updates.
 - **GitHub** — GitHub's official hosted MCP endpoint for repository reads and approval-gated writes, including issues, file changes and pull requests.
 - **Plaud** — Plaud recordings, transcripts, and notes through the npm MCP package pinned to version `0.3.10`.
+- **TalentHR** — a local allow-listed wrapper for TalentHR's documented public API, with bounded reads and approval-gated writes using an externally configured API key.
 
 These wrappers contain no user credentials or access tokens. Authentication and effective data access remain tied to each employee's account. Business Central is intentionally excluded from this marketplace release.
 
@@ -78,11 +79,12 @@ codex plugin add ms-365-mcp-server@anstar-ai
 codex plugin add clickup@anstar-ai
 codex plugin add github@anstar-ai
 codex plugin add plaud@anstar-ai
+codex plugin add talenthr@anstar-ai
 ```
 
 ## Updating employee installations
 
-Softeria and Plaud use reviewed, pinned npm releases. ClickUp and GitHub use vendor-hosted MCP endpoints. After a marketplace release, refresh **Anstar AI**, fully quit and reopen the desktop app, then start a new chat.
+Softeria and Plaud use reviewed, pinned npm releases. ClickUp and GitHub use vendor-hosted MCP endpoints. TalentHR uses the bundled local wrapper and inherits `TALENTHR_API_KEY` from the Codex process environment. After a marketplace release, refresh **Anstar AI**, fully quit and reopen the desktop app, then start a new chat.
 
 CLI equivalent:
 
