@@ -87,9 +87,9 @@ These plugins contain connection metadata only; they do not include passwords, a
 ### Connect Softeria Microsoft 365
 
 1. Install **Softeria Microsoft 365** from **Anstar AI**.
-2. Start a new chat and ask: “Check my Microsoft 365 connection.”
-3. If sign-in is required, use the URL and one-time code shown by the login tool. Complete the Microsoft page yourself using your normal Anstar account.
-4. Ask Codex to verify the connection.
+2. Start a new chat and select **Connect my Microsoft 365 account**, or ask Codex to do this. Installing the plugin alone does not open Microsoft sign-in because Softeria runs as a local MCP; its device-code authentication starts on first use.
+3. Codex should call Softeria's `login` tool. Use the Microsoft URL and one-time code it shows, then complete the Microsoft page yourself using your normal Anstar account.
+4. Tell Codex when the Microsoft page is complete. Codex should call `verify-login` and must not describe the connection as ready until verification succeeds.
 5. Test one Teams item or SharePoint file that you already know you can access.
 
 The plugin includes a `microsoft-365-first` skill. In a new task, Codex should check Softeria before using browser or desktop automation for Outlook, Teams, SharePoint, OneDrive and other Microsoft 365 requests. If Softeria cannot complete the request, Codex should state whether the limitation is availability, authentication, permission or missing capability before suggesting a fallback.

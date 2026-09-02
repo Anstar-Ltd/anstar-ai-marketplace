@@ -54,7 +54,7 @@ The Softeria plugin uses interactive delegated authentication. It does not conta
 
 Organisation mode preserves Softeria's current read and write capabilities. Codex still applies approval handling to write tools, and Microsoft 365 permissions remain the final authorization boundary.
 
-The bundled `microsoft-365-first` skill tells Codex to check Softeria before browser or desktop automation for Outlook, Teams, SharePoint, OneDrive and other Microsoft 365 work. It also requires Codex to explain any connection, authentication, permission or capability limitation before using a fallback.
+The bundled `microsoft-365-first` skill tells Codex to check Softeria before browser or desktop automation for Outlook, Teams, SharePoint, OneDrive and other Microsoft 365 work. On a new employee's first use, it starts Softeria's device-code login, presents the Microsoft URL and one-time code, then verifies the connection before continuing. It also requires Codex to explain any connection, authentication, permission or capability limitation before using a fallback.
 
 The bundled `github-first` skill applies the same direct-integration rule to GitHub. Codex should use GitHub MCP before a browser or GitHub CLI, keep writes within the user's requested scope and report any connection, authentication or capability limitation before suggesting a fallback.
 
@@ -65,7 +65,7 @@ The bundled `github-first` skill applies the same direct-integration rule to Git
 3. Use source `https://github.com/Anstar-Ltd/anstar-ai-marketplace.git` and Git ref `main`.
 4. Install **Anstar Dataverse** and complete normal-user Microsoft sign-in.
 5. Install **Anstar Sales**.
-6. Start a new chat.
+6. Install **Softeria Microsoft 365**, start a new chat and select **Connect my Microsoft 365 account**. Installing this local MCP does not itself open Microsoft sign-in; authentication starts on first use through Softeria's `login` tool.
 
 See `docs/INSTALL-FOR-EVERYONE.md` for the click-by-click guide.
 

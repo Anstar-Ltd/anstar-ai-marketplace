@@ -31,6 +31,10 @@ class EmployeeRolloutTests(unittest.TestCase):
         self.assertIn("Write", manifest["interface"]["capabilities"])
         self.assertIn("delegated", manifest["interface"]["longDescription"].lower())
         self.assertEqual(manifest["skills"], "./skills/")
+        self.assertEqual(
+            manifest["interface"]["defaultPrompt"][0],
+            "Connect my Microsoft 365 account",
+        )
 
         skill = (
             ROOT
@@ -39,6 +43,10 @@ class EmployeeRolloutTests(unittest.TestCase):
         for wording in (
             "before opening a browser",
             "mcp__ms365__verify_login",
+            "mcp__ms365__login",
+            "device_code_required",
+            "do not stop at an unauthenticated result",
+            "do not report the plugin as connected until that check returns success",
             "mcp__ms365__list_accounts",
             "teams and sharepoint require softeria organisation mode",
             "availability, authentication, permission or capability limitation",
@@ -100,6 +108,8 @@ class EmployeeRolloutTests(unittest.TestCase):
             "delegated microsoft authentication",
             "cannot grant access",
             "administrator consent",
+            "installing the plugin alone does not open microsoft sign-in",
+            "must not describe the connection as ready until verification succeeds",
             "github cli authentication is separate",
             "codex plugin marketplace upgrade anstar-ai",
             "second normal employee account",

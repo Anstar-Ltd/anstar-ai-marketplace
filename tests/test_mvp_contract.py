@@ -190,7 +190,11 @@ class MvpContractTests(unittest.TestCase):
             entries["anstar-sales"]["policy"]["authentication"],
             "ON_USE",
         )
-        for name in ("ms-365-mcp-server", "clickup", "github", "plaud"):
+        self.assertEqual(
+            entries["ms-365-mcp-server"]["policy"]["authentication"],
+            "ON_USE",
+        )
+        for name in ("clickup", "github", "plaud"):
             self.assertEqual(entries[name]["policy"]["authentication"], "ON_INSTALL")
 
     def test_shared_productivity_plugins_are_portable_and_bounded(self):
