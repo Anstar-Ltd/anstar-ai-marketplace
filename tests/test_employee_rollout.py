@@ -20,6 +20,8 @@ class EmployeeRolloutTests(unittest.TestCase):
         )
         self.assertIn("--org-mode", server["args"])
         self.assertNotIn("--read-only", server["args"])
+        self.assertNotIn("--auth-browser", server["args"])
+        self.assertNotIn("--login", server["args"])
         self.assertNotIn("env", server)
         self.assertNotIn("env_vars", server)
 
@@ -33,7 +35,7 @@ class EmployeeRolloutTests(unittest.TestCase):
         self.assertEqual(manifest["skills"], "./skills/")
         self.assertEqual(
             manifest["interface"]["defaultPrompt"][0],
-            "Connect my Microsoft 365 account",
+            "Connect my Microsoft 365 account using device-code sign-in",
         )
 
         skill = (
@@ -45,6 +47,9 @@ class EmployeeRolloutTests(unittest.TestCase):
             "mcp__ms365__verify_login",
             "mcp__ms365__login",
             "device_code_required",
+            "do not replace this with browser-callback authentication",
+            "aadsts50011",
+            "do not add `--login`",
             "do not stop at an unauthenticated result",
             "do not report the plugin as connected until that check returns success",
             "mcp__ms365__list_accounts",
@@ -113,6 +118,8 @@ class EmployeeRolloutTests(unittest.TestCase):
             "github cli authentication is separate",
             "codex plugin marketplace upgrade anstar-ai",
             "second normal employee account",
+            "aadsts50011",
+            "device-code sign-in",
         ):
             self.assertIn(wording, guide)
 

@@ -87,7 +87,7 @@ These plugins contain connection metadata only; they do not include passwords, a
 ### Connect Softeria Microsoft 365
 
 1. Install **Softeria Microsoft 365** from **Anstar AI**.
-2. Start a new chat and select **Connect my Microsoft 365 account**, or ask Codex to do this. Installing the plugin alone does not open Microsoft sign-in because Softeria runs as a local MCP; its device-code authentication starts on first use.
+2. Start a new chat and select **Connect my Microsoft 365 account using device-code sign-in**, or ask Codex to do this. Installing the plugin alone does not open Microsoft sign-in because Softeria runs as a local MCP; its device-code authentication starts on first use.
 3. Codex should call Softeria's `login` tool. Use the Microsoft URL and one-time code it shows, then complete the Microsoft page yourself using your normal Anstar account.
 4. Tell Codex when the Microsoft page is complete. Codex should call `verify-login` and must not describe the connection as ready until verification succeeds.
 5. Test one Teams item or SharePoint file that you already know you can access.
@@ -169,7 +169,7 @@ Before broad deployment, IT should complete one clean installation using a secon
 - **Teams or SharePoint tools are missing:** refresh **Anstar AI**, confirm Softeria is the marketplace version that runs in organisation mode, then restart the app.
 - **Microsoft requests administrator approval:** stop and send the exact consent request to IT. Do not switch to an administrator account.
 - **A SharePoint result looks over-broad:** stop using the plugin and report the site, signed-in account and non-sensitive reproduction steps to IT. Do not open or share additional files.
-- **Microsoft says the redirect URI is invalid:** record the exact message and app version for IT; do not try another account or paste login data into chat.
+- **Microsoft shows `AADSTS50011` or says the localhost redirect URI is invalid:** stop the browser-callback attempt and ask Codex to restart Softeria's device-code sign-in through its `login` tool. Do not try to cure the redirect error by signing in as an administrator. If the employee account separately requires administrator approval, Anstar IT should grant tenant consent, then the employee should repeat device-code sign-in with their own account.
 - **No CRM records appear:** confirm the signed-in Anstar user can see those records in Dynamics CRM.
 - **The plugin changed but looks old:** upgrade or refresh **Anstar AI**, then restart the app.
 
