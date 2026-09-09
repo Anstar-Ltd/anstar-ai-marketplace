@@ -3,12 +3,15 @@
     "ms365": {
       "command": "cmd",
       "args": [
+        "/d",
+        "/s",
         "/c",
-        "npx",
-        "-y",
-        "@softeria/ms-365-mcp-server@0.148.2",
-        "--org-mode"
+        "scripts\\start-ms365.cmd"
       ],
+      "cwd": ".",
+      "env": {
+        "ENABLED_TOOLS": "^(?!.*adhoc-call-transcript).*$"
+      },
       "startup_timeout_sec": 120,
       "tool_timeout_sec": 120,
       "default_tools_approval_mode": "writes"
