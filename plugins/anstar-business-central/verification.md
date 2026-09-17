@@ -11,16 +11,17 @@
 - The first-party protected-resource metadata endpoint responded without credentials and advertised tenant Entra OAuth with `https://mcp.businesscentral.dynamics.com/Financials.ReadWrite.All`. This establishes public auth discovery only, not authenticated MCP transport.
 - Codex release-tag source confirms `oauth.client_id`, `http_headers` and URL-specific callback suffix handling. This runtime ignores plugin-specific callback settings. `mcp get` does not serialize OAuth/scopes; its output is not claimed as verification of those omitted fields.
 - With the administrator-supplied client ID, an isolated native Codex app-server OAuth request produced a Microsoft authorization URL containing that exact ID, PKCE S256, the documented scopes, and `http://localhost:33418/callback/GNmTSc-BOPT4`. No browser was opened automatically. This confirms the runtime uses the packaged client ID and pilot callback settings; it does not yet prove that Microsoft accepts the registration or that sign-in succeeds.
+- The subsequent interactive sign-in completed with Codex reporting `success: true`. A fresh app-server process reused the isolated OAuth session and reported `authStatus: oAuth`. Authenticated MCP discovery then returned HTTP 400: **The MCP Configuration named Anstar AI Read Only was not found or not active.** No business tools were invoked. This verifies login and session reuse, not refresh-token renewal, successful MCP initialization or read access.
 
 ## Not verified / release blockers
 
 | Gate | State |
 | --- | --- |
-| Dedicated Entra app/client ID and admin consent | Client ID supplied; administrator reports permissions/consent complete; live authorization not yet verified |
+| Dedicated Entra app/client ID and admin consent | Client ID supplied; administrator reports consent complete; interactive OAuth succeeded |
 | Approval and deployment of global callback settings | Pending decision; no employee config was changed |
-| `Anstar AI Read Only` sandbox configuration | Not created or verified; outbound-service permission prompt requires review |
-| BC MCP initialization and actual tools/list | Not performed |
-| Normal-user Microsoft sign-in and token renewal | Not performed |
+| `Anstar AI Read Only` sandbox configuration | Authenticated endpoint reports configuration not found or not active; create/activate and verify read-only settings |
+| BC MCP initialization and actual tools/list | Attempted; blocked by HTTP 400 missing/inactive configuration; no tools discovered |
+| Microsoft sign-in and token renewal | Interactive sign-in and session reuse passed; restricted-normal-user pilot and refresh-token renewal pending |
 | Bounded live MCP read | Not performed |
 | Negative identity access test | Not performed; never test by mutating records |
 | Clean ChatGPT desktop Work pilot | Not performed |

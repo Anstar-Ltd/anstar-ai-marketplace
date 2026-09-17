@@ -4,7 +4,7 @@
 
 ## 1. Register a dedicated public OAuth client
 
-The administrator supplied Application (client) ID **`894473ac-0b35-44de-97f8-c642366fdb43`** and reported API permission/consent setup complete. The plugin now includes that public ID, but sign-in, callback and effective consent still require live verification. The intended registration name is **Anstar Business Central MCP — Read Only**; its name describes intended MCP configuration, not the breadth of the OAuth grant.
+The administrator supplied Application (client) ID **`894473ac-0b35-44de-97f8-c642366fdb43`** and reported API permission/consent setup complete. Interactive sign-in with that ID and the documented callback succeeded in the isolated Codex pilot. Authenticated MCP discovery is now blocked because the named BC configuration was not found or is not active. The intended registration name is **Anstar Business Central MCP — Read Only**; its name describes intended MCP configuration, not the breadth of the OAuth grant.
 
 [Open this app's API permissions](https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/CallAnAPI/appId/894473ac-0b35-44de-97f8-c642366fdb43) in the Anstar directory. Do not create a duplicate registration.
 

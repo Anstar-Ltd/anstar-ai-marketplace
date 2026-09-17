@@ -1,6 +1,6 @@
 # Anstar Business Central — staged preview
 
-**Not ready for employee installation.** The marketplace entry is `NOT_AVAILABLE` and the MCP server is `enabled: false`. No OAuth client ID is fabricated or borrowed from another integration. Authentication and live MCP reads have **not** been verified. This is an administrator/reviewer preview, not a completed rollout.
+**Not ready for employee installation.** The marketplace entry is `NOT_AVAILABLE` and the MCP server is `enabled: false`. The dedicated client ID completed interactive Microsoft sign-in in an isolated Codex pilot. Live MCP reads have **not** been verified: the authenticated endpoint reports that `Anstar AI Read Only` was not found or is not active. This is an administrator/reviewer preview, not a completed rollout.
 
 ## What it packages
 
