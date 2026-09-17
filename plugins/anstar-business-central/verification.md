@@ -10,12 +10,13 @@
 - The smoke ran 10 commands: 9 successful, 1 expected release-policy refusal. It created no OAuth credential files and made no BC read or write calls. Reproduce with `python3 scripts/smoke_business_central.py` on macOS.
 - The first-party protected-resource metadata endpoint responded without credentials and advertised tenant Entra OAuth with `https://mcp.businesscentral.dynamics.com/Financials.ReadWrite.All`. This establishes public auth discovery only, not authenticated MCP transport.
 - Codex release-tag source confirms `oauth.client_id`, `http_headers` and URL-specific callback suffix handling. This runtime ignores plugin-specific callback settings. `mcp get` does not serialize OAuth/scopes; its output is not claimed as verification of those omitted fields.
+- With the administrator-supplied client ID, an isolated native Codex app-server OAuth request produced a Microsoft authorization URL containing that exact ID, PKCE S256, the documented scopes, and `http://localhost:33418/callback/GNmTSc-BOPT4`. No browser was opened automatically. This confirms the runtime uses the packaged client ID and pilot callback settings; it does not yet prove that Microsoft accepts the registration or that sign-in succeeds.
 
 ## Not verified / release blockers
 
 | Gate | State |
 | --- | --- |
-| Dedicated Entra app/client ID and admin consent | Pending administrator |
+| Dedicated Entra app/client ID and admin consent | Client ID supplied; administrator reports permissions/consent complete; live authorization not yet verified |
 | Approval and deployment of global callback settings | Pending decision; no employee config was changed |
 | `Anstar AI Read Only` sandbox configuration | Not created or verified; outbound-service permission prompt requires review |
 | BC MCP initialization and actual tools/list | Not performed |

@@ -4,7 +4,9 @@
 
 ## 1. Register a dedicated public OAuth client
 
-In the Anstar tenant, create **Anstar Business Central MCP — Read Only**. The name describes intended MCP configuration, not the breadth of the OAuth grant.
+The administrator supplied Application (client) ID **`894473ac-0b35-44de-97f8-c642366fdb43`** and reported API permission/consent setup complete. The plugin now includes that public ID, but sign-in, callback and effective consent still require live verification. The intended registration name is **Anstar Business Central MCP — Read Only**; its name describes intended MCP configuration, not the breadth of the OAuth grant.
+
+[Open this app's API permissions](https://portal.azure.com/#view/Microsoft_AAD_RegisteredApps/ApplicationMenuBlade/~/CallAnAPI/appId/894473ac-0b35-44de-97f8-c642366fdb43) in the Anstar directory. Do not create a duplicate registration.
 
 | Setting | Value |
 | --- | --- |
@@ -76,13 +78,13 @@ Desktop Work may run a different bundled runtime. Capture its real authorization
 
 ## 4. Activate only in a reviewed pilot
 
-After steps 1–3, the maintainer adds the **verified** public client ID to `.mcp.json`:
+The administrator-supplied public client ID is now packaged in `.mcp.json`:
 
 ```json
-"oauth": { "client_id": "<ADMIN-SUPPLIED-CLIENT-ID>" }
+"oauth": { "client_id": "894473ac-0b35-44de-97f8-c642366fdb43" }
 ```
 
-This is documentation only; no placeholder ID is shipped in executable configuration. Keep `http_headers` (not `headers`) and the explicit ConfigurationName. Do not omit the name and fall back to an uncontrolled default.
+The ID is not a credential and is not a placeholder; its presence alone does not prove successful authorization. Keep `http_headers` (not `headers`) and the explicit ConfigurationName. Do not omit the name and fall back to an uncontrolled default.
 
 For an approved isolated pilot only, change `enabled` to true and local marketplace policy to AVAILABLE; keep employee release blocked until all acceptance gates pass. Never add a client secret. Test Microsoft sign-in with a normal user, actual MCP initialization/tools/list, search, describe and one bounded read (at most 1–3 rows and non-sensitive fields). Retain only sanitized success/error evidence. No write denial probe.
 

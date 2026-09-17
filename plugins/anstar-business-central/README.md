@@ -25,7 +25,7 @@ See [ADMIN-SETUP.md](ADMIN-SETUP.md) for the exact handoff and release checklist
 1. Dedicated Entra public-client registration and tenant-admin consent.
 2. Explicit read-only BC MCP configuration in the authorized sandbox.
 3. IT-managed callback configuration for Codex 0.146.0. This version ignores plugin-specific callback settings. **Approval to deploy these settings is still pending.** Do not silently modify an employee's global Codex configuration.
-4. Add the verified public client ID to this package, validate login/discovery/read, then separately enable and release it. Client/tenant IDs are public identifiers, not credentials; tokens and secrets never belong in Git.
+4. The administrator-supplied public client ID is now packaged. Verify login/discovery/read, then separately enable and release it. Client/tenant IDs are public identifiers, not credentials; tokens and secrets never belong in Git.
 
 ## Intended employee flow after release
 

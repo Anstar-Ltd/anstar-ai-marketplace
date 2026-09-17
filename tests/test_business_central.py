@@ -37,7 +37,9 @@ class BusinessCentralContractTests(unittest.TestCase):
         self.assertEqual(manifest["mcpServers"], "./.mcp.json")
         server = json.loads((PLUGIN / ".mcp.json").read_text())["mcpServers"]["anstar-business-central"]
         self.assertIs(server["enabled"], False)
-        self.assertNotIn("oauth", server, "Do not ship a fictitious or reused OAuth client ID")
+        self.assertEqual(server["oauth"], {
+            "client_id": "894473ac-0b35-44de-97f8-c642366fdb43",
+        })
         self.assertEqual(server["type"], "http")
         self.assertEqual(server["url"], "https://mcp.businesscentral.dynamics.com")
         self.assertNotIn("command", server)
