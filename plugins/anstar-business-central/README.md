@@ -1,12 +1,12 @@
 # Anstar Business Central — staged preview
 
-**Not ready for employee installation.** The marketplace entry is `NOT_AVAILABLE` and the MCP server is `enabled: false`. The dedicated client ID completed interactive Microsoft sign-in in an isolated Codex pilot. Live MCP reads have **not** been verified: the authenticated endpoint reports that `Anstar AI Read Only` was not found or is not active. This is an administrator/reviewer preview, not a completed rollout.
+**Not ready for employee installation.** The marketplace entry is `NOT_AVAILABLE` and the MCP server is `enabled: false`. Microsoft sign-in, MCP discovery and bounded reads of **Items, Item Ledger Entries and Sales Orders** passed in the isolated sandbox pilot. Employee callback setup, desktop validation and the remaining permission/rollout checks are still open. This is a working sandbox pilot, not a completed employee rollout.
 
 ## What it packages
 
 - Microsoft's official hosted MCP: `https://mcp.businesscentral.dynamics.com`.
 - Native Streamable HTTP transport and per-user Microsoft OAuth through a dedicated Anstar-owned public-client app.
-- Raw discovery-first reads across API pages exposed by BC, including supported custom API pages. Not arbitrary tables, all OData services, or every AL object; Microsoft currently excludes API pages of subtype ListPart/CardPart.
+- Raw discovery-first reads across APIs exposed by BC, including supported custom APIs. Live discovery also exposed API-query and nested list actions; only the three pilot entities have been functionally validated. This is not arbitrary table access or a guarantee that all OData services, fields or AL objects are exposed.
 - Three model-visible dispatchers: `bc_actions_search`, `bc_actions_describe`, `bc_actions_invoke`. Search and describe only relevant operations instead of loading every API schema. This is **server-side dynamic discovery**, not a special client `defer` flag and not OAuth dynamic client registration. No numerical token savings are claimed.
 - One small source/safety skill; no task-specific business workflows yet.
 
