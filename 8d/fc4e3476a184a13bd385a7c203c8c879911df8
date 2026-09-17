@@ -1,0 +1,42 @@
+.agents/plugins/marketplace.json
+  h_7a831411810cd7 7-18
+.github/workflows/validate.yml
+  h_7a831411810cd7 13-27
+CHANGELOG.md
+  h_7a831411810cd7 1-7
+README.md
+  h_7a831411810cd7 49-55
+THIRD_PARTY_NOTICES.md
+  h_7a831411810cd7 3-6
+docs/INSTALL-FOR-EVERYONE.md
+  h_7a831411810cd7 85-91
+plugins/anstar-business-central/.codex-plugin/plugin.json
+  h_7a831411810cd7 1-28
+plugins/anstar-business-central/.mcp.json
+  h_7a831411810cd7 1-27
+plugins/anstar-business-central/ADMIN-SETUP.md
+  h_7a831411810cd7 1-99
+plugins/anstar-business-central/README.md
+  h_7a831411810cd7 1-80
+plugins/anstar-business-central/skills/business-central-read/SKILL.md
+  h_7a831411810cd7 1-30
+plugins/anstar-business-central/verification.md
+  h_7a831411810cd7 1-32
+scripts/smoke_business_central.py
+  h_7a831411810cd7 1-152
+tests/test_business_central.py
+  h_7a831411810cd7 1-57
+tests/test_mvp_contract.py
+  h_7a831411810cd7 179,206-207
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "8dfc4e3476a184a13bd385a7c203c8c879911df8",
+  "prompts": {},
+  "humans": {
+    "h_7a831411810cd7": {
+      "author": "Maksym Dudkin <lugamax@gmail.com>"
+    }
+  }
+}
