@@ -1,0 +1,22 @@
+CHANGELOG.md
+  h_7a831411810cd7 13
+plugins/anstar-business-central/ADMIN-SETUP.md
+  h_7a831411810cd7 7,54
+plugins/anstar-business-central/README.md
+  h_7a831411810cd7 3,9
+plugins/anstar-business-central/skills/business-central-read/SKILL.md
+  h_7a831411810cd7 18,20
+plugins/anstar-business-central/verification.md
+  h_7a831411810cd7 16-31,38-39,41
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "ea17f132ac754e252d76dfeff64d3e56bfb4d74a",
+  "prompts": {},
+  "humans": {
+    "h_7a831411810cd7": {
+      "author": "Maksym Dudkin <lugamax@gmail.com>"
+    }
+  }
+}
