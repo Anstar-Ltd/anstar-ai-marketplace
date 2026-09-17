@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "anstar-business-central": {
+      "type": "http",
+      "url": "https://mcp.businesscentral.dynamics.com",
+      "enabled": false,
+      "http_headers": {
+        "TenantId": "8f0da656-9ff9-4e19-97a2-79388929de03",
+        "EnvironmentName": "sandbox-uat-2026-march",
+        "Company": "Anstar Ltd",
+        "ConfigurationName": "Anstar AI Read Only"
+      },
+      "scopes": [
+        "offline_access",
+        "https://mcp.businesscentral.dynamics.com/Financials.ReadWrite.All"
+      ],
+      "enabled_tools": [
+        "bc_actions_search",
+        "bc_actions_describe",
+        "bc_actions_invoke"
+      ],
+      "startup_timeout_sec": 60,
+      "tool_timeout_sec": 120,
+      "default_tools_approval_mode": "approve"
+    }
+  }
+}

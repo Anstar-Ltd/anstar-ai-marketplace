@@ -1,5 +1,9 @@
 # Third-Party Notices
 
+## Microsoft Business Central hosted MCP
+
+The Anstar Business Central preview connects to Microsoft's hosted Business Central MCP service. No Microsoft server source or third-party community MCP implementation is redistributed. Use of the service remains subject to Microsoft terms and the customer's Business Central entitlements. The Anstar-authored plugin metadata, safety skill and validation tooling follow this repository's `UNLICENSED` package convention. OpenAI Codex CLI 0.146.0 is installed only as a pinned validation dependency; it is not bundled with this plugin.
+
 ## OpenAI Role-Specific Sales Plugin
 
 Portions of the Anstar Sales workflow architecture and wording are adapted from the Sales plugin in [`openai/role-specific-plugins`](https://github.com/openai/role-specific-plugins), revision `fe5608d2512a7d6a7b9821ce8a88c48464ecd6e4`. The Anstar adaptation keeps a small subset of workflow concepts, replaces provider placeholders with the existing Anstar Dataverse MCP, and enforces a read-only MVP boundary.
