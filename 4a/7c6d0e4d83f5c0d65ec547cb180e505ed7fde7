@@ -1,0 +1,46 @@
+CHANGELOG.md
+  h_7a831411810cd7 11-12
+plugins/anstar-business-central/.codex-plugin/plugin.json
+  h_7a831411810cd7 3,17
+plugins/anstar-business-central/ADMIN-SETUP.md
+  h_7a831411810cd7 30,34,38-39,54,66
+plugins/anstar-business-central/README.md
+  h_7a831411810cd7 3,13,24,35,37,41,86
+plugins/anstar-business-central/connection.json
+  h_7a831411810cd7 7-8
+plugins/anstar-business-central/package-lock.json
+  h_7a831411810cd7 3,9
+plugins/anstar-business-central/package.json
+  h_7a831411810cd7 3
+plugins/anstar-business-central/skills/business-central-read/SKILL.md
+  h_7a831411810cd7 3,16-17
+plugins/anstar-business-central/src/adapter.ts
+  h_7a831411810cd7 24,35-38,41
+plugins/anstar-business-central/src/auth.ts
+  h_7a831411810cd7 71,85,108,149,153-154
+plugins/anstar-business-central/src/config.ts
+  h_7a831411810cd7 14-15
+plugins/anstar-business-central/src/upstream.ts
+  h_7a831411810cd7 19
+plugins/anstar-business-central/tests/auth.test.ts
+  h_7a831411810cd7 188-190
+plugins/anstar-business-central/tests/config.test.ts
+  h_7a831411810cd7 7-10,12
+plugins/anstar-business-central/tests/server.test.ts
+  h_7a831411810cd7 26-46
+plugins/anstar-business-central/verification.md
+  h_7a831411810cd7 3-10
+tests/test_business_central.py
+  h_7a831411810cd7 49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "4a7c6d0e4d83f5c0d65ec547cb180e505ed7fde7",
+  "prompts": {},
+  "humans": {
+    "h_7a831411810cd7": {
+      "author": "Maksym Dudkin <lugamax@gmail.com>"
+    }
+  }
+}
