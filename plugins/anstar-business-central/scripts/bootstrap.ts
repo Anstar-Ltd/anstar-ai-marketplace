@@ -5,7 +5,7 @@ import { lstat, mkdir, readFile, readdir, rename, rm, writeFile } from 'node:fs/
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { guardRuntimeDirectory, guardRuntimeTree } from '../src/auth-store.ts';
+import { guardRuntimeDirectory, guardRuntimeTree, sealNewRuntime } from '../src/auth-store.ts';
 
 async function privateDirectory(directory: string): Promise<void> {
   await guardRuntimeDirectory(directory);
@@ -49,6 +49,7 @@ export async function prepareRuntime(source: string, cache: string, install: (di
     }
     await install(staging);
     await writeFile(path.join(staging, '.ready'), digest, { mode: 0o600, flag: 'wx' });
+    await sealNewRuntime(staging);
     await guardRuntimeTree(staging);
     try { await rename(staging, target); }
     catch (error) {

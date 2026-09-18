@@ -84,6 +84,14 @@ try {
     }
     Assert-Private $path $true
   }
+  function Seal-NewRuntimeTree([string]$path) {
+    $attributes = Attributes-OrMissing $path
+    if ($attributes -eq -1 -or ($attributes -band 1024) -ne 0) { throw 'Unsafe new runtime entry' }
+    if (($attributes -band 16) -ne 0) {
+      [System.IO.Directory]::SetAccessControl($path, (Private-Security $true))
+      foreach ($child in [System.IO.Directory]::EnumerateFileSystemEntries($path)) { Seal-NewRuntimeTree $child }
+    } else { [System.IO.File]::SetAccessControl($path, (Private-Security $false)) }
+  }
   function Assert-RuntimeTree([string]$path) {
     $attributes = Attributes-OrMissing $path
     if ($attributes -eq -1 -or ($attributes -band 1024) -ne 0) { throw 'Unsafe runtime entry' }
@@ -98,6 +106,7 @@ try {
   switch ($operation) {
     'directory' { Guard-Directory $p }
     'runtime-tree' { Guard-Directory $p; Assert-RuntimeTree $p }
+    'seal-new-runtime' { Guard-Directory $p; Seal-NewRuntimeTree $p; Assert-RuntimeTree $p }
     'file' { Assert-Private $p $false }
     'seal-new-file' {
       # Only called for an empty, exclusively created temporary in a private dir.
@@ -138,7 +147,7 @@ try {
 } catch { [Console]::Error.WriteLine('Authentication cache ACL check failed.'); exit 1 }
 `;
 
-async function windowsAcl(path: string, operation: 'directory' | 'file' | 'seal-new-file' | 'acquire' | 'runtime-tree'): Promise<'OK' | 'BUSY'> {
+async function windowsAcl(path: string, operation: 'directory' | 'file' | 'seal-new-file' | 'acquire' | 'runtime-tree' | 'seal-new-runtime'): Promise<'OK' | 'BUSY'> {
   const systemRoot = process.env.SystemRoot;
   if (!systemRoot || !/^[a-z]:\\/i.test(systemRoot) || systemRoot !== resolve(systemRoot)) throw new AuthStoreError();
   try {
@@ -179,6 +188,12 @@ export async function guardRuntimeDirectory(directory: string): Promise<void> {
     if (info.isSymbolicLink() || !info.isDirectory() || (info.uid !== 0 && info.uid !== process.getuid?.()) || ((info.mode & 0o022) !== 0 && !stickyRoot)) throw new AuthStoreError();
   }
   owned(await lstat(directory),0o700);
+}
+
+/** Seal only a freshly installed private staging tree; never repair a published cache. */
+export async function sealNewRuntime(directory: string): Promise<void> {
+  await guardRuntimeDirectory(directory);
+  if (WINDOWS) await windowsAcl(directory,'seal-new-runtime');
 }
 
 export async function guardRuntimeTree(directory: string): Promise<void> {
