@@ -46,7 +46,13 @@ The marketplace packages Anstar's portable MCP connections as installable plugin
 - **Plaud** — Plaud recordings, transcripts, and notes through the npm MCP package pinned to version `0.3.10`.
 - **TalentHR** — a local allow-listed wrapper for TalentHR's documented public API, with bounded reads and approval-gated writes using an externally configured API key.
 
-These wrappers contain no user credentials or access tokens. Authentication and effective data access remain tied to each employee's account. Business Central is intentionally excluded from this marketplace release.
+These wrappers contain no user credentials or access tokens. Authentication and effective data access remain tied to each employee's account.
+
+### Business Central — staged, not released
+
+**Anstar Business Central** connects to Microsoft's official hosted MCP through an Anstar-owned TypeScript adapter, launched with pinned `npx tsx`. It requires **Node.js 22+ and npm/npx**; locked dependencies install automatically on first launch. Codex live sign-in and sandbox reads pass, as do clean macOS/Windows/Linux installation checks. The entry remains `NOT_AVAILABLE` and disabled pending desktop Work and restricted-user rollout acceptance; it is **not yet released for employee installation**.
+
+See the [plugin README](plugins/anstar-business-central/README.md), [administrator handoff](plugins/anstar-business-central/ADMIN-SETUP.md), and [verification status](plugins/anstar-business-central/verification.md). The adapter owns its callback without global Codex settings. It adds two connection tools to the three discovery/read dispatchers. Microsoft's OAuth scope is `Financials.ReadWrite.All`; the BC read-only configuration and identity permissions remain the server-side boundary. No Production validation is performed.
 
 ### Microsoft 365 employee boundary
 

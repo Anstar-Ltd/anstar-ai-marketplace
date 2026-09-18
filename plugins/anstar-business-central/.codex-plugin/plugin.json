@@ -1,0 +1,28 @@
+{
+  "name": "anstar-business-central",
+  "version": "0.3.0-preview.1",
+  "description": "Staged Business Central read adapter with personal Microsoft sign-in.",
+  "author": {
+    "name": "Anstar",
+    "url": "https://anstar.com"
+  },
+  "homepage": "https://github.com/Anstar-Ltd/anstar-ai-marketplace",
+  "license": "UNLICENSED",
+  "keywords": ["anstar", "business-central", "erp", "read-only", "mcp"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Anstar Business Central (staged preview)",
+    "shortDescription": "Read-only ERP adapter; validation pending",
+    "longDescription": "Anstar-owned TypeScript adapter to Microsoft's hosted Business Central MCP. First use starts personal Microsoft sign-in if needed. Read-only dynamic discovery targets Production / Anstar Ltd. Requires Node.js 22+ and npm/npx. Preview remains disabled pending Production configuration and validation.",
+    "developerName": "Anstar",
+    "category": "Productivity",
+    "capabilities": ["Read"],
+    "websiteURL": "https://github.com/Anstar-Ltd/anstar-ai-marketplace",
+    "defaultPrompt": [
+      "Check whether the Business Central read-only connection is ready.",
+      "Find the available Business Central APIs for my question without changing any records."
+    ],
+    "brandColor": "#007F7F"
+  }
+}

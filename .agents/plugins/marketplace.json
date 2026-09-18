@@ -5,6 +5,18 @@
   },
   "plugins": [
     {
+      "name": "anstar-business-central",
+      "source": {
+        "source": "local",
+        "path": "./plugins/anstar-business-central"
+      },
+      "policy": {
+        "installation": "NOT_AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
       "name": "anstar-dataverse",
       "source": {
         "source": "local",

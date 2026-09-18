@@ -1,0 +1,23 @@
+{
+  "name": "@anstar/business-central-codex-plugin",
+  "version": "0.3.0-preview.1",
+  "private": true,
+  "type": "module",
+  "license": "UNLICENSED",
+  "engines": { "node": ">=22.0.0" },
+  "scripts": {
+    "test": "tsx --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
+    "start": "tsx src/server.ts"
+  },
+  "dependencies": {
+    "@azure/msal-node": "6.0.1",
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "tsx": "4.23.13",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.3",
+    "typescript": "5.9.3"
+  }
+}
