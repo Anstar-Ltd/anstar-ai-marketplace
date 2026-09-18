@@ -1,66 +1,61 @@
 # Anstar Business Central — staged preview
 
-**Not ready for employee installation.** The marketplace entry is `NOT_AVAILABLE` and the MCP server is `enabled: false`. Microsoft sign-in, MCP discovery and bounded reads of **Items, Item Ledger Entries and Sales Orders** passed in the isolated sandbox pilot. Employee callback setup, desktop validation and the remaining permission/rollout checks are still open. This is a working sandbox pilot, not a completed employee rollout.
+**Employee release is still held:** marketplace policy `NOT_AVAILABLE`, MCP `enabled: false`. The current implementation is an **Anstar-owned TypeScript adapter**, launched with `npx tsx`, connecting to Microsoft's hosted Business Central MCP. The earlier native Codex pilot passed Microsoft sign-in and bounded sandbox reads; those results do not verify this replacement adapter. See [verification.md](verification.md).
 
-## What it packages
+## What it provides
 
-- Microsoft's official hosted MCP: `https://mcp.businesscentral.dynamics.com`.
-- Native Streamable HTTP transport and per-user Microsoft OAuth through a dedicated Anstar-owned public-client app.
-- Raw discovery-first reads across APIs exposed by BC, including supported custom APIs. Live discovery also exposed API-query and nested list actions; only the three pilot entities have been functionally validated. This is not arbitrary table access or a guarantee that all OData services, fields or AL objects are exposed.
-- Three model-visible dispatchers: `bc_actions_search`, `bc_actions_describe`, `bc_actions_invoke`. Search and describe only relevant operations instead of loading every API schema. This is **server-side dynamic discovery**, not a special client `defer` flag and not OAuth dynamic client registration. No numerical token savings are claimed.
-- One small source/safety skill; no task-specific business workflows yet.
+- Microsoft-hosted API access at `https://mcp.businesscentral.dynamics.com`, through a local stdio MCP adapter—no Anstar-hosted service.
+- Personal Microsoft sign-in using Microsoft's MSAL library, PKCE S256, the existing tenant-owned public client and a fixed loopback callback. **No global Codex callback settings or client secrets.**
+- Three business dispatchers: `bc_actions_search`, `bc_actions_describe`, `bc_actions_invoke`; plus two small connection tools, `bc_connect` and `bc_status`. Search/describe loads only relevant API schemas, not every BC tool. This is dynamic discovery, not a client `defer` flag.
+- Generic **List** reads from API pages/queries exposed by BC, including supported custom APIs. This is not arbitrary table access or a promise of all OData/AL objects. Nested operations requiring additional route arguments are not yet supported by the local parameter allowlist.
+- A local fail-closed guard: discover → describe → invoke; selected fields required, at most 100 rows per call, text results, bounded response bytes, no create/modify/delete/bound actions, arbitrary URLs, expansion or resource downloads.
 
-The configured pilot is sandbox-only. The exact target is visible in `.mcp.json`. Production is not a fallback. Changing environment/company is a separately reviewed configuration release.
+Target: **sandbox-uat-2026-march / Anstar Ltd / Anstar AI Read Only**, pinned in `connection.json` and validated in code. No Production fallback. Changing this scope requires a separately reviewed release.
 
-## Runtime dependencies
+## Employee prerequisites and installation
 
-**No additional CLI, Node.js, npm/npx, Azure CLI, PnP CLI, BC developer tooling, local proxy, container, or hosted Anstar gateway is required by this native-HTTP package.** The employee needs a compatible Codex/ChatGPT desktop runtime, a BC-entitled normal Microsoft work account, internet access, and the completed IT prerequisites below. Development-machine authentication is neither shipped nor relied on.
+Required: **Node.js 22+ with npm/npx on PATH**, a compatible local Codex/desktop MCP runtime, internet access, and an entitled normal Microsoft work account. Having npx alone does not prove the installed Node version is compatible. On Windows the protected cache also uses Windows PowerShell/.NET ACL support; its acceptance is a separate CI gate.
 
-Python 3 and Codex CLI are used for repository validation only. The compatibility baseline tested is **Codex CLI 0.146.0**. ChatGPT desktop Work and Windows have separate pilot gates; a passing CLI install is not proof of either.
+No Azure/PnP/BC CLI, Python, Git, Docker, global tsx installation or manual `npm install` is required for employees. On first launch the plugin automatically downloads pinned `tsx@4.23.13` and installs its locked production dependencies into a private, content-addressed local runtime cache with npm lifecycle scripts disabled. Further launches reuse it. Registry access is required for first use and changed releases. Dependencies are code running as the employee; Anstar owns review and updates.
 
-## One-time administrator prerequisites
+Intended flow **after release gates pass**:
 
-See [ADMIN-SETUP.md](ADMIN-SETUP.md) for the exact handoff and release checklist:
+1. Refresh/upgrade **Anstar AI**, then install **Anstar Business Central**.
+2. Ask the agent to connect to Business Central. It calls `bc_connect` and presents a short-lived Microsoft sign-in link. Open it on **the same computer** and authenticate as yourself.
+3. The callback page confirms completion; the agent checks `bc_status`, then performs search → describe → a bounded read.
+4. Subsequent sessions use the stored account and MSAL's silent renewal. A new interactive login may be required by Microsoft policy.
 
-1. Dedicated Entra public-client registration and tenant-admin consent.
-2. Explicit read-only BC MCP configuration in the authorized sandbox.
-3. Resolve employee callback delivery. Codex 0.146.0 ignores plugin-specific callback settings. The user selected a local bridge investigation rather than global configuration deployment; the evaluated community bridge is not recommended unchanged. See [BRIDGE-EVALUATION.md](BRIDGE-EVALUATION.md). No replacement is adopted yet, and no employee's global configuration may be silently changed.
-4. The administrator-supplied public client ID is now packaged. Verify login/discovery/read, then separately enable and release it. Client/tenant IDs are public identifiers, not credentials; tokens and secrets never belong in Git.
-
-## Intended employee flow after release
-
-These steps are **not available yet**:
-
-1. Upgrade/refresh **Anstar AI** in Plugins Directory.
-2. Install **Anstar Business Central** in desktop Work or Codex.
-3. Sign in with the employee's normal Microsoft account, not an administrator account.
-4. Start a new chat and ask for a bounded read. The agent should use search → describe → invoke.
-
-Technical equivalent **after the release gates pass**:
+Technical installation equivalent:
 
 ```sh
 codex plugin marketplace upgrade anstar-ai
 codex plugin add anstar-business-central@anstar-ai
-codex mcp login anstar-business-central
 ```
 
-The native CLI `plugin add` does not itself initiate OAuth; desktop/app-server installation may. A marketplace authentication policy is not proof that sign-in succeeded. The employee callback delivery path is unresolved; the commands above describe the existing native pilot, not a verified zero-configuration rollout.
+Do **not** run `codex mcp login` for this stdio adapter; authentication is through `bc_connect`. Startup/listing tools does not open a browser or contact BC. No browser is opened automatically; this avoids disrupting existing browser sessions. The returned sign-in URL is ephemeral authorization material—do not copy it into tickets or logs.
 
-## Read-only means a server-side configuration
+ChatGPT desktop Work and Windows end-user sign-in require independent validation. Hosted ChatGPT/web cannot execute a local npx process; no hosted `.app.json` connector is supplied or claimed.
 
-Microsoft documents delegated **Financials.ReadWrite.All** for this MCP. It is **not a read-only OAuth permission**. There is no claim that hiding tools, requesting approval, or the skill makes this token intrinsically read-only.
+## Read-only boundary
 
-The dedicated BC configuration must have **Unblock Edit Tools OFF**, no create/modify/delete/bound-action permissions, and the user's BC permission sets must remain least-privileged. The three dispatcher names do not prevent `invoke` from running writes if an administrator later enables them. Do not activate this connection until that boundary is verified. Do not test denial by attempting a write.
+Microsoft requires delegated **Financials.ReadWrite.All**, which is **not a read-only token**. The BC configuration must keep **Unblock Edit Tools OFF** and all Create/Modify/Delete/Bound Action permissions OFF. The user confirmed these settings for the sandbox. The adapter additionally validates each List action and request, but this local guard is not a server-side authorization boundary: another process with the same token may use the user's broader BC permissions.
 
-For genuine identity-level read-only restriction, use an appropriately restricted BC identity/permission assignment; adding a read permission set to an already privileged user does not remove their other rights. Do not remove employee roles as part of this package installation. Any identity policy changes require separate administrator review.
+BC role assignments are additive. Adding a read-only role does not revoke existing write rights. Restrict identities through a separate administrator-approved policy where required; do not change employee roles or test denied writes during installation. [ADMIN-SETUP.md](ADMIN-SETUP.md) records the existing app, callback and configuration.
 
-## Data flow, ownership and licensing
+## Data flow and credentials
 
-The OpenAI host communicates directly with Microsoft Entra and Microsoft's hosted BC MCP. Results enter the host/model context and remain subject to the organization's OpenAI and Microsoft data-handling agreements. No third-party community MCP, shared OAuth client, npm code, telemetry, or Anstar-hosted data intermediary is added. Microsoft operates and updates its endpoint; this repository does not pin or redistribute the server. BC entitlements and API availability remain Microsoft's responsibility. Anstar owns the plugin metadata and skill (`UNLICENSED`, matching repository packages).
+Codex/desktop → local Anstar adapter → Microsoft Entra / Microsoft BC MCP. BC results enter the agent/model provider context. npm receives package-download requests, not BC tokens or query data. No telemetry is added by the adapter. Microsoft operates the remote service; Anstar maintains the adapter, pins and tests its dependencies. See [third-party notices](../../THIRD_PARTY_NOTICES.md).
 
-Do not place ERP response bodies, tokens, personal data, browser profiles or consent artifacts in this public repository. Validation reports contain only sanitized outcomes.
+MSAL cache data, including refresh tokens, is stored **unencrypted at rest** in a permission-restricted, nonsynced per-user directory outside the plugin/repository:
+
+- macOS/Linux: `~/.local/state/anstar-business-central/auth/<connection-hash>/`
+- Windows: `%USERPROFILE%\AppData\Local\Anstar\anstar-business-central\auth\<connection-hash>\`
+
+Require disk encryption, protected backups and trusted same-user software. This is not an OS keychain or a boundary against same-user processes. Cache identity includes the client, tenant, target and scope. Full read/refresh/save transactions are locked across processes; crashed-owner locks are never stolen automatically. Login PKCE/state remain in memory and expire after ten minutes. Logs omit tokens, business rows and raw OAuth errors; do not enable SDK debug logging.
 
 ## Verification
+
+From repository root:
 
 ```sh
 python3 scripts/validate_plugins.py
@@ -68,13 +63,25 @@ python3 -m unittest discover -s tests -p 'test_*.py' -v
 python3 scripts/smoke_business_central.py
 ```
 
-The smoke script uses disposable HOME/CODEX_HOME/XDG directories, file credential stores and a disabled server. It tests the repository's release hold, then enables **installation only** in a disposable copy to exercise packaging and `mcp get` readback. It never enables the MCP server, starts OAuth, runs a model or accesses BC records. It does not modify the employee's Codex installation. See [verification.md](verification.md) for evidence and remaining gates.
+From this plugin directory:
+
+```sh
+npm ci --ignore-scripts
+npm test
+npm run typecheck
+npm audit --omit=dev
+npx --no-install tsx scripts/check-install.ts
+```
+
+The Python smoke uses real Codex 0.146.0 and macOS `sandbox-exec` to verify the release hold and disposable local installation/readback with all network denied. The install probe uses a fresh home, empty npm cache and plugin copy without node_modules; it starts the exact npx command twice and checks MCP discovery/status, without starting OAuth or making BC calls. Synthetic auth tests exercise the real MSAL library; they are not live Microsoft evidence.
 
 ## Troubleshooting
 
-- **Not available / disabled:** intentional release hold, not a reason to bypass it.
-- **AADSTS50011:** compare the actual callback with ADMIN-SETUP.md; `oauth.callbackPort` is ignored by Codex 0.146.0. Do not change another plugin or sign in as admin.
-- **Admin approval / consent:** send the requested scope to IT; do not add application permissions or secrets.
-- **No tools:** check the exact tenant/environment/company/configuration and Dynamic Tool Mode. Do not remove the read allowlist or switch to Production.
-- **Write operation appears:** stop. IT must audit the BC configuration. Do not invoke it to test authorization.
-- **ChatGPT web:** no verified `.app.json` binding is provided. Desktop marketplace compatibility is not hosted ChatGPT app publication.
+- **Not available/disabled:** intentional release hold; do not bypass outside an approved isolated pilot.
+- **npx not found / unsupported Node:** install the organization's supported Node 22+ distribution, then restart the host so PATH is refreshed.
+- **First start fails:** check npm-registry access, disk permissions and startup timeout; no fallback to an unpinned package.
+- **Sign-in required:** call `bc_connect`, complete the link on this machine, then `bc_status`. Do not share passwords, codes or tokens in chat.
+- **Callback unavailable / AADSTS50011:** port 33418 must be free; retain the exact registered callback in ADMIN-SETUP. Do not change another plugin's settings.
+- **Cache locked after a crash:** stop the adapter processes; IT may recover only the exact stale `.auth-lock` directory after confirming there is no owner. Never delete a possibly live lock or print the cache.
+- **No actions / unsupported discovery format:** verify Dynamic Tool Mode and exact sandbox configuration; report schema changes rather than weakening the guard.
+- **Unexpected writes advertised:** stop and have IT audit the BC configuration. Never invoke one to test rejection.

@@ -50,9 +50,9 @@ These wrappers contain no user credentials or access tokens. Authentication and 
 
 ### Business Central — staged, not released
 
-**Anstar Business Central** packages Microsoft's official hosted MCP with read-only API discovery through `bc_actions_search`, `bc_actions_describe`, and `bc_actions_invoke`. It requires no additional runtime CLI, Node.js, or npx package. The entry is intentionally `NOT_AVAILABLE` and the connection disabled until administrator setup and authenticated sandbox validation are complete; it is **not yet upgrade/install/sign-in ready**.
+**Anstar Business Central** connects to Microsoft's official hosted MCP through an Anstar-owned TypeScript adapter, launched with pinned `npx tsx`. It requires **Node.js 22+ and npm/npx**; locked dependencies install automatically on first launch. The entry remains `NOT_AVAILABLE` and disabled while adapter-specific live and desktop validation are pending; it is **not yet upgrade/install/sign-in ready**.
 
-See the [plugin README](plugins/anstar-business-central/README.md), [exact administrator handoff](plugins/anstar-business-central/ADMIN-SETUP.md), and [verification status](plugins/anstar-business-central/verification.md). Codex 0.146.0 requires IT-managed global callback settings; deployment approval is pending. Microsoft's OAuth scope is `Financials.ReadWrite.All`, so read-only enforcement belongs to the BC MCP configuration and BC permissions, not the dispatcher allowlist. No Production validation is performed.
+See the [plugin README](plugins/anstar-business-central/README.md), [administrator handoff](plugins/anstar-business-central/ADMIN-SETUP.md), and [verification status](plugins/anstar-business-central/verification.md). The adapter owns its callback without global Codex settings. It adds two connection tools to the three discovery/read dispatchers. Microsoft's OAuth scope is `Financials.ReadWrite.All`; the BC read-only configuration and identity permissions remain the server-side boundary. No Production validation is performed.
 
 ### Microsoft 365 employee boundary
 

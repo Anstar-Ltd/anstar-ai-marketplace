@@ -2,7 +2,7 @@
 
 ## Decision
 
-The native HTTP sandbox pilot works, but Codex 0.146.0 requires global callback settings. The user selected investigation of a local npx bridge to avoid that per-device configuration. **No replacement bridge is adopted or shipped yet.** The existing native-HTTP plugin remains disabled for employee release.
+The native HTTP sandbox pilot worked, but Codex 0.146.0 required global callback settings. The user selected investigation of a local npx bridge to avoid that per-device configuration. After this evaluation, the user approved an **Anstar-owned TypeScript adapter using MSAL/MCP SDK via npx tsx**. That implementation now replaces the native payload but remains disabled until its own acceptance passes. This document records the rejected community candidate, not current adapter verification.
 
 `mcp-remote@0.14.2` is functionally promising but is **not recommended unchanged for employee deployment** after review of callback handling, optional debug logging, token storage and refresh coordination. Successful happy-path tests do not establish those security boundaries. A simple launcher would not fix all of the internal concerns.
 
@@ -45,8 +45,8 @@ The independent bounded source review and targeted checks of the published artif
 
 Detailed local security reproduction evidence is not included in this public marketplace. No upstream security-report publication or new live consent was performed as part of this evaluation.
 
-## Proposed next path — not implemented
+## Approved next path — implemented separately
 
 A small Anstar-owned local adapter using Microsoft's authentication library and the MCP SDK could own a fixed callback, bounded Microsoft-only requests, explicit read-only dispatch and isolated credential lifecycle. This avoids carrying a broad community bridge fork, but it is new maintained code and requires its own tests, provenance review and live pilot. It must not be called safer merely because Anstar owns it.
 
-The current npm candidates inspected for that design are Microsoft `@azure/msal-node` (6.0.1, MIT, Node >=20) and `@modelcontextprotocol/sdk` (1.30.0, MIT, Node >=18). These versions have **not** been adopted or audited as an implementation dependency graph. Approval and implementation are separate from this investigation.
+The adapter now pins Microsoft `@azure/msal-node` 6.0.1 and `@modelcontextprotocol/sdk` 1.30.0 with a committed dependency lockfile. See [README.md](README.md) for runtime dependencies/data flow and [verification.md](verification.md) for implementation-specific evidence and open release gates.

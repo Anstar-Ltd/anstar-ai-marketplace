@@ -1,6 +1,16 @@
 # Business Central preview verification
 
-## Verified
+## Current TypeScript adapter — separate acceptance
+
+The user approved replacing native HTTP with an Anstar-owned MSAL/MCP adapter launched via pinned npx tsx. The former native pilot below is historical, not evidence of this adapter's live sign-in.
+
+- Local macOS tests pass for callback state/error validation, real MSAL with synthetic authorization-code/cache/refresh responses, cross-process cache transactions, fixed Microsoft destinations, bounded streams, read-action policy, MCP discovery and the actual stdio entrypoint.
+- A fresh home/empty npm cache/plugin copy without node_modules launched the exact `npx -y tsx@4.23.13 ./scripts/bootstrap.ts` command. First run installed the locked production dependency tree; second run reused it. Both returned five expected tools and unauthenticated status. No OAuth or BC call was made, and no global Codex settings were used.
+- Real Codex 0.146.0 offline install/readback now verifies the stdio command, args, plugin-relative cwd, five-tool allowlist and timeouts. The release hold and disabled transport remain in place.
+- A separate disposable local marketplace enabled only the pilot copy, with a fresh Codex home and npm cache. Real Codex app-server started the exact npx adapter and returned all five tools without global callback settings, OAuth initiation or BC calls. This verifies host startup, not live authentication.
+- New adapter live OAuth/BC reads, Windows acceptance, desktop Work and restricted-normal-user verification remain pending. CI now defines macOS, Windows and Linux adapter gates; a configured workflow is not a passing run.
+
+## Historical native HTTP pilot
 
 - Existing marketplace baseline: 20 MVP contracts and 4 employee-rollout tests passed before changes.
 - Codex CLI **0.146.0** was exercised through a fresh local marketplace, isolated HOME/CODEX_HOME/XDG paths and file-only credential storage. `sandbox-exec` denied all network access and access to the normal Codex/agent homes.
@@ -34,11 +44,11 @@ Observed quirks: the first broad search timed out at 120 seconds; a bounded retr
 | Gate | State |
 | --- | --- |
 | Dedicated Entra app/client ID and admin consent | Client ID supplied; administrator reports consent complete; interactive OAuth succeeded |
-| Employee callback delivery | User selected bridge investigation instead of global settings; see BRIDGE-EVALUATION.md; no replacement adopted |
+| Employee callback delivery | TypeScript adapter owns callback; clean local npx startup passed without global settings; live sign-in pending |
 | `Anstar AI Read Only` sandbox configuration | Active and usable; user confirmed every edit/bound-action permission OFF; bounded write-action search empty; restricted-user boundary test still pending |
-| BC MCP initialization and actual tools/list | Passed; Microsoft BC 28.0.54016.0 and 3 dispatchers |
-| Microsoft sign-in and token renewal | Interactive sign-in and session reuse passed; restricted-normal-user pilot and refresh-token renewal pending |
-| Bounded live MCP read | Passed for all 3 named entities, 1 row each |
+| BC MCP initialization and actual tools/list | Earlier native path passed; current adapter upstream live connection pending |
+| Microsoft sign-in and token renewal | Earlier native sign-in/reuse passed; new MSAL path currently has synthetic verification only |
+| Bounded live MCP read | Earlier native path passed all 3 named entities, 1 row each; current adapter live reads pending |
 | Negative identity access test | Not performed; never test by mutating records |
 | Clean ChatGPT desktop Work pilot | Not performed |
 | Windows pilot | Not performed |

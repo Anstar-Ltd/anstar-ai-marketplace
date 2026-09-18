@@ -1,0 +1,11 @@
+{
+  "tenantId": "8f0da656-9ff9-4e19-97a2-79388929de03",
+  "clientId": "894473ac-0b35-44de-97f8-c642366fdb43",
+  "scope": "https://mcp.businesscentral.dynamics.com/Financials.ReadWrite.All",
+  "redirectUri": "http://localhost:33418/callback/GNmTSc-BOPT4",
+  "endpoint": "https://mcp.businesscentral.dynamics.com",
+  "environment": "sandbox-uat-2026-march",
+  "environmentType": "Sandbox",
+  "company": "Anstar Ltd",
+  "configuration": "Anstar AI Read Only"
+}

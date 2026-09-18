@@ -19,7 +19,7 @@ class BusinessCentralContractTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             shutil.copytree(ROOT / ".agents", root / ".agents")
-            shutil.copytree(PLUGIN, root / "plugins/anstar-business-central")
+            shutil.copytree(PLUGIN, root / "plugins/anstar-business-central", ignore=shutil.ignore_patterns("node_modules"))
             path = root / "plugins/anstar-business-central/.mcp.json"
             data = json.loads(path.read_text())
             data["mcpServers"]["anstar-business-central"]["enabled"] = True
@@ -37,22 +37,22 @@ class BusinessCentralContractTests(unittest.TestCase):
         self.assertEqual(manifest["mcpServers"], "./.mcp.json")
         server = json.loads((PLUGIN / ".mcp.json").read_text())["mcpServers"]["anstar-business-central"]
         self.assertIs(server["enabled"], False)
-        self.assertEqual(server["oauth"], {
-            "client_id": "894473ac-0b35-44de-97f8-c642366fdb43",
-        })
-        self.assertEqual(server["type"], "http")
-        self.assertEqual(server["url"], "https://mcp.businesscentral.dynamics.com")
-        self.assertNotIn("command", server)
+        self.assertEqual(server["command"], "npx")
+        self.assertEqual(server["args"], ["-y", "tsx@4.23.13", "./scripts/bootstrap.ts"])
+        self.assertEqual(server["cwd"], ".")
+        self.assertNotIn("url", server)
+        self.assertNotIn("oauth", server)
         self.assertNotIn("env_http_headers", server, "Employees must not configure environment variables")
-        self.assertEqual(server["http_headers"]["EnvironmentName"], "sandbox-uat-2026-march")
-        self.assertEqual(server["http_headers"]["ConfigurationName"], "Anstar AI Read Only")
+        connection = json.loads((PLUGIN / "connection.json").read_text())
+        self.assertEqual(connection["clientId"], "894473ac-0b35-44de-97f8-c642366fdb43")
+        self.assertEqual(connection["endpoint"], "https://mcp.businesscentral.dynamics.com")
+        self.assertEqual(connection["environment"], "sandbox-uat-2026-march")
+        self.assertEqual(connection["configuration"], "Anstar AI Read Only")
         self.assertEqual(set(server["enabled_tools"]), {
-            "bc_actions_search", "bc_actions_describe", "bc_actions_invoke",
+            "bc_connect", "bc_status", "bc_actions_search", "bc_actions_describe", "bc_actions_invoke",
         })
         self.assertEqual(server["default_tools_approval_mode"], "approve")
-        self.assertEqual(server["scopes"], [
-            "offline_access", "https://mcp.businesscentral.dynamics.com/Financials.ReadWrite.All",
-        ])
+        self.assertEqual(connection["scope"], "https://mcp.businesscentral.dynamics.com/Financials.ReadWrite.All")
 
 
 if __name__ == "__main__":

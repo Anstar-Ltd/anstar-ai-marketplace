@@ -1,29 +1,19 @@
 {
   "mcpServers": {
     "anstar-business-central": {
-      "type": "http",
-      "url": "https://mcp.businesscentral.dynamics.com",
+      "command": "npx",
+      "args": ["-y", "tsx@4.23.13", "./scripts/bootstrap.ts"],
+      "cwd": ".",
       "enabled": false,
-      "oauth": {
-        "client_id": "894473ac-0b35-44de-97f8-c642366fdb43"
-      },
-      "http_headers": {
-        "TenantId": "8f0da656-9ff9-4e19-97a2-79388929de03",
-        "EnvironmentName": "sandbox-uat-2026-march",
-        "Company": "Anstar Ltd",
-        "ConfigurationName": "Anstar AI Read Only"
-      },
-      "scopes": [
-        "offline_access",
-        "https://mcp.businesscentral.dynamics.com/Financials.ReadWrite.All"
-      ],
       "enabled_tools": [
+        "bc_connect",
+        "bc_status",
         "bc_actions_search",
         "bc_actions_describe",
         "bc_actions_invoke"
       ],
-      "startup_timeout_sec": 60,
-      "tool_timeout_sec": 120,
+      "startup_timeout_sec": 240,
+      "tool_timeout_sec": 150,
       "default_tools_approval_mode": "approve"
     }
   }

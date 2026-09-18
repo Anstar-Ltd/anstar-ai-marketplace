@@ -32,8 +32,8 @@ def validate_staged_marketplace(root: Path) -> dict:
     server = data["mcpServers"][NAME]
     if server.get("enabled") is not False:
         raise ValueError("Smoke requires a disabled MCP server")
-    if server.get("command") or server.get("url") != "https://mcp.businesscentral.dynamics.com":
-        raise ValueError("Smoke requires the native Microsoft HTTP endpoint")
+    if server.get("command") != "npx" or server.get("args") != ["-y", "tsx@4.23.13", "./scripts/bootstrap.ts"]:
+        raise ValueError("Smoke requires the pinned TypeScript adapter launcher")
     return server
 
 
@@ -96,7 +96,7 @@ def run_smoke(binary: str) -> dict:
         # BC payload and its disabled network transport stay byte-for-byte intact.
         source = base / "marketplace"
         shutil.copytree(ROOT / ".agents/plugins", source / ".agents/plugins")
-        shutil.copytree(ROOT / "plugins", source / "plugins")
+        shutil.copytree(ROOT / "plugins", source / "plugins", ignore=shutil.ignore_patterns("node_modules", "__pycache__"))
         market_file = source / ".agents/plugins/marketplace.json"
         market = json.loads(market_file.read_text())
         next(p for p in market["plugins"] if p["name"] == NAME)["policy"]["installation"] = "AVAILABLE"
@@ -113,15 +113,16 @@ def run_smoke(binary: str) -> dict:
         if not destination.resolve().is_relative_to(Path(probe["CODEX_HOME"]).resolve()):
             raise AssertionError("Install escaped disposable Codex home")
         original = ROOT / f"plugins/{NAME}"
-        files = [p for p in original.rglob("*") if p.is_file()]
+        files = [p for p in original.rglob("*") if p.is_file() and not set(p.relative_to(original).parts) & {"node_modules", "__pycache__"}]
         for path in files:
             if (destination / path.relative_to(original)).read_bytes() != path.read_bytes():
                 raise AssertionError(f"Installed payload differs: {path.relative_to(original)}")
         server = run(probe, ["mcp", "get", NAME, "--json"])
         assert server["enabled"] is False
-        assert server["transport"]["type"] == "streamable_http"
-        assert server["transport"]["url"] == expected["url"]
-        assert server["transport"]["http_headers"] == expected["http_headers"]
+        assert server["transport"]["type"] == "stdio"
+        assert server["transport"]["command"] == expected["command"]
+        assert server["transport"]["args"] == expected["args"]
+        assert Path(server["transport"]["cwd"]).resolve() == destination.resolve()
         assert server["enabled_tools"] == expected["enabled_tools"]
         assert server["startup_timeout_sec"] == expected["startup_timeout_sec"]
         assert server["tool_timeout_sec"] == expected["tool_timeout_sec"]

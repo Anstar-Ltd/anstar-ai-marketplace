@@ -1,7 +1,7 @@
 {
   "name": "anstar-business-central",
-  "version": "0.1.0-preview.1",
-  "description": "Staged read-only Business Central connection; admin setup pending.",
+  "version": "0.2.0-preview.1",
+  "description": "Staged Business Central read adapter with personal Microsoft sign-in.",
   "author": {
     "name": "Anstar",
     "url": "https://anstar.com"
@@ -13,8 +13,8 @@
   "mcpServers": "./.mcp.json",
   "interface": {
     "displayName": "Anstar Business Central (staged preview)",
-    "shortDescription": "Read-only ERP connection; setup pending",
-    "longDescription": "First-party Microsoft Business Central MCP connection for discovery-first API reads. This preview is disabled pending Entra administration, read-only sandbox configuration, and authenticated validation. It does not yet provide a ready-to-use connection.",
+    "shortDescription": "Read-only ERP adapter; validation pending",
+    "longDescription": "Anstar-owned TypeScript adapter to Microsoft's hosted Business Central MCP, using Microsoft MSAL sign-in and read-only dynamic discovery. Requires Node.js 22+ and npm/npx; dependencies install automatically. Preview remains disabled pending adapter and desktop acceptance.",
     "developerName": "Anstar",
     "category": "Productivity",
     "capabilities": ["Read"],
