@@ -1,0 +1,22 @@
+CHANGELOG.md
+  h_7a831411810cd7 14
+plugins/anstar-business-central/ADMIN-SETUP.md
+  h_7a831411810cd7 54,67
+plugins/anstar-business-central/BRIDGE-EVALUATION.md
+  h_7a831411810cd7 1-52
+plugins/anstar-business-central/README.md
+  h_7a831411810cd7 27,47
+plugins/anstar-business-central/verification.md
+  h_7a831411810cd7 37-38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "3fc32344b2ddfb6bca8112a8e4a8c28701c2a9d4",
+  "prompts": {},
+  "humans": {
+    "h_7a831411810cd7": {
+      "author": "Maksym Dudkin <lugamax@gmail.com>"
+    }
+  }
+}
