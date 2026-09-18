@@ -50,7 +50,7 @@ These wrappers contain no user credentials or access tokens. Authentication and 
 
 ### Business Central — staged, not released
 
-**Anstar Business Central** connects to Microsoft's official hosted MCP through an Anstar-owned TypeScript adapter, launched with pinned `npx tsx`. It requires **Node.js 22+ and npm/npx**; locked dependencies install automatically on first launch. The entry remains `NOT_AVAILABLE` and disabled while adapter-specific live and desktop validation are pending; it is **not yet upgrade/install/sign-in ready**.
+**Anstar Business Central** connects to Microsoft's official hosted MCP through an Anstar-owned TypeScript adapter, launched with pinned `npx tsx`. It requires **Node.js 22+ and npm/npx**; locked dependencies install automatically on first launch. Codex live sign-in and sandbox reads pass, as do clean macOS/Windows/Linux installation checks. The entry remains `NOT_AVAILABLE` and disabled pending desktop Work and restricted-user rollout acceptance; it is **not yet released for employee installation**.
 
 See the [plugin README](plugins/anstar-business-central/README.md), [administrator handoff](plugins/anstar-business-central/ADMIN-SETUP.md), and [verification status](plugins/anstar-business-central/verification.md). The adapter owns its callback without global Codex settings. It adds two connection tools to the three discovery/read dispatchers. Microsoft's OAuth scope is `Financials.ReadWrite.All`; the BC read-only configuration and identity permissions remain the server-side boundary. No Production validation is performed.
 

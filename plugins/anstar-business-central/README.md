@@ -1,6 +1,6 @@
 # Anstar Business Central — staged preview
 
-**Employee release is still held:** marketplace policy `NOT_AVAILABLE`, MCP `enabled: false`. The current implementation is an **Anstar-owned TypeScript adapter**, launched with `npx tsx`, connecting to Microsoft's hosted Business Central MCP. Its own isolated Codex pilot now passes Microsoft sign-in, restart reuse and one-row reads of Items, Item Ledger Entries and Sales Orders. Windows clean installation, desktop Work and restricted-user rollout gates remain separate. See [verification.md](verification.md).
+**Employee release is still held:** marketplace policy `NOT_AVAILABLE`, MCP `enabled: false`. The current implementation is an **Anstar-owned TypeScript adapter**, launched with `npx tsx`, connecting to Microsoft's hosted Business Central MCP. Its own isolated Codex pilot passes Microsoft sign-in, restart reuse and one-row reads of Items, Item Ledger Entries and Sales Orders. Clean installation/reuse passes on Windows, macOS and Linux; desktop Work and restricted-user rollout checks remain open. See [verification.md](verification.md).
 
 ## What it provides
 
@@ -14,7 +14,7 @@ Target: **sandbox-uat-2026-march / Anstar Ltd / Anstar AI Read Only**, pinned in
 
 ## Employee prerequisites and installation
 
-Required: **Node.js 22+ with npm/npx on PATH**, a compatible local Codex/desktop MCP runtime, internet access, and an entitled normal Microsoft work account. Having npx alone does not prove the installed Node version is compatible. On Windows the protected cache also uses Windows PowerShell/.NET ACL support; its acceptance is a separate CI gate.
+Required: **Node.js 22+ with npm/npx on PATH**, a compatible local Codex/desktop MCP runtime, internet access, and an entitled normal Microsoft work account. Having npx alone does not prove the installed Node version is compatible. On Windows the protected cache also requires built-in Windows PowerShell 5.1/.NET ACL support and a local NTFS volume; clean installation and cache reuse are verified in Windows CI.
 
 No Azure/PnP/BC CLI, Python, Git, Docker, global tsx installation or manual `npm install` is required for employees. On first launch the plugin automatically downloads pinned `tsx@4.23.13` and installs its locked production dependencies into a private, content-addressed local runtime cache with npm lifecycle scripts disabled. Further launches reuse it. Registry access is required for first use and changed releases. First setup can take several minutes on Windows because the dependency tree is protected before execution; startup is bounded to seven minutes. Dependencies are code running as the employee; Anstar owns review and updates.
 

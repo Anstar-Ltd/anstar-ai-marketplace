@@ -11,7 +11,7 @@ The user approved replacing native HTTP with an Anstar-owned MSAL/MCP adapter la
 - **New adapter live Microsoft sign-in and restart reuse passed** through the isolated Codex app-server with no global callback settings. The initial discovery call failed without a detailed error; an instrumented bounded retry returned HTTP 200 and it did not recur. No transport/policy relaxation was needed.
 - **New adapter search → describe → invoke passed** for Items, Item Ledger Entries and Sales Orders, one row each with the same four selected fields listed below. Field sets and counts were checked locally; no row values are published. The pilot's initial parser incorrectly assumed a single JSON text block; it was corrected to handle the separate summary and JSON data blocks without changing the adapter.
 - Microsoft login and all reads ran against the fresh installed `0.2.0-preview.1` adapter snapshot from commit `ea9a7ca`. Later changes only classify Windows errors and adjust Windows first-install deadlines, not the verified macOS auth/read path. The pilot's cached server was disabled afterward.
-- Local adapter suite: 41 discovered, 30 passed and 11 Windows-only skipped on macOS. All 26 Python tests and typecheck pass. macOS/Linux CI and offline Codex smoke passed; Windows auth/cache tests pass, but its fresh full dependency install hit the short ACL-helper deadline. Runtime-only deadlines were increased without relaxing checks; final CI is pending.
+- Local adapter suite: 41 discovered, 30 passed and 11 Windows-only skipped on macOS; Windows CI passed 39 with 2 POSIX-only skips. All 26 Python tests and typecheck pass. **All five CI jobs passed at code commit `3da1255`**, including macOS/Linux/Windows fresh npx installation and cache reuse, offline Codex smoke, and repository/secret validation ([run](https://github.com/Anstar-Ltd/anstar-ai-marketplace/actions/runs/35296986044)). Windows's initial dependency-tree ACL timeout was resolved with runtime-specific bounded deadlines, without relaxing permission checks.
 - Bounded review found a runtime-cache permission gap, reproduced with a failing regression and fixed by validating private roots/executable descendants. The targeted recheck confirmed the original payload is blocked and identified a Windows volume-root edge case; the shared ancestor check now includes the root, with a source contract avoiding changes to real volume permissions. No further broad review cycle is planned.
 
 ## Historical native HTTP pilot
@@ -55,7 +55,7 @@ Observed quirks: the first broad search timed out at 120 seconds; a bounded retr
 | Bounded live MCP read | Current adapter passed all 3 named entities, 1 row each with limited fields |
 | Negative identity access test | Not performed; never test by mutating records |
 | Clean ChatGPT desktop Work pilot | Not performed |
-| Windows pilot | Real CI auth/cache tests pass; full clean dependency-install validation pending; live Windows user sign-in not performed |
+| Windows pilot | Real CI auth/cache tests and full clean dependency-install/reuse pass; live Windows user sign-in not performed |
 | Hosted ChatGPT app / `.app.json` binding | Not implemented; no placeholder app ID |
 | Employee marketplace release | Blocked: NOT_AVAILABLE and disabled |
 
