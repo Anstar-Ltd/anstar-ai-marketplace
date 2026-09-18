@@ -1,0 +1,16 @@
+plugins/anstar-business-central/scripts/bootstrap.ts
+  h_7a831411810cd7 8,52
+plugins/anstar-business-central/src/auth-store.ts
+  h_7a831411810cd7 87-94,109,150,193-198
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "eb3446ff5373701eb36976d21f5a7cb134b89de0",
+  "prompts": {},
+  "humans": {
+    "h_7a831411810cd7": {
+      "author": "Maksym Dudkin <lugamax@gmail.com>"
+    }
+  }
+}
