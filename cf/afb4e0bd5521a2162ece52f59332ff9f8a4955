@@ -1,0 +1,86 @@
+.github/workflows/validate.yml
+  h_7a831411810cd7 13-33
+CHANGELOG.md
+  h_7a831411810cd7 7,11-12
+README.md
+  h_7a831411810cd7 53,55
+THIRD_PARTY_NOTICES.md
+  h_7a831411810cd7 7-8
+docs/INSTALL-FOR-EVERYONE.md
+  h_7a831411810cd7 89,91
+plugins/anstar-business-central/.codex-plugin/plugin.json
+  h_7a831411810cd7 3-4,16-17
+plugins/anstar-business-central/.mcp.json
+  h_7a831411810cd7 4-6,9-10,15-16
+plugins/anstar-business-central/ADMIN-SETUP.md
+  h_7a831411810cd7 16,58-66,75,85,89,92,95
+plugins/anstar-business-central/BRIDGE-EVALUATION.md
+  h_7a831411810cd7 5,48,52
+plugins/anstar-business-central/README.md
+  h_7a831411810cd7 3,5,7-11,13,15,17,19,21,23-26,28,35-39,41,43,45,47,49,51-52,54,58-59,66-76,80-87
+plugins/anstar-business-central/connection.json
+  h_7a831411810cd7 1-11
+plugins/anstar-business-central/package-lock.json
+  h_7a831411810cd7 1-1887
+plugins/anstar-business-central/package.json
+  h_7a831411810cd7 1-23
+plugins/anstar-business-central/scripts/bootstrap.ts
+  h_7a831411810cd7 1-88
+plugins/anstar-business-central/scripts/check-install.ts
+  h_7a831411810cd7 1-40
+plugins/anstar-business-central/skills/business-central-read/SKILL.md
+  h_7a831411810cd7 16,20,26
+plugins/anstar-business-central/src/adapter.ts
+  h_7a831411810cd7 1-45
+plugins/anstar-business-central/src/auth-store.ts
+  h_7a831411810cd7 1-306
+plugins/anstar-business-central/src/auth.ts
+  h_7a831411810cd7 1-161
+plugins/anstar-business-central/src/config.ts
+  h_7a831411810cd7 1-36
+plugins/anstar-business-central/src/network.ts
+  h_7a831411810cd7 1-55
+plugins/anstar-business-central/src/policy.ts
+  h_7a831411810cd7 1-95
+plugins/anstar-business-central/src/server.ts
+  h_7a831411810cd7 1-31
+plugins/anstar-business-central/src/upstream.ts
+  h_7a831411810cd7 1-77
+plugins/anstar-business-central/tests/auth-store.test.ts
+  h_7a831411810cd7 1-267
+plugins/anstar-business-central/tests/auth.test.ts
+  h_7a831411810cd7 1-201
+plugins/anstar-business-central/tests/bootstrap.test.ts
+  h_7a831411810cd7 1-58
+plugins/anstar-business-central/tests/config.test.ts
+  h_7a831411810cd7 1-16
+plugins/anstar-business-central/tests/entrypoint.test.ts
+  h_7a831411810cd7 1-24
+plugins/anstar-business-central/tests/network.test.ts
+  h_7a831411810cd7 1-25
+plugins/anstar-business-central/tests/policy.test.ts
+  h_7a831411810cd7 1-51
+plugins/anstar-business-central/tests/server.test.ts
+  h_7a831411810cd7 1-25
+plugins/anstar-business-central/tests/upstream.test.ts
+  h_7a831411810cd7 1-42
+plugins/anstar-business-central/tsconfig.json
+  h_7a831411810cd7 1-14
+plugins/anstar-business-central/verification.md
+  h_7a831411810cd7 3-13,47,49-51
+scripts/smoke_business_central.py
+  h_7a831411810cd7 35-36,99,116,122-125
+tests/test_business_central.py
+  h_7a831411810cd7 22,40-44,46-50,52,55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "cfafb4e0bd5521a2162ece52f59332ff9f8a4955",
+  "prompts": {},
+  "humans": {
+    "h_7a831411810cd7": {
+      "author": "Maksym Dudkin <lugamax@gmail.com>"
+    }
+  }
+}
