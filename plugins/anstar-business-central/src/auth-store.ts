@@ -160,7 +160,11 @@ async function windowsAcl(path: string, operation: 'directory' | 'file' | 'seal-
       ['-NoLogo', '-NoProfile', '-NonInteractive', '-EncodedCommand', Buffer.from(WINDOWS_ACL_SCRIPT, 'utf16le').toString('base64')],
       { windowsHide: true, timeout: 15_000, maxBuffer: 1024, env: { SystemRoot: systemRoot, windir: systemRoot, ANSTAR_AUTH_ACL_PATH: path, ANSTAR_AUTH_ACL_OPERATION: operation } });
     if (stdout === 'OK' || (operation === 'acquire' && stdout === 'BUSY')) return stdout;
-  } catch { /* Never surface subprocess errors, arguments, paths, or stderr. */ }
+  } catch (error) {
+    // Only fixed operation names and timeout classification; never raw diagnostics.
+    const timedOut = !!(error as { killed?: boolean }).killed;
+    throw new AuthStoreError(`Authentication cache ACL ${operation} ${timedOut ? 'timed out' : 'rejected'}; cache is unavailable or unsafe.`);
+  }
   throw new AuthStoreError();
 }
 
