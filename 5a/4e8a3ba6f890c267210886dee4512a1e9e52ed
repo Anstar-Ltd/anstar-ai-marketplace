@@ -1,0 +1,18 @@
+README.md
+  h_7a831411810cd7 53
+plugins/anstar-business-central/README.md
+  h_7a831411810cd7 3,17
+plugins/anstar-business-central/verification.md
+  h_7a831411810cd7 14,58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "5a4e8a3ba6f890c267210886dee4512a1e9e52ed",
+  "prompts": {},
+  "humans": {
+    "h_7a831411810cd7": {
+      "author": "Maksym Dudkin <lugamax@gmail.com>"
+    }
+  }
+}
