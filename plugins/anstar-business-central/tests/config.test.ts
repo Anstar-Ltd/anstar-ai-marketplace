@@ -4,10 +4,12 @@ import { readFile } from 'node:fs/promises';
 import { validateConnection, encodeHeader, privateBaseDirectory } from '../src/config.ts';
 
 const actual = JSON.parse(await readFile(new URL('../connection.json', import.meta.url), 'utf8'));
-test('connection pins the approved sandbox and never accepts arbitrary endpoints', () => {
-  assert.equal(validateConnection(actual).environmentType,'Sandbox');
+test('connection pins approved Production and never accepts arbitrary endpoints', () => {
+  assert.equal(validateConnection(actual).environmentType,'Production');
+  assert.equal(validateConnection(actual).environment,'Production');
+  assert.throws(()=>validateConnection({...actual,environment:'sandbox-uat-2026-march'}));
   assert.throws(()=>validateConnection({...actual,company:'Other Company'}));
-  for (const bad of [{endpoint:'https://attacker.invalid'}, {environment:'Production'}, {tenantId:'../bad'}, {configuration:'\r\nAuthorization: bad'}, {extra:'value'}, {redirectUri:'http://0.0.0.0:33418/callback'}]) {
+  for (const bad of [{endpoint:'https://attacker.invalid'}, {environment:'production'}, {tenantId:'../bad'}, {configuration:'\r\nAuthorization: bad'}, {extra:'value'}, {redirectUri:'http://0.0.0.0:33418/callback'}]) {
     assert.throws(()=>validateConnection({...actual,...bad}));
   }
   assert.equal(encodeHeader('Fixture Ltd'),'Fixture Ltd');

@@ -21,7 +21,7 @@ export const TOOLS: Tool[] = [
 ];
 
 export function createAdapterServer(handlers: AdapterHandlers): Server {
-  const server = new Server({ name: 'anstar-business-central', version: '0.2.0-preview.1' }, { capabilities: { tools: {} } });
+  const server = new Server({ name: 'anstar-business-central', version: '0.3.0-preview.1' }, { capabilities: { tools: {} } });
   server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: TOOLS }));
   server.setRequestHandler(CallToolRequestSchema, async request => {
     try {
@@ -32,9 +32,13 @@ export function createAdapterServer(handlers: AdapterHandlers): Server {
         return { content: [{ type: 'text', text: JSON.stringify(value) }] };
       }
       if (!TOOLS.some(t => t.name === name)) throw new PolicyError('Unknown tool; only approved read dispatchers are available.');
+      if (!(await handlers.status()).authenticated) {
+        const login = await handlers.login();
+        return { content: [{ type: 'text', text: JSON.stringify({ authenticationRequired: true, ...login, nextStep: 'Present this Microsoft sign-in link to the user. They must open it on this computer. Wait for completion, check bc_status, then retry the original read. No Business Central records were accessed.' }) }] };
+      }
       return await handlers.call(name, args) as CallToolResult;
     } catch (error) {
-      let message = 'Business Central request failed. Check sign-in and the approved sandbox configuration; no fallback was attempted.';
+      let message = 'Business Central request failed. Check sign-in and the configured read-only environment; no fallback was attempted.';
       if (error instanceof ZodError) message = 'Invalid arguments. Use the exact tool schema and bounded read parameters.';
       else if (error instanceof PolicyError || error instanceof NetworkBoundaryError) message = error.message;
       else if (error instanceof Error && error.name === 'AuthRequiredError') message = 'Microsoft sign-in required. Call bc_connect, complete sign-in, then retry.';

@@ -4,8 +4,8 @@
   "scope": "https://mcp.businesscentral.dynamics.com/Financials.ReadWrite.All",
   "redirectUri": "http://localhost:33418/callback/GNmTSc-BOPT4",
   "endpoint": "https://mcp.businesscentral.dynamics.com",
-  "environment": "sandbox-uat-2026-march",
-  "environmentType": "Sandbox",
+  "environment": "Production",
+  "environmentType": "Production",
   "company": "Anstar Ltd",
   "configuration": "Anstar AI Read Only"
 }

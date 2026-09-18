@@ -46,7 +46,7 @@ class BusinessCentralContractTests(unittest.TestCase):
         connection = json.loads((PLUGIN / "connection.json").read_text())
         self.assertEqual(connection["clientId"], "894473ac-0b35-44de-97f8-c642366fdb43")
         self.assertEqual(connection["endpoint"], "https://mcp.businesscentral.dynamics.com")
-        self.assertEqual(connection["environment"], "sandbox-uat-2026-march")
+        self.assertEqual(connection["environment"], "Production")
         self.assertEqual(connection["configuration"], "Anstar AI Read Only")
         self.assertEqual(set(server["enabled_tools"]), {
             "bc_connect", "bc_status", "bc_actions_search", "bc_actions_describe", "bc_actions_invoke",

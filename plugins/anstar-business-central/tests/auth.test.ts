@@ -185,6 +185,9 @@ test('explicit PKCE login pins account and restart silently uses persisted selec
     assert.equal(f.calls.url, undefined);
     const login = await auth.beginLogin();
     assert.equal(login.expiresInSeconds, 600);
+    const repeated = await auth.beginLogin();
+    assert.equal(repeated.authorizationUrl, login.authorizationUrl);
+    assert.ok(repeated.expiresInSeconds > 0 && repeated.expiresInSeconds <= 600);
     assert.equal((await auth.status()).loginPending, true);
     const state = f.calls.url!.state!;
     const response = await callback(`state=${state}&code=fixture-code`);

@@ -1,5 +1,13 @@
 # Business Central preview verification
 
+## Production transition / first-use authentication — 0.3.0-preview.1
+
+- User reported the ChatGPT local sandbox connection works. This is user-reported desktop evidence, not an independently observed desktop trace.
+- User explicitly selected exact environment `Production`, company `Anstar Ltd`, and approved discovery plus one selected-field row each from Items, Item Ledger Entries and Sales Orders, with no writes. This supersedes the previous sandbox-only verification restriction for those bounded reads only.
+- Packaged configuration and validation now pin Production. Distribution remains disabled/NOT_AVAILABLE pending confirmation that Production has its own active `Anstar AI Read Only` configuration with every edit/bound-action permission OFF. Sandbox configuration and the existing local sandbox test copy are unchanged.
+- First relevant message is handled by the bundled skill; unauthenticated business-tool calls now initiate sign-in and return a link before any business call. Startup/tools-list/status stay passive. Repeated sign-in requests reuse the pending link and remaining lifetime.
+- New behavior has synthetic regression coverage. Production has not been queried or verified yet; the successful live evidence below belongs to the earlier sandbox version. The Production target changes the credential namespace and may require fresh sign-in; no tokens are copied between targets.
+
 ## Current TypeScript adapter — separate acceptance
 
 The user approved replacing native HTTP with an Anstar-owned MSAL/MCP adapter launched via pinned npx tsx. The former native pilot below is historical, not evidence of this adapter's live sign-in.

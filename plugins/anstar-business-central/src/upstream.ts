@@ -16,7 +16,7 @@ export class BcClient {
     if (this.client) return this.client;
     if (this.connecting) return this.connecting;
     this.connecting = (async () => {
-      const client = new Client({ name: 'anstar-business-central-readonly', version: '0.2.0-preview.1' }, { capabilities: {} });
+      const client = new Client({ name: 'anstar-business-central-readonly', version: '0.3.0-preview.1' }, { capabilities: {} });
       const transport = new StreamableHTTPClientTransport(new URL('https://mcp.businesscentral.dynamics.com'), {
         fetch: async (input, init) => {
           if (this.closed) throw new Error('Business Central connection is closed.');

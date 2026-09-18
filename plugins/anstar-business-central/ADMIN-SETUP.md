@@ -27,13 +27,15 @@ Return the **Application (client) ID**, app ownership and consent confirmation t
 
 Microsoft's current guide requests a multitenant registration. That is a separate trust consideration; approve it deliberately, restrict enterprise-app access as appropriate, and validate the actual identity. If the organization requires single-tenant registration, validate that variant before changing the documented profile rather than silently claiming support.
 
-## 2. Provision the read-only sandbox MCP configuration
+## 2. Provision the read-only Production MCP configuration
 
 Authorized target only:
 
-- Environment: `sandbox-uat-2026-march` (Sandbox).
+- Environment: `Production` (Production), explicitly requested by the user.
 - Company: `Anstar Ltd`.
 - New configuration: `Anstar AI Read Only`.
+
+The sandbox setup does not automatically provision Production. Keep it unchanged and recreate the same dedicated configuration in [Production](https://businesscentral.dynamics.com/8f0da656-9ff9-4e19-97a2-79388929de03/Production/?company=Anstar%20Ltd&page=8350). Reuse the existing Entra app and callback; do not create another registration or expand consent. Production activation/read-only settings remain unconfirmed, so the package is still disabled. An administrator with MCP - ADMIN or equivalent permissions must verify the fields below.
 
 Find **Model Context Protocol (MCP) Server Configurations** through BC's search. On the inspected sandbox build, page 8350 opened the list and 8351 opened the card; Microsoft documentation currently links 8351 as the list, so prefer the page name over guessing an ID.
 
@@ -49,7 +51,7 @@ Create a **new, non-default** configuration; do not change an existing/default c
 | Explicit tool rows | None needed for additional-object discovery; if added, Allow Read only |
 | Allow Create / Modify / Delete / Bound Actions | Off on every row |
 
-Review and validate the configuration, close and reopen it, and verify every field. Do not enable edits or posting to test rejection. The user approved this integration-settings change, not business-record writes or Production access.
+Review and validate the configuration, close and reopen it, and verify every field. Do not enable edits or posting to test rejection. The user approved Production discovery and one selected-field row each from Items, Item Ledger Entries and Sales Orders; no business-record writes or broad extraction are authorized.
 
 The agent's earlier visit prompted for **System Application by Microsoft** to contact an unspecified external service; the agent did not grant that prompt or create the configuration. The administrator later reported it active, and MCP initialization/read calls now succeed. The user explicitly confirmed Unblock Edit Tools and every Create/Modify/Delete/Bound Action permission are OFF. A bounded empty write-action search is supporting evidence, not a full configuration or restricted-user audit.
 
@@ -61,7 +63,7 @@ The user approved an Anstar-owned TypeScript MSAL/MCP adapter, launched with `np
 
 Provision Node.js 22+ with npm/npx on PATH and permit npm-registry downloads. First launch automatically installs locked production dependencies in the user's nonsynced local runtime cache with lifecycle scripts disabled. Credentials are kept separately with filesystem permissions; they are not encrypted by a keychain. Approve disk encryption, backup restrictions and the same-user trust boundary before employee rollout. Windows ACL support and desktop behavior have separate validation gates.
 
-Sign-in is started through the local `bc_connect` tool, not Codex's HTTP-MCP login command. The user opens the returned link on the same computer; `bc_status` verifies completion. No browser automation or password input by the agent is needed. The adapter never automatically starts sign-in at initialization.
+On the first relevant message, the skill checks `bc_status` and starts `bc_connect` when required. An unauthenticated business-tool call also returns a sign-in link automatically, without accessing BC data. Repeated requests reuse the pending link. The user opens it on the same computer; `bc_status` verifies completion. Startup/tools-list alone remains passive. No global callback configuration or automated browser/password entry is needed.
 
 ### Historical native Codex 0.146.0 pilot (not employee instructions)
 

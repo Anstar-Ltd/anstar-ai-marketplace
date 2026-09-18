@@ -68,7 +68,7 @@ export function createAuth(config: AuthConfig, deps: AuthDependencies = {}): Aut
   const store = new AuthStore(config.cacheDirectory, createHash('sha256').update(JSON.stringify([config.tenantId, config.clientId, config.scope])).digest('hex'));
   const makeClient = () => (deps.createClient ?? (c => new PublicClientApplication(c)))({ auth: { clientId: config.clientId, authority }, system: { networkClient: createAuthNetwork(config.tenantId, deps.fetch), disableInternalRetries: true, loggerOptions: { piiLoggingEnabled: false, loggerCallback: () => {} } } });
   let closed = false;
-  type Pending = { server: Server; state: string; verifier: string; nonce: string; processing: boolean; timer?: NodeJS.Timeout; operation?: Promise<void> };
+  type Pending = { server: Server; state: string; verifier: string; nonce: string; processing: boolean; authorizationUrl?: string; expiresAt?: number; timer?: NodeJS.Timeout; operation?: Promise<void> };
   let pending: Pending | undefined;
   let starting: Promise<{ authorizationUrl: string; expiresInSeconds: number }> | undefined;
   const operations = new Set<Promise<unknown>>();
@@ -82,7 +82,7 @@ export function createAuth(config: AuthConfig, deps: AuthDependencies = {}): Aut
     if (flow.timer) clearTimeout(flow.timer);
     if (pending === flow) pending = undefined;
     flow.server.close(); flow.server.closeIdleConnections();
-    flow.verifier = ''; flow.state = ''; flow.nonce = '';
+    flow.verifier = ''; flow.state = ''; flow.nonce = ''; flow.authorizationUrl = undefined;
   }
   function respond(response: ServerResponse, status: number, text: string): void {
     response.writeHead(status, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Connection': 'close', 'Content-Security-Policy': "default-src 'none'" }); response.end(text);
@@ -105,6 +105,7 @@ export function createAuth(config: AuthConfig, deps: AuthDependencies = {}): Aut
   async function beginLogin(): Promise<{ authorizationUrl: string; expiresInSeconds: number }> {
     if (closed) throw new AuthRequiredError();
     if (starting) return starting;
+    if (pending?.authorizationUrl && pending.expiresAt && pending.expiresAt > Date.now()) return { authorizationUrl: pending.authorizationUrl, expiresInSeconds: Math.ceil((pending.expiresAt - Date.now()) / 1000) };
     if (pending) throw new Error('A sign-in is already pending.');
     starting = (async () => {
       await store.transaction(async () => {});
@@ -145,10 +146,12 @@ export function createAuth(config: AuthConfig, deps: AuthDependencies = {}): Aut
         await new Promise<void>((resolve, reject) => { flow.server.once('error', reject); flow.server.listen(33418, '127.0.0.1', () => { flow.server.removeListener('error', reject); resolve(); }); });
         flow.server.on('error', () => finish(flow));
         flow.timer = setTimeout(() => finish(flow), LOGIN_SECONDS * 1000); flow.timer.unref();
+        flow.expiresAt = Date.now() + LOGIN_SECONDS * 1000;
         const authorizationUrl = await makeClient().getAuthCodeUrl({ authority, scopes, redirectUri: CALLBACK, state: flow.state, nonce: flow.nonce, codeChallenge: pkce.challenge, codeChallengeMethod: 'S256', responseMode: 'query', prompt: 'select_account' });
         const url = new URL(authorizationUrl);
         if (url.origin !== 'https://login.microsoftonline.com' || url.pathname !== `/${config.tenantId}/oauth2/v2.0/authorize` || url.username || url.password || url.hash || closed || pending !== flow) throw new Error();
-        return { authorizationUrl, expiresInSeconds: LOGIN_SECONDS };
+        flow.authorizationUrl = authorizationUrl;
+        return { authorizationUrl, expiresInSeconds: Math.ceil((flow.expiresAt - Date.now()) / 1000) };
       } catch { finish(flow); throw new Error('Sign-in could not be started.'); }
     })();
     try { return await starting; } finally { starting = undefined; }

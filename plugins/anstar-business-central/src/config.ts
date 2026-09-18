@@ -11,8 +11,8 @@ const schema = z.object({
   scope: z.literal('https://mcp.businesscentral.dynamics.com/Financials.ReadWrite.All'),
   redirectUri: z.literal('http://localhost:33418/callback/GNmTSc-BOPT4'),
   endpoint: z.literal('https://mcp.businesscentral.dynamics.com'),
-  environment: z.literal('sandbox-uat-2026-march'),
-  environmentType: z.literal('Sandbox'), company: z.literal('Anstar Ltd'), configuration: z.literal('Anstar AI Read Only'),
+  environment: z.literal('Production'),
+  environmentType: z.literal('Production'), company: z.literal('Anstar Ltd'), configuration: z.literal('Anstar AI Read Only'),
 }).strict();
 export type Connection = z.infer<typeof schema>;
 export function validateConnection(value: unknown): Connection { return schema.parse(value); }

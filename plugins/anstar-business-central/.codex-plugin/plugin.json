@@ -1,6 +1,6 @@
 {
   "name": "anstar-business-central",
-  "version": "0.2.0-preview.1",
+  "version": "0.3.0-preview.1",
   "description": "Staged Business Central read adapter with personal Microsoft sign-in.",
   "author": {
     "name": "Anstar",
@@ -14,7 +14,7 @@
   "interface": {
     "displayName": "Anstar Business Central (staged preview)",
     "shortDescription": "Read-only ERP adapter; validation pending",
-    "longDescription": "Anstar-owned TypeScript adapter to Microsoft's hosted Business Central MCP, using Microsoft MSAL sign-in and read-only dynamic discovery. Requires Node.js 22+ and npm/npx; dependencies install automatically. Preview remains disabled pending adapter and desktop acceptance.",
+    "longDescription": "Anstar-owned TypeScript adapter to Microsoft's hosted Business Central MCP. First use starts personal Microsoft sign-in if needed. Read-only dynamic discovery targets Production / Anstar Ltd. Requires Node.js 22+ and npm/npx. Preview remains disabled pending Production configuration and validation.",
     "developerName": "Anstar",
     "category": "Productivity",
     "capabilities": ["Read"],

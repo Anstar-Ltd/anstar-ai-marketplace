@@ -1,6 +1,6 @@
 # Anstar Business Central — staged preview
 
-**Employee release is still held:** marketplace policy `NOT_AVAILABLE`, MCP `enabled: false`. The current implementation is an **Anstar-owned TypeScript adapter**, launched with `npx tsx`, connecting to Microsoft's hosted Business Central MCP. Its own isolated Codex pilot passes Microsoft sign-in, restart reuse and one-row reads of Items, Item Ledger Entries and Sales Orders. Clean installation/reuse passes on Windows, macOS and Linux; desktop Work and restricted-user rollout checks remain open. See [verification.md](verification.md).
+**Production release is still held:** marketplace policy `NOT_AVAILABLE`, MCP `enabled: false`. Version `0.3.0-preview.1` adds first-use sign-in and targets **Production / Anstar Ltd**, as requested. The earlier sandbox version passed live Codex reads and the user confirmed the local ChatGPT connection works. That does not prove the Production MCP configuration exists or is read-only; its confirmation and bounded live validation are pending. See [verification.md](verification.md).
 
 ## What it provides
 
@@ -10,7 +10,7 @@
 - Generic **List** reads from API pages/queries exposed by BC, including supported custom APIs. This is not arbitrary table access or a promise of all OData/AL objects. Nested operations requiring additional route arguments are not yet supported by the local parameter allowlist.
 - A local fail-closed guard: discover → describe → invoke; selected fields required, at most 100 rows per call, text results, bounded response bytes, no create/modify/delete/bound actions, arbitrary URLs, expansion or resource downloads.
 
-Target: **sandbox-uat-2026-march / Anstar Ltd / Anstar AI Read Only**, pinned in `connection.json` and validated in code. No Production fallback. Changing this scope requires a separately reviewed release.
+Target: **Production / Anstar Ltd / Anstar AI Read Only**, pinned in `connection.json` and validated in code. No environment fallback. The user explicitly approved this target and bounded Production verification; no Production business writes are authorized. The sandbox configuration remains separate and unchanged.
 
 ## Employee prerequisites and installation
 
@@ -21,7 +21,7 @@ No Azure/PnP/BC CLI, Python, Git, Docker, global tsx installation or manual `npm
 Intended flow **after release gates pass**:
 
 1. Refresh/upgrade **Anstar AI**, then install **Anstar Business Central**.
-2. Ask the agent to connect to Business Central. It calls `bc_connect` and presents a short-lived Microsoft sign-in link. Open it on **the same computer** and authenticate as yourself.
+2. Send your first Business Central message. The bundled skill checks `bc_status` and starts `bc_connect` automatically if needed—no separate “connect” request. A direct unauthenticated business-tool call also returns `authenticationRequired` with the sign-in link without reading BC data. Open it on **the same computer** and authenticate as yourself.
 3. The callback page confirms completion; the agent checks `bc_status`, then performs search → describe → a bounded read.
 4. Subsequent sessions use the stored account and MSAL's silent renewal. A new interactive login may be required by Microsoft policy.
 
@@ -32,13 +32,13 @@ codex plugin marketplace upgrade anstar-ai
 codex plugin add anstar-business-central@anstar-ai
 ```
 
-Do **not** run `codex mcp login` for this stdio adapter; authentication is through `bc_connect`. Startup/listing tools does not open a browser or contact BC. No browser is opened automatically; this avoids disrupting existing browser sessions. The returned sign-in URL is ephemeral authorization material—do not copy it into tickets or logs.
+Do **not** run `codex mcp login` for this stdio adapter. The first relevant message is handled by the plugin skill; MCP cannot observe arbitrary chat messages before the host invokes it. Startup/listing tools stays passive, unrelated chats do not initiate login, and no browser is opened automatically. Pending sign-in calls reuse the same in-memory link until it expires. The returned URL is ephemeral authorization material—do not copy it into tickets or logs.
 
-ChatGPT desktop Work and Windows end-user sign-in require independent validation. Hosted ChatGPT/web cannot execute a local npx process; no hosted `.app.json` connector is supplied or claimed.
+The user reported the local ChatGPT connection works with the sandbox test copy. The revised first-message behavior and Production target still require acceptance. Windows clean installation is CI-verified; live Windows sign-in is not. Hosted ChatGPT/web cannot execute a local npx process; no hosted `.app.json` connector is supplied or claimed.
 
 ## Read-only boundary
 
-Microsoft requires delegated **Financials.ReadWrite.All**, which is **not a read-only token**. The BC configuration must keep **Unblock Edit Tools OFF** and all Create/Modify/Delete/Bound Action permissions OFF. The user confirmed these settings for the sandbox. The adapter additionally validates each List action and request, but this local guard is not a server-side authorization boundary: another process with the same token may use the user's broader BC permissions.
+Microsoft requires delegated **Financials.ReadWrite.All**, which is **not a read-only token**. The BC configuration must keep **Unblock Edit Tools OFF** and all Create/Modify/Delete/Bound Action permissions OFF. The user confirmed these settings for the sandbox only; Production confirmation is pending. The adapter additionally validates each List action and request, but this local guard is not a server-side authorization boundary: another process with the same token may use the user's broader BC permissions.
 
 BC role assignments are additive. Adding a read-only role does not revoke existing write rights. Restrict identities through a separate administrator-approved policy where required; do not change employee roles or test denied writes during installation. [ADMIN-SETUP.md](ADMIN-SETUP.md) records the existing app, callback and configuration.
 
@@ -83,5 +83,5 @@ The Python smoke uses real Codex 0.146.0 and macOS `sandbox-exec` to verify the 
 - **Sign-in required:** call `bc_connect`, complete the link on this machine, then `bc_status`. Do not share passwords, codes or tokens in chat.
 - **Callback unavailable / AADSTS50011:** port 33418 must be free; retain the exact registered callback in ADMIN-SETUP. Do not change another plugin's settings.
 - **Cache locked after a crash:** stop the adapter processes; IT may recover only the exact stale `.auth-lock` directory after confirming there is no owner. Never delete a possibly live lock or print the cache.
-- **No actions / unsupported discovery format:** verify Dynamic Tool Mode and exact sandbox configuration; report schema changes rather than weakening the guard.
+- **No actions / unsupported discovery format:** verify Dynamic Tool Mode and exact Production configuration; report schema changes rather than weakening the guard.
 - **Unexpected writes advertised:** stop and have IT audit the BC configuration. Never invoke one to test rejection.
