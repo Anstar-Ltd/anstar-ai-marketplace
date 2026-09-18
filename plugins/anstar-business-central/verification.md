@@ -34,8 +34,8 @@ Observed quirks: the first broad search timed out at 120 seconds; a bounded retr
 | Gate | State |
 | --- | --- |
 | Dedicated Entra app/client ID and admin consent | Client ID supplied; administrator reports consent complete; interactive OAuth succeeded |
-| Approval and deployment of global callback settings | Pending decision; no employee config was changed |
-| `Anstar AI Read Only` sandbox configuration | Active and usable; bounded write-action search empty; full administrator settings/permission audit still pending |
+| Employee callback delivery | User selected bridge investigation instead of global settings; see BRIDGE-EVALUATION.md; no replacement adopted |
+| `Anstar AI Read Only` sandbox configuration | Active and usable; user confirmed every edit/bound-action permission OFF; bounded write-action search empty; restricted-user boundary test still pending |
 | BC MCP initialization and actual tools/list | Passed; Microsoft BC 28.0.54016.0 and 3 dispatchers |
 | Microsoft sign-in and token renewal | Interactive sign-in and session reuse passed; restricted-normal-user pilot and refresh-token renewal pending |
 | Bounded live MCP read | Passed for all 3 named entities, 1 row each |

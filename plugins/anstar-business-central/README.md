@@ -24,7 +24,7 @@ See [ADMIN-SETUP.md](ADMIN-SETUP.md) for the exact handoff and release checklist
 
 1. Dedicated Entra public-client registration and tenant-admin consent.
 2. Explicit read-only BC MCP configuration in the authorized sandbox.
-3. IT-managed callback configuration for Codex 0.146.0. This version ignores plugin-specific callback settings. **Approval to deploy these settings is still pending.** Do not silently modify an employee's global Codex configuration.
+3. Resolve employee callback delivery. Codex 0.146.0 ignores plugin-specific callback settings. The user selected a local bridge investigation rather than global configuration deployment; the evaluated community bridge is not recommended unchanged. See [BRIDGE-EVALUATION.md](BRIDGE-EVALUATION.md). No replacement is adopted yet, and no employee's global configuration may be silently changed.
 4. The administrator-supplied public client ID is now packaged. Verify login/discovery/read, then separately enable and release it. Client/tenant IDs are public identifiers, not credentials; tokens and secrets never belong in Git.
 
 ## Intended employee flow after release
@@ -44,7 +44,7 @@ codex plugin add anstar-business-central@anstar-ai
 codex mcp login anstar-business-central
 ```
 
-The native CLI `plugin add` does not itself initiate OAuth; desktop/app-server installation may. A marketplace authentication policy is not proof that sign-in succeeded. IT should provision callback settings centrally so employees do not need these commands or manual configuration.
+The native CLI `plugin add` does not itself initiate OAuth; desktop/app-server installation may. A marketplace authentication policy is not proof that sign-in succeeded. The employee callback delivery path is unresolved; the commands above describe the existing native pilot, not a verified zero-configuration rollout.
 
 ## Read-only means a server-side configuration
 

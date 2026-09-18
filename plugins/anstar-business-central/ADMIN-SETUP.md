@@ -51,7 +51,7 @@ Create a **new, non-default** configuration; do not change an existing/default c
 
 Review and validate the configuration, close and reopen it, and verify every field. Do not enable edits or posting to test rejection. The user approved this integration-settings change, not business-record writes or Production access.
 
-The agent's earlier visit prompted for **System Application by Microsoft** to contact an unspecified external service; the agent did not grant that prompt or create the configuration. The administrator later reported it active, and MCP initialization/read calls now succeed. Administrator verification of every setting above remains required; a bounded empty write-action search is not a full configuration audit.
+The agent's earlier visit prompted for **System Application by Microsoft** to contact an unspecified external service; the agent did not grant that prompt or create the configuration. The administrator later reported it active, and MCP initialization/read calls now succeed. The user explicitly confirmed Unblock Edit Tools and every Create/Modify/Delete/Bound Action permission are OFF. A bounded empty write-action search is supporting evidence, not a full configuration or restricted-user audit.
 
 BC roles remain additive. Granting a read-only set to a user with broader roles does not remove write access. Keep normal user roles unchanged during plugin deployment; any identity-level restriction is a separate administrator decision. `Financials.ReadWrite.All` is not a read-only token. This MCP configuration narrows operations through this connection, while BC identity permissions set the data-access ceiling.
 
@@ -64,7 +64,7 @@ mcp_oauth_callback_port = 33418
 mcp_oauth_callback_url = "http://localhost:33418/callback"
 ```
 
-The user has not yet approved central deployment of these global settings. Obtain that decision first. IT must merge settings into the correct employee runtime configuration without replacing unrelated content. They affect **all HTTP MCP OAuth logins**; compare existing callbacks (including Dataverse) and register compatible URIs before changing an already configured machine. Keep existing registrations/callbacks intact. If the machine already uses a compatible localhost callback base, assess that existing base instead of silently overwriting it.
+The user selected investigation of a bundled OAuth bridge instead of deploying these global settings. See [BRIDGE-EVALUATION.md](BRIDGE-EVALUATION.md): the candidate passed local functional tests but is not recommended unchanged after security review. These native settings remain the historical verified pilot recipe, not the approved employee delivery path. Do not deploy them without a new decision. IT must merge settings into the correct employee runtime configuration without replacing unrelated content. They affect **all HTTP MCP OAuth logins**; compare existing callbacks (including Dataverse) and register compatible URIs before changing an already configured machine. Keep existing registrations/callbacks intact. If the machine already uses a compatible localhost callback base, assess that existing base instead of silently overwriting it.
 
 Codex appends a URL-derived path component. For the BC endpoint the actual callback is:
 
