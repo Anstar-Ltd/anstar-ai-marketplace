@@ -22,7 +22,7 @@ try {
     let stderr = '';
     transport.stderr?.on('data', chunk => { stderr += String(chunk); });
     try {
-      await client.connect(transport, { timeout: 240000 });
+      await client.connect(transport, { timeout: 420000 });
       const tools = await client.listTools();
       assert.deepEqual(tools.tools.map(tool => tool.name).sort(), ['bc_actions_describe', 'bc_actions_invoke', 'bc_actions_search', 'bc_connect', 'bc_status']);
       const status = await client.callTool({ name: 'bc_status', arguments: {} });

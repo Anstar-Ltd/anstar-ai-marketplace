@@ -8,7 +8,11 @@ The user approved replacing native HTTP with an Anstar-owned MSAL/MCP adapter la
 - A fresh home/empty npm cache/plugin copy without node_modules launched the exact `npx -y tsx@4.23.13 ./scripts/bootstrap.ts` command. First run installed the locked production dependency tree; second run reused it. Both returned five expected tools and unauthenticated status. No OAuth or BC call was made, and no global Codex settings were used.
 - Real Codex 0.146.0 offline install/readback now verifies the stdio command, args, plugin-relative cwd, five-tool allowlist and timeouts. The release hold and disabled transport remain in place.
 - A separate disposable local marketplace enabled only the pilot copy, with a fresh Codex home and npm cache. Real Codex app-server started the exact npx adapter and returned all five tools without global callback settings, OAuth initiation or BC calls. This verifies host startup, not live authentication.
-- New adapter live OAuth/BC reads, Windows acceptance, desktop Work and restricted-normal-user verification remain pending. CI now defines macOS, Windows and Linux adapter gates; a configured workflow is not a passing run.
+- **New adapter live Microsoft sign-in and restart reuse passed** through the isolated Codex app-server with no global callback settings. The initial discovery call failed without a detailed error; an instrumented bounded retry returned HTTP 200 and it did not recur. No transport/policy relaxation was needed.
+- **New adapter search → describe → invoke passed** for Items, Item Ledger Entries and Sales Orders, one row each with the same four selected fields listed below. Field sets and counts were checked locally; no row values are published. The pilot's initial parser incorrectly assumed a single JSON text block; it was corrected to handle the separate summary and JSON data blocks without changing the adapter.
+- Microsoft login and all reads ran against the fresh installed `0.2.0-preview.1` adapter snapshot from commit `ea9a7ca`. Later changes only classify Windows errors and adjust Windows first-install deadlines, not the verified macOS auth/read path. The pilot's cached server was disabled afterward.
+- Local adapter suite: 41 discovered, 30 passed and 11 Windows-only skipped on macOS. All 26 Python tests and typecheck pass. macOS/Linux CI and offline Codex smoke passed; Windows auth/cache tests pass, but its fresh full dependency install hit the short ACL-helper deadline. Runtime-only deadlines were increased without relaxing checks; final CI is pending.
+- Bounded review found a runtime-cache permission gap, reproduced with a failing regression and fixed by validating private roots/executable descendants. The targeted recheck confirmed the original payload is blocked and identified a Windows volume-root edge case; the shared ancestor check now includes the root, with a source contract avoiding changes to real volume permissions. No further broad review cycle is planned.
 
 ## Historical native HTTP pilot
 
@@ -44,14 +48,14 @@ Observed quirks: the first broad search timed out at 120 seconds; a bounded retr
 | Gate | State |
 | --- | --- |
 | Dedicated Entra app/client ID and admin consent | Client ID supplied; administrator reports consent complete; interactive OAuth succeeded |
-| Employee callback delivery | TypeScript adapter owns callback; clean local npx startup passed without global settings; live sign-in pending |
+| Employee callback delivery | Adapter callback and live personal sign-in passed in isolated Codex without global settings |
 | `Anstar AI Read Only` sandbox configuration | Active and usable; user confirmed every edit/bound-action permission OFF; bounded write-action search empty; restricted-user boundary test still pending |
-| BC MCP initialization and actual tools/list | Earlier native path passed; current adapter upstream live connection pending |
-| Microsoft sign-in and token renewal | Earlier native sign-in/reuse passed; new MSAL path currently has synthetic verification only |
-| Bounded live MCP read | Earlier native path passed all 3 named entities, 1 row each; current adapter live reads pending |
+| BC MCP initialization and actual tools/list | Current adapter passed; three remote business dispatchers plus two local connection tools |
+| Microsoft sign-in and token renewal | Current adapter interactive sign-in and process-restart reuse passed; expired-token renewal verified synthetically, not by a live expiry soak |
+| Bounded live MCP read | Current adapter passed all 3 named entities, 1 row each with limited fields |
 | Negative identity access test | Not performed; never test by mutating records |
 | Clean ChatGPT desktop Work pilot | Not performed |
-| Windows pilot | Not performed |
+| Windows pilot | Real CI auth/cache tests pass; full clean dependency-install validation pending; live Windows user sign-in not performed |
 | Hosted ChatGPT app / `.app.json` binding | Not implemented; no placeholder app ID |
 | Employee marketplace release | Blocked: NOT_AVAILABLE and disabled |
 

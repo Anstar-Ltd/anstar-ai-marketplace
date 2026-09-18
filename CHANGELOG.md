@@ -8,6 +8,8 @@
 
 ### Changed
 
+- Verified the replacement TypeScript adapter's personal Microsoft login, process-restart reuse and one-row sandbox reads of Items, Item Ledger Entries and Sales Orders. Hardened runtime-cache execution permissions, fixed a cache-lock release race, pinned the company and stopped in-flight connections during shutdown. Windows installation and desktop/restricted-user rollout remain separately gated.
+
 - Replaced the native HTTP preview with an approved Anstar-owned TypeScript MSAL/MCP adapter launched by pinned npx tsx. Added automatic locked dependency setup, local sign-in/status tools, callback/state and cache protections, read-action enforcement and synthetic/runtime tests. Requires Node.js 22+ and npm/npx but no global Codex callback settings; new adapter live/desktop acceptance remains separate from the earlier successful native pilot.
 
 - Added the administrator-supplied Business Central OAuth client ID after permission/consent setup was reported complete. The connection remains disabled until authenticated sandbox validation and the other release gates pass.

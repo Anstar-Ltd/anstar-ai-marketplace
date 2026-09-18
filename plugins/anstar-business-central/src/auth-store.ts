@@ -155,10 +155,12 @@ try {
 async function windowsAcl(path: string, operation: 'directory' | 'file' | 'seal-new-file' | 'acquire' | 'runtime-tree' | 'seal-new-runtime'): Promise<'OK' | 'BUSY'> {
   const systemRoot = process.env.SystemRoot;
   if (!systemRoot || !/^[a-z]:\\/i.test(systemRoot) || systemRoot !== resolve(systemRoot)) throw new AuthStoreError();
+  // A dependency tree contains thousands of files; credential checks stay short.
+  const timeout = operation === 'seal-new-runtime' ? 90_000 : operation === 'runtime-tree' ? 60_000 : 15_000;
   try {
     const { stdout } = await executeFile(join(systemRoot, 'System32', 'WindowsPowerShell', 'v1.0', 'powershell.exe'),
       ['-NoLogo', '-NoProfile', '-NonInteractive', '-EncodedCommand', Buffer.from(WINDOWS_ACL_SCRIPT, 'utf16le').toString('base64')],
-      { windowsHide: true, timeout: 15_000, maxBuffer: 1024, env: { SystemRoot: systemRoot, windir: systemRoot, ANSTAR_AUTH_ACL_PATH: path, ANSTAR_AUTH_ACL_OPERATION: operation } });
+      { windowsHide: true, timeout, maxBuffer: 1024, env: { SystemRoot: systemRoot, windir: systemRoot, ANSTAR_AUTH_ACL_PATH: path, ANSTAR_AUTH_ACL_OPERATION: operation } });
     if (stdout === 'OK' || (operation === 'acquire' && stdout === 'BUSY')) return stdout;
   } catch (error) {
     // Only fixed operation names and timeout classification; never raw diagnostics.
