@@ -59,11 +59,23 @@ try {
         $rule.FileSystemRights -ne 'FullControl' -or $rule.IsInherited -or
         [int]$rule.InheritanceFlags -ne $inherit -or $rule.PropagationFlags -ne 'None') { throw 'Unsafe rule' }
   }
+  function Assert-Ancestor([string]$current) {
+    $attributes = Attributes-OrMissing $current
+    if ($attributes -eq -1 -or ($attributes -band 1024) -ne 0 -or ($attributes -band 16) -eq 0) { throw 'Unsafe ancestor' }
+    $ancestor = [System.IO.Directory]::GetAccessControl($current)
+    $trusted = @($sid.Value, 'S-1-5-18', 'S-1-5-32-544', 'S-1-5-80-956008885-3418522649-1831038044-1853292631-2271478464')
+    if ($trusted -notcontains $ancestor.GetOwner([System.Security.Principal.SecurityIdentifier]).Value) { throw 'Unsafe ancestor owner' }
+    foreach ($rule in $ancestor.GetAccessRules($true, $true, [System.Security.Principal.SecurityIdentifier])) {
+      # Applied Delete/DeleteChild/ChangePermissions/TakeOwnership rights can replace private descendants.
+      if ($rule.AccessControlType -eq 'Allow' -and ([int]$rule.PropagationFlags -band 2) -eq 0 -and $trusted -notcontains $rule.IdentityReference.Value -and ([int]$rule.FileSystemRights -band 852032) -ne 0) { throw 'Unsafe ancestor access' }
+    }
+  }
   function Guard-Directory([string]$path) {
     $root = [System.IO.Path]::GetPathRoot($path)
     $drive = [System.IO.DriveInfo]::new($root)
     if ($drive.DriveType -ne 'Fixed' -or $drive.DriveFormat -ne 'NTFS') { throw 'Unsupported volume' }
     $current = $root
+    Assert-Ancestor $current
     foreach ($part in $path.Substring($root.Length).Split([char]92)) {
       if ($part -match '^(?:\.git|onedrive.*|dropbox.*|icloud.*|cloudstorage|mobile documents|google drive.*)$') { throw 'Unsafe location' }
       $current = [System.IO.Path]::Combine($current, $part)
@@ -72,14 +84,7 @@ try {
         [void][System.IO.Directory]::CreateDirectory($current, (Private-Security $true))
         $attributes = Attributes-OrMissing $current
       }
-      if (($attributes -band 1024) -ne 0 -or ($attributes -band 16) -eq 0) { throw 'Unsafe ancestor' }
-      $ancestor = [System.IO.Directory]::GetAccessControl($current)
-      $trusted = @($sid.Value, 'S-1-5-18', 'S-1-5-32-544', 'S-1-5-80-956008885-3418522649-1831038044-1853292631-2271478464')
-      if ($trusted -notcontains $ancestor.GetOwner([System.Security.Principal.SecurityIdentifier]).Value) { throw 'Unsafe ancestor owner' }
-      foreach ($rule in $ancestor.GetAccessRules($true, $true, [System.Security.Principal.SecurityIdentifier])) {
-        # Applied Delete/DeleteChild/ChangePermissions/TakeOwnership rights can replace private descendants.
-        if ($rule.AccessControlType -eq 'Allow' -and ([int]$rule.PropagationFlags -band 2) -eq 0 -and $trusted -notcontains $rule.IdentityReference.Value -and ([int]$rule.FileSystemRights -band 852032) -ne 0) { throw 'Unsafe ancestor access' }
-      }
+      Assert-Ancestor $current
       if ((Attributes-OrMissing ([System.IO.Path]::Combine($current, '.git'))) -ne -1) { throw 'Repository location' }
     }
     Assert-Private $path $true

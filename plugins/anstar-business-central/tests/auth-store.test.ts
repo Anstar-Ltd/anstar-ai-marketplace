@@ -2,7 +2,7 @@ import test from 'node:test';
 import fsPromises from 'node:fs/promises';
 import { syncBuiltinESMExports } from 'node:module';
 import assert from 'node:assert/strict';
-import { mkdtemp, realpath, rm, stat, mkdir, symlink, chmod, utimes, link, readdir } from 'node:fs/promises';
+import { mkdtemp, realpath, rm, stat, mkdir, symlink, chmod, utimes, link, readdir, readFile } from 'node:fs/promises';
 import { execFile, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
 import { tmpdir } from 'node:os';
@@ -11,6 +11,12 @@ import { AuthStore, AuthStoreError } from '../src/auth-store.ts';
 
 const windows = process.platform === 'win32';
 const lockWaitMs = windows ? 60_000 : 5_000;
+
+test('Windows guard includes volume-root ACL before descending (source contract)', async()=>{
+  // Never mutate a real machine's volume-root ACL to test this invariant.
+  const source=await readFile(new URL('../src/auth-store.ts',import.meta.url),'utf8');
+  assert.match(source,/\$current = \$root\s+Assert-Ancestor \$current\s+foreach/);
+});
 
 async function fixture() {
   const root = await mkdtemp(join(await realpath(tmpdir()), 'bc-auth-test-'));
