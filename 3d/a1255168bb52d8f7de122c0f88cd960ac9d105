@@ -1,0 +1,24 @@
+CHANGELOG.md
+  h_7a831411810cd7 11-12
+plugins/anstar-business-central/.mcp.json
+  h_7a831411810cd7 15
+plugins/anstar-business-central/README.md
+  h_7a831411810cd7 3,19
+plugins/anstar-business-central/scripts/check-install.ts
+  h_7a831411810cd7 25
+plugins/anstar-business-central/src/auth-store.ts
+  h_7a831411810cd7 158-159,163
+plugins/anstar-business-central/verification.md
+  h_7a831411810cd7 11-15,51,53-55,58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "3da1255168bb52d8f7de122c0f88cd960ac9d105",
+  "prompts": {},
+  "humans": {
+    "h_7a831411810cd7": {
+      "author": "Maksym Dudkin <lugamax@gmail.com>"
+    }
+  }
+}
