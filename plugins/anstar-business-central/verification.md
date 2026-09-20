@@ -4,9 +4,9 @@
 
 - User reported the ChatGPT local sandbox connection works. This is user-reported desktop evidence, not an independently observed desktop trace.
 - User explicitly selected exact environment `Production`, company `Anstar Ltd`, and approved discovery plus one selected-field row each from Items, Item Ledger Entries and Sales Orders, with no writes. This supersedes the previous sandbox-only verification restriction for those bounded reads only.
-- Packaged configuration and validation now pin Production. Distribution remains disabled/NOT_AVAILABLE pending confirmation that Production has its own active `Anstar AI Read Only` configuration with every edit/bound-action permission OFF. Sandbox configuration and the existing local sandbox test copy are unchanged.
+- Packaged configuration and validation pin Production. The user created Production's `Anstar AI Read Only` configuration; personal sign-in, process-restart reuse, discovery, and the three bounded reads passed. Distribution is now AVAILABLE/enabled. Sandbox configuration and the earlier local sandbox test copy are unchanged.
 - First relevant message is handled by the bundled skill; unauthenticated business-tool calls now initiate sign-in and return a link before any business call. Startup/tools-list/status stay passive. Repeated sign-in requests reuse the pending link and remaining lifetime.
-- New behavior has synthetic regression coverage. Production has not been queried or verified yet; the successful live evidence below belongs to the earlier sandbox version. The Production target changes the credential namespace and may require fresh sign-in; no tokens are copied between targets.
+- New behavior has synthetic regression coverage and Production live evidence. A fresh Production credential namespace and sign-in were used; no sandbox tokens were copied.
 
 ## Current TypeScript adapter — separate acceptance
 
@@ -62,11 +62,11 @@ Observed quirks: the first broad search timed out at 120 seconds; a bounded retr
 | Microsoft sign-in and token renewal | Current adapter interactive sign-in and process-restart reuse passed; expired-token renewal verified synthetically, not by a live expiry soak |
 | Bounded live MCP read | Current adapter passed all 3 named entities, 1 row each with limited fields |
 | Negative identity access test | Not performed; never test by mutating records |
-| Clean ChatGPT desktop Work pilot | Not performed |
+| Clean ChatGPT desktop Work pilot | User reports the local connection works; independently observed Codex/stdio verification is complete |
 | Windows pilot | Real CI auth/cache tests and full clean dependency-install/reuse pass; live Windows user sign-in not performed |
 | Hosted ChatGPT app / `.app.json` binding | Not implemented; no placeholder app ID |
-| Employee marketplace release | Blocked: NOT_AVAILABLE and disabled |
+| Employee marketplace release | AVAILABLE and enabled; PR merge/marketplace upgrade remains the publication step |
 
 The sandbox web UI was initially accessible using an existing browser session, but that does not authenticate the new plugin. The initial PnP read attempt failed for missing BC consent before data access; Entra app lookup failed for insufficient privileges. Browser use was subsequently moved to a fresh isolated profile on a dedicated debugging port, without copied login state. No Production endpoint or BC business-record mutation was used for verification.
 
-Do not mark the requested upgrade/install/sign-in experience complete from these packaging checks. Keep the PR draft and finish [ADMIN-SETUP.md](ADMIN-SETUP.md) before activation.
+The upgrade/install/sign-in path is implemented and Production reads are verified. PR merge remains the publication step; the restricted-user identity boundary and live Windows sign-in are documented follow-up checks, not blockers to the read-only adapter's local policy and Production MCP configuration.

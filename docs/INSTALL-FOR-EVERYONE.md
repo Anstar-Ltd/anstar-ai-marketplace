@@ -82,13 +82,13 @@ The **Anstar AI** marketplace also packages the portable MCP connections used by
 - **Plaud** — the employee's own Plaud recordings, transcripts and notes.
 - **TalentHR** — TalentHR's documented public API through a bounded local wrapper. Reads are permission-scoped and writes require explicit approval.
 
-These plugins contain connection metadata only; they do not include passwords, access tokens, tenant secrets, or shared user identities. Business Central has a staged preview but is not available for employee installation yet.
+These plugins contain no passwords, access tokens, tenant secrets, or shared user identities. Business Central includes a local read-only adapter and is available for employee installation.
 
-### Business Central preview — wait for IT release
+### Connect Anstar Business Central
 
-The **Anstar Business Central** connection is deliberately disabled. Do not enable it or manually change OAuth settings. IT must complete the [administrator handoff](../plugins/anstar-business-central/ADMIN-SETUP.md) and validate the new adapter's normal-user Microsoft sign-in and reads in the desktop runtime. The adapter owns its callback; no global Codex callback setting is required.
+The **Anstar Business Central** connection targets **Production / Anstar Ltd** through the dedicated `Anstar AI Read Only` configuration. Upgrade the marketplace and install it normally; do not manually change OAuth headers or environment settings. The adapter owns its callback, so no global Codex callback setting is required.
 
-After IT releases it: refresh **Anstar AI**, install **Anstar Business Central**, and ask the agent to connect. Open the Microsoft sign-in link on the same computer; the agent verifies completion with `bc_status`. **Node.js 22+ with npm/npx on PATH is required**; pinned dependencies install automatically at first launch. No BC/Azure/PnP CLI or manual npm setup is needed. The consent screen's `Financials.ReadWrite.All` scope is broader than reading; the dedicated BC MCP configuration must keep edit tools disabled. Report unexpected writes and do not run them. Hosted ChatGPT web cannot run this local adapter.
+Refresh **Anstar AI**, install **Anstar Business Central**, then send a Business Central request. If needed, the first relevant message returns a Microsoft sign-in link; open it on the same computer and the agent resumes after `bc_status`. **Node.js 22+ with npm/npx on PATH is required**; pinned dependencies install automatically at first launch. No BC/Azure/PnP CLI or manual npm setup is needed. The consent screen's `Financials.ReadWrite.All` scope is broader than reading; the dedicated BC MCP configuration must keep edit tools disabled. Report unexpected writes and do not run them. Hosted ChatGPT web cannot run this local adapter.
 
 ### Connect Softeria Microsoft 365
 

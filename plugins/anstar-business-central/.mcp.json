@@ -4,7 +4,7 @@
       "command": "npx",
       "args": ["-y", "tsx@4.23.13", "./scripts/bootstrap.ts"],
       "cwd": ".",
-      "enabled": false,
+      "enabled": true,
       "enabled_tools": [
         "bc_connect",
         "bc_status",

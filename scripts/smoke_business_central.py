@@ -1,4 +1,4 @@
-"""Exercise a disabled BC plugin through real Codex, without network or credentials.
+"""Install the released BC plugin through real Codex, without launching it.
 
 Requires macOS sandbox-exec for an OS-enforced no-network boundary. This is
 validation tooling, not a runtime or employee installation dependency.
@@ -24,14 +24,16 @@ PLUGIN_ID = f"{NAME}@anstar-ai"
 def validate_staged_marketplace(root: Path) -> dict:
     marketplace = json.loads((root / ".agents/plugins/marketplace.json").read_text())
     entry = next(entry for entry in marketplace["plugins"] if entry["name"] == NAME)
-    if entry["policy"]["installation"] != "NOT_AVAILABLE":
-        raise ValueError("Smoke requires the staged NOT_AVAILABLE policy")
+    if entry["policy"]["installation"] != "AVAILABLE":
+        raise ValueError("Smoke requires the released AVAILABLE policy")
+    if entry["policy"]["authentication"] != "ON_USE":
+        raise ValueError("Smoke requires first-use authentication")
     data = json.loads((root / f"plugins/{NAME}/.mcp.json").read_text())
     if set(data["mcpServers"]) != {NAME}:
         raise ValueError("Unexpected MCP server in staged BC package")
     server = data["mcpServers"][NAME]
-    if server.get("enabled") is not False:
-        raise ValueError("Smoke requires a disabled MCP server")
+    if server.get("enabled") is not True:
+        raise ValueError("Smoke requires an enabled MCP server")
     if server.get("command") != "npx" or server.get("args") != ["-y", "tsx@4.23.13", "./scripts/bootstrap.ts"]:
         raise ValueError("Smoke requires the pinned TypeScript adapter launcher")
     return server
@@ -67,42 +69,20 @@ def run_smoke(binary: str) -> dict:
                 "LANG": "en_US.UTF-8", "RUST_LOG": "warn",
             }
 
-        def run(env: dict, args: list[str], *, failure: bool = False) -> Any:
+        def run(env: dict, args: list[str]) -> Any:
             result = subprocess.run(
                 ["/usr/bin/sandbox-exec", "-f", str(sandbox), binary, *args],
                 env=env, cwd=Path(env["HOME"]) / "work", capture_output=True,
                 text=True, timeout=60,
             )
             records.append({"command": ["codex", *args], "exit_code": result.returncode})
-            if failure:
-                if result.returncode == 0:
-                    raise AssertionError("Staged installation unexpectedly succeeded")
-                if "not available" not in (result.stdout + result.stderr).lower():
-                    raise AssertionError("Expected policy refusal, got: " + result.stderr)
-                return None
             if result.returncode:
                 raise RuntimeError(f"{args}: {result.stderr}")
             return json.loads(result.stdout) if "--json" in args else result.stdout.strip()
 
-        held = environment("held")
-        version = run(held, ["--version"])
-        run(held, ["plugin", "marketplace", "add", str(ROOT), "--json"])
-        run(held, ["plugin", "add", PLUGIN_ID, "--json"], failure=True)
-        listed = run(held, ["plugin", "list", "--json"])
-        if any(p["pluginId"] == PLUGIN_ID for p in listed["installed"]):
-            raise AssertionError("Release-held plugin was installed")
-
-        # Alter installation policy only in a disposable marketplace. The actual
-        # BC payload and its disabled network transport stay byte-for-byte intact.
-        source = base / "marketplace"
-        shutil.copytree(ROOT / ".agents/plugins", source / ".agents/plugins")
-        shutil.copytree(ROOT / "plugins", source / "plugins", ignore=shutil.ignore_patterns("node_modules", "__pycache__"))
-        market_file = source / ".agents/plugins/marketplace.json"
-        market = json.loads(market_file.read_text())
-        next(p for p in market["plugins"] if p["name"] == NAME)["policy"]["installation"] = "AVAILABLE"
-        market_file.write_text(json.dumps(market, indent=2))
         probe = environment("probe")
-        run(probe, ["plugin", "marketplace", "add", str(source), "--json"])
+        version = run(probe, ["--version"])
+        run(probe, ["plugin", "marketplace", "add", str(ROOT), "--json"])
         run(probe, ["plugin", "marketplace", "list", "--json"])
         run(probe, ["plugin", "list", "--available", "--json"])
         installed = run(probe, ["plugin", "add", PLUGIN_ID, "--json"])
@@ -118,7 +98,7 @@ def run_smoke(binary: str) -> dict:
             if (destination / path.relative_to(original)).read_bytes() != path.read_bytes():
                 raise AssertionError(f"Installed payload differs: {path.relative_to(original)}")
         server = run(probe, ["mcp", "get", NAME, "--json"])
-        assert server["enabled"] is False
+        assert server["enabled"] is True
         assert server["transport"]["type"] == "stdio"
         assert server["transport"]["command"] == expected["command"]
         assert server["transport"]["args"] == expected["args"]
@@ -126,15 +106,15 @@ def run_smoke(binary: str) -> dict:
         assert server["enabled_tools"] == expected["enabled_tools"]
         assert server["startup_timeout_sec"] == expected["startup_timeout_sec"]
         assert server["tool_timeout_sec"] == expected["tool_timeout_sec"]
-        for env in (held, probe):
+        for env in (probe,):
             for name in ("auth.json", ".credentials.json"):
                 if (Path(env["CODEX_HOME"]) / name).exists():
                     raise AssertionError("Unexpected credential artifact")
         return {
             "result": "PASS", "codex_version": version,
             "checks": records, "commands_executed": len(records),
-            "payload_files_verified": len(files), "release_hold_enforced": True,
-            "mcp_enabled": False, "network": "denied by sandbox-exec",
+            "payload_files_verified": len(files), "released_install_verified": True,
+            "mcp_enabled": True, "network": "denied by sandbox-exec",
             "oauth_started": False, "live_bc_reads": 0,
             "user_configuration_modified": False,
         }

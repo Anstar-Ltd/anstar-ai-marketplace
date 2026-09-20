@@ -204,7 +204,7 @@ class MvpContractTests(unittest.TestCase):
         self.assertNotIn("teams", names)
         self.assertNotIn("sharepoint", names)
         bc = next(entry for entry in marketplace["plugins"] if entry["name"] == "anstar-business-central")
-        self.assertEqual(bc["policy"]["installation"], "NOT_AVAILABLE")
+        self.assertEqual(bc["policy"]["installation"], "AVAILABLE")
 
         ms365 = json.loads((MS365_PLUGIN / ".mcp.json").read_text())["mcpServers"]["ms365"]
         self.assertEqual(ms365["command"], "cmd")

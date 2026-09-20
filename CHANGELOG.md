@@ -4,11 +4,12 @@
 
 ### Added
 
-- Staged a Business Central read-only source plugin with search/describe/invoke discovery, administrator setup guidance and isolated Codex installation validation. Employee availability remains held while rollout acceptance is incomplete.
+- Added the installable Business Central Production read-only plugin with first-use Microsoft sign-in, search/describe/invoke discovery, administrator guidance and cross-platform installation validation.
 
 ### Changed
 
-- Added automatic first-use Microsoft sign-in links and pending-login reuse. Staged the explicitly requested Production / Anstar Ltd target in 0.3.0-preview.1; activation remains held until Production's dedicated read-only MCP configuration is confirmed and bounded reads pass. Existing sandbox setup is unchanged.
+- Added automatic first-use Microsoft sign-in links and pending-login reuse. Switched the explicitly requested target to Production / Anstar Ltd in 0.3.0-preview.1 after its dedicated read-only MCP configuration and bounded reads were verified. Existing sandbox setup is unchanged.
+- Verified the Production configuration through a fresh personal sign-in, process restart and one-row reads of Items, Item Ledger Entries and Sales Orders; enabled marketplace installation and runtime startup. No writes were attempted.
 
 - Verified the replacement TypeScript adapter's personal Microsoft login, process-restart reuse and one-row sandbox reads of Items, Item Ledger Entries and Sales Orders. Hardened runtime-cache execution permissions, fixed a cache-lock release race, pinned the company and stopped in-flight connections during shutdown. Windows installation and desktop/restricted-user rollout remain separately gated.
 

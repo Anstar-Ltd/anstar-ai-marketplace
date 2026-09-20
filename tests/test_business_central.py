@@ -11,32 +11,32 @@ PLUGIN = ROOT / "plugins/anstar-business-central"
 
 
 class BusinessCentralContractTests(unittest.TestCase):
-    def test_smoke_refuses_to_launch_with_an_enabled_server(self):
+    def test_smoke_requires_released_enabled_server(self):
         self.assertTrue((ROOT / "scripts/smoke_business_central.py").is_file())
         from scripts.smoke_business_central import validate_staged_marketplace
 
-        self.assertIs(validate_staged_marketplace(ROOT)["enabled"], False)
+        self.assertIs(validate_staged_marketplace(ROOT)["enabled"], True)
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             shutil.copytree(ROOT / ".agents", root / ".agents")
             shutil.copytree(PLUGIN, root / "plugins/anstar-business-central", ignore=shutil.ignore_patterns("node_modules"))
             path = root / "plugins/anstar-business-central/.mcp.json"
             data = json.loads(path.read_text())
-            data["mcpServers"]["anstar-business-central"]["enabled"] = True
+            data["mcpServers"]["anstar-business-central"]["enabled"] = False
             path.write_text(json.dumps(data))
-            with self.assertRaisesRegex(ValueError, "disabled"):
+            with self.assertRaisesRegex(ValueError, "enabled"):
                 validate_staged_marketplace(root)
 
-    def test_staged_plugin_is_discoverable_but_cannot_connect(self):
+    def test_released_plugin_is_installable_and_read_only(self):
         marketplace = json.loads((ROOT / ".agents/plugins/marketplace.json").read_text())
         entries = {entry["name"]: entry for entry in marketplace["plugins"]}
         self.assertIn("anstar-business-central", entries)
-        self.assertEqual(entries["anstar-business-central"]["policy"]["installation"], "NOT_AVAILABLE")
+        self.assertEqual(entries["anstar-business-central"]["policy"]["installation"], "AVAILABLE")
         manifest = json.loads((PLUGIN / ".codex-plugin/plugin.json").read_text())
         self.assertEqual(manifest["interface"]["capabilities"], ["Read"])
         self.assertEqual(manifest["mcpServers"], "./.mcp.json")
         server = json.loads((PLUGIN / ".mcp.json").read_text())["mcpServers"]["anstar-business-central"]
-        self.assertIs(server["enabled"], False)
+        self.assertIs(server["enabled"], True)
         self.assertEqual(server["command"], "npx")
         self.assertEqual(server["args"], ["-y", "tsx@4.23.13", "./scripts/bootstrap.ts"])
         self.assertEqual(server["cwd"], ".")

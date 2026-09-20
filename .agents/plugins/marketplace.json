@@ -11,8 +11,8 @@
         "path": "./plugins/anstar-business-central"
       },
       "policy": {
-        "installation": "NOT_AVAILABLE",
-        "authentication": "ON_INSTALL"
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
       },
       "category": "Productivity"
     },

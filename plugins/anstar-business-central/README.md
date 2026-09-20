@@ -1,6 +1,6 @@
-# Anstar Business Central — staged preview
+# Anstar Business Central
 
-**Production release is still held:** marketplace policy `NOT_AVAILABLE`, MCP `enabled: false`. Version `0.3.0-preview.1` adds first-use sign-in and targets **Production / Anstar Ltd**, as requested. The earlier sandbox version passed live Codex reads and the user confirmed the local ChatGPT connection works. That does not prove the Production MCP configuration exists or is read-only; its confirmation and bounded live validation are pending. See [verification.md](verification.md).
+**Available for installation.** Version `0.3.0-preview.1` starts personal Microsoft sign-in on first Business Central use and targets **Production / Anstar Ltd / Anstar AI Read Only**. Production sign-in, process-restart reuse, and one-row reads of Items, Item Ledger Entries and Sales Orders passed; no writes were attempted. Clean install/reuse passes on macOS, Windows and Linux. See [verification.md](verification.md).
 
 ## What it provides
 
@@ -18,7 +18,7 @@ Required: **Node.js 22+ with npm/npx on PATH**, a compatible local Codex/desktop
 
 No Azure/PnP/BC CLI, Python, Git, Docker, global tsx installation or manual `npm install` is required for employees. On first launch the plugin automatically downloads pinned `tsx@4.23.13` and installs its locked production dependencies into a private, content-addressed local runtime cache with npm lifecycle scripts disabled. Further launches reuse it. Registry access is required for first use and changed releases. First setup can take several minutes on Windows because the dependency tree is protected before execution; startup is bounded to seven minutes. Dependencies are code running as the employee; Anstar owns review and updates.
 
-Intended flow **after release gates pass**:
+Employee flow:
 
 1. Refresh/upgrade **Anstar AI**, then install **Anstar Business Central**.
 2. Send your first Business Central message. The bundled skill checks `bc_status` and starts `bc_connect` automatically if needed—no separate “connect” request. A direct unauthenticated business-tool call also returns `authenticationRequired` with the sign-in link without reading BC data. Open it on **the same computer** and authenticate as yourself.
@@ -34,11 +34,11 @@ codex plugin add anstar-business-central@anstar-ai
 
 Do **not** run `codex mcp login` for this stdio adapter. The first relevant message is handled by the plugin skill; MCP cannot observe arbitrary chat messages before the host invokes it. Startup/listing tools stays passive, unrelated chats do not initiate login, and no browser is opened automatically. Pending sign-in calls reuse the same in-memory link until it expires. The returned URL is ephemeral authorization material—do not copy it into tickets or logs.
 
-The user reported the local ChatGPT connection works with the sandbox test copy. The revised first-message behavior and Production target still require acceptance. Windows clean installation is CI-verified; live Windows sign-in is not. Hosted ChatGPT/web cannot execute a local npx process; no hosted `.app.json` connector is supplied or claimed.
+The user reported the local ChatGPT connection works; Production was independently verified through the same adapter. Windows clean installation is CI-verified; live Windows sign-in is not. Hosted ChatGPT/web cannot execute a local npx process; no hosted `.app.json` connector is supplied or claimed.
 
 ## Read-only boundary
 
-Microsoft requires delegated **Financials.ReadWrite.All**, which is **not a read-only token**. The BC configuration must keep **Unblock Edit Tools OFF** and all Create/Modify/Delete/Bound Action permissions OFF. The user confirmed these settings for the sandbox only; Production confirmation is pending. The adapter additionally validates each List action and request, but this local guard is not a server-side authorization boundary: another process with the same token may use the user's broader BC permissions.
+Microsoft requires delegated **Financials.ReadWrite.All**, which is **not a read-only token**. The Production configuration `Anstar AI Read Only` was created by the user and its bounded List reads passed. It must keep **Unblock Edit Tools OFF** and all Create/Modify/Delete/Bound Action permissions OFF. The adapter additionally validates each List action and request, but this local guard is not a server-side authorization boundary: another process with the same token may use the user's broader BC permissions.
 
 BC role assignments are additive. Adding a read-only role does not revoke existing write rights. Restrict identities through a separate administrator-approved policy where required; do not change employee roles or test denied writes during installation. [ADMIN-SETUP.md](ADMIN-SETUP.md) records the existing app, callback and configuration.
 
@@ -77,7 +77,7 @@ The Python smoke uses real Codex 0.146.0 and macOS `sandbox-exec` to verify the 
 
 ## Troubleshooting
 
-- **Not available/disabled:** intentional release hold; do not bypass outside an approved isolated pilot.
+- **Not available/disabled:** upgrade the Anstar AI marketplace and reinstall/enable this plugin; do not copy an old staged test package.
 - **npx not found / unsupported Node:** install the organization's supported Node 22+ distribution, then restart the host so PATH is refreshed.
 - **First start fails:** check npm-registry access, disk permissions and startup timeout; no fallback to an unpinned package.
 - **Sign-in required:** call `bc_connect`, complete the link on this machine, then `bc_status`. Do not share passwords, codes or tokens in chat.
