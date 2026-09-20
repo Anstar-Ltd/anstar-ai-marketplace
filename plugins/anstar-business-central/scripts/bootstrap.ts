@@ -24,6 +24,20 @@ async function payload(source: string): Promise<Map<string, Buffer>> {
   return files;
 }
 
+export async function removeRuntimeStaging(
+  directory: string,
+  remove: (path: string, options: { recursive: true; force: true }) => Promise<void> = rm,
+): Promise<void> {
+  for (let attempt = 0; ; attempt++) {
+    try { await remove(directory, { recursive: true, force: true }); return; }
+    catch (error) {
+      const code = (error as NodeJS.ErrnoException).code;
+      if (!['EBUSY', 'EPERM', 'ENOTEMPTY'].includes(code ?? '') || attempt >= 5) throw error;
+      await new Promise(resolve => setTimeout(resolve, 50 * 2 ** attempt));
+    }
+  }
+}
+
 export async function prepareRuntime(source: string, cache: string, install: (directory: string) => Promise<void>): Promise<string> {
   const files = await payload(source);
   const hash = createHash('sha256');
@@ -59,7 +73,7 @@ export async function prepareRuntime(source: string, cache: string, install: (di
       await guardRuntimeTree(target);
     }
     return target;
-  } finally { await rm(staging, { recursive: true, force: true }); }
+  } finally { await removeRuntimeStaging(staging); }
 }
 
 async function main(): Promise<void> {

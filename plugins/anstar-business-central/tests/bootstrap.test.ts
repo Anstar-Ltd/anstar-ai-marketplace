@@ -5,7 +5,14 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import os from 'node:os';
 import path from 'node:path';
-import { prepareRuntime } from '../scripts/bootstrap.ts';
+import { prepareRuntime, removeRuntimeStaging } from '../scripts/bootstrap.ts';
+
+test('runtime staging cleanup retries transient Windows filesystem locks', async()=>{
+  let calls=0;
+  await removeRuntimeStaging('fixture',async()=>{calls++;if(calls<3)throw Object.assign(new Error('busy'),{code:'EBUSY'});});
+  assert.equal(calls,3);
+  await assert.rejects(removeRuntimeStaging('fixture',async()=>{throw Object.assign(new Error('denied'),{code:'EACCES'});}),/denied/);
+});
 
 test('runtime is content-addressed, installed once and refuses symlinked inputs', async () => {
   const temp=await mkdtemp(path.join(await realpath(os.tmpdir()),'bc-bootstrap-'));
