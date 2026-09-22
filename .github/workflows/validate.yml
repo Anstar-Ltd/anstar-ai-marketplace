@@ -10,6 +10,42 @@ permissions:
   contents: read
 
 jobs:
+  bc-adapter:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: plugins/anstar-business-central
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci --ignore-scripts
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm audit --omit=dev
+      - name: Fresh npx runtime installation and cache reuse (no OAuth or BC)
+        run: npx --no-install tsx scripts/check-install.ts
+
+  codex-bc-smoke:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install pinned Codex validation CLI
+        run: npm install --prefix "$RUNNER_TEMP/codex-cli" --ignore-scripts @openai/codex@0.146.0
+      - name: Verify disabled BC plugin with network denied
+        run: python scripts/smoke_business_central.py --codex-bin "$RUNNER_TEMP/codex-cli/node_modules/.bin/codex"
+
   validate:
     runs-on: ubuntu-latest
     steps:

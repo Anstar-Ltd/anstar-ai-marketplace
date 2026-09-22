@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "anstar-business-central": {
+      "command": "npx",
+      "args": ["-y", "tsx@4.23.13", "./scripts/bootstrap.ts"],
+      "cwd": ".",
+      "enabled": true,
+      "enabled_tools": [
+        "bc_connect",
+        "bc_status",
+        "bc_actions_search",
+        "bc_actions_describe",
+        "bc_actions_invoke"
+      ],
+      "startup_timeout_sec": 420,
+      "tool_timeout_sec": 150,
+      "default_tools_approval_mode": "approve"
+    }
+  }
+}

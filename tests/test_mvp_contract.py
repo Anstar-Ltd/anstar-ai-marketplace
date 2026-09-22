@@ -176,6 +176,7 @@ class MvpContractTests(unittest.TestCase):
                 "github",
                 "plaud",
                 "talenthr",
+                "anstar-business-central",
             },
         )
         for entry in entries.values():
@@ -202,7 +203,8 @@ class MvpContractTests(unittest.TestCase):
         names = {entry["name"] for entry in marketplace["plugins"]}
         self.assertNotIn("teams", names)
         self.assertNotIn("sharepoint", names)
-        self.assertNotIn("businesscentral", " ".join(sorted(names)).lower())
+        bc = next(entry for entry in marketplace["plugins"] if entry["name"] == "anstar-business-central")
+        self.assertEqual(bc["policy"]["installation"], "AVAILABLE")
 
         ms365 = json.loads((MS365_PLUGIN / ".mcp.json").read_text())["mcpServers"]["ms365"]
         self.assertEqual(ms365["command"], "cmd")
