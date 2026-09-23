@@ -1,5 +1,11 @@
 # Business Central preview verification
 
+## Windows packaged-app ACL compatibility
+
+- A real Windows desktop profile exposed applied packaged-app capability access on `AppData\Local`. The adapter correctly failed closed while traversing that ancestor, so the MCP process exited before its initial handshake and Codex omitted all five tools.
+- Runtime and authentication state now use `~/.local/state/anstar-business-central` on every platform. This keeps the strict ancestor and owner-only descendant checks without trusting the broader `AppData` access entry.
+- On the affected Windows machine, the corrected production bootstrap installed and sealed the private runtime. The complete adapter suite passed with 41 passes, 3 expected skips and 0 failures; type-checking and marketplace validation passed. The clean-install probe then passed two exact launches, exposing five tools and reporting unauthenticated status without OAuth or Business Central calls.
+
 ## Production transition / first-use authentication — 0.3.0-preview.1
 
 - User reported the ChatGPT local sandbox connection works. This is user-reported desktop evidence, not an independently observed desktop trace.

@@ -80,7 +80,10 @@ async function main(): Promise<void> {
   if (Number(process.versions.node.split('.')[0]) < 22) throw new Error('Node.js 22 or newer is required.');
   process.umask(0o077);
   const source = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-  const root = process.platform === 'win32' ? path.join(os.homedir(), 'AppData', 'Local', 'Anstar', 'anstar-business-central') : path.join(os.homedir(), '.local', 'state', 'anstar-business-central');
+  // Use the same private profile-level state root on every platform. In
+  // particular, avoid Windows AppData ancestors carrying applied packaged-app
+  // capability ACEs, which the fail-closed ancestor guard must reject.
+  const root = path.join(os.homedir(), '.local', 'state', 'anstar-business-central');
   const runtime = await prepareRuntime(source, path.join(root, 'runtime'), async directory => {
     const execPath = process.env.npm_execpath;
     if (!execPath || !path.isAbsolute(execPath) || !['npm-cli.js', 'npx-cli.js'].includes(path.basename(execPath))) throw new Error('Launch through npx tsx so the trusted npm CLI can be located.');

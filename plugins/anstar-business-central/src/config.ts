@@ -24,11 +24,12 @@ export function encodeHeader(value: string): string {
   return /^[\x20-\x7e]+$/.test(value) ? value : `=?base64?${Buffer.from(value, 'utf8').toString('base64')}?=`;
 }
 export function privateBaseDirectory(): string {
-  // Deliberately not XDG/OneDrive/cloud-synced configuration or plugin cache.
+  // Keep Windows state directly below the profile rather than AppData. Some
+  // normal Windows installations grant packaged-app capability SIDs applied
+  // access on AppData; the fail-closed ancestor guard correctly rejects those
+  // parents because they could replace a private descendant.
   const home = os.homedir();
-  return process.platform === 'win32'
-    ? path.join(home, 'AppData', 'Local', 'Anstar', 'anstar-business-central')
-    : path.join(home, '.local', 'state', 'anstar-business-central');
+  return path.join(home, '.local', 'state', 'anstar-business-central');
 }
 export function authDirectory(connection: Connection): string {
   const identity = createHash('sha256').update(JSON.stringify(connection)).digest('hex');

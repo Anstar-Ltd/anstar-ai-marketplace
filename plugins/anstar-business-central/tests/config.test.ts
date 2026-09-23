@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFile } from 'node:fs/promises';
+import os from 'node:os';
+import path from 'node:path';
 import { validateConnection, encodeHeader, privateBaseDirectory } from '../src/config.ts';
 
 const actual = JSON.parse(await readFile(new URL('../connection.json', import.meta.url), 'utf8'));
@@ -14,5 +16,6 @@ test('connection pins approved Production and never accepts arbitrary endpoints'
   }
   assert.equal(encodeHeader('Fixture Ltd'),'Fixture Ltd');
   assert.equal(encodeHeader('Århus'),'=?base64?w4VyaHVz?=');
-  assert.ok(privateBaseDirectory().includes('anstar-business-central'));
+  assert.equal(privateBaseDirectory(), path.join(os.homedir(), '.local', 'state', 'anstar-business-central'));
+  assert.equal(privateBaseDirectory().includes(`${path.sep}AppData${path.sep}`), false);
 });

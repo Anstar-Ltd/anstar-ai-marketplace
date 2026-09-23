@@ -1,12 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, realpath, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { rm } from 'node:fs/promises';
 import { join } from 'node:path';
 import { createHash } from 'node:crypto';
 import { PublicClientApplication, type AccountInfo, type AuthenticationResult, type AuthorizationCodeRequest, type AuthorizationUrlRequest, type SilentFlowRequest } from '@azure/msal-node';
 import { createAuth, createAuthNetwork, AuthRequiredError, type AuthConfig, type MsalClient } from '../src/auth.ts';
 import { AuthStore } from '../src/auth-store.ts';
+import { privateTestDirectory } from './test-path.ts';
 
 const tenantId = '11111111-1111-1111-1111-111111111111';
 const account: AccountInfo = { homeAccountId: 'fixture-home', localAccountId: 'fixture-local', environment: 'login.microsoftonline.com', tenantId, username: 'fixture@example.invalid' };
@@ -21,7 +21,7 @@ function result(a = account): AuthenticationResult {
   return { authority: `https://login.microsoftonline.com/${tenantId}`, uniqueId: a.localAccountId, tenantId: a.tenantId, scopes: ['fixture'], account: a, idToken: 'fixture-id-token', idTokenClaims: { tid: a.tenantId }, accessToken: 'fixture-access-token', fromCache: false, expiresOn: new Date(Date.now() + 3600_000), tokenType: 'Bearer', correlationId: 'fixture' };
 }
 async function setup() {
-  const root = await mkdtemp(join(await realpath(tmpdir()), 'bc-auth-test-'));
+  const root = await privateTestDirectory('bc-auth-test-');
   const config: AuthConfig = { tenantId, clientId: '22222222-2222-2222-2222-222222222222', scope: 'https://mcp.businesscentral.dynamics.com/Financials.ReadWrite.All', redirectUri: 'http://localhost:33418/callback/GNmTSc-BOPT4', cacheDirectory: join(root, 'cache') };
   const calls: { url?: AuthorizationUrlRequest; code?: AuthorizationCodeRequest; silent?: SilentFlowRequest; exchanges: number } = { exchanges: 0 };
   let selectedResult = result();

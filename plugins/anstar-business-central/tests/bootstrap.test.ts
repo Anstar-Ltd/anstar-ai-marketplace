@@ -1,11 +1,18 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { mkdtemp, mkdir, readFile, writeFile, rm, symlink, chmod, realpath } from 'node:fs/promises';
+import { mkdir, readFile, writeFile, rm, symlink, chmod } from 'node:fs/promises';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import os from 'node:os';
 import path from 'node:path';
 import { prepareRuntime, removeRuntimeStaging } from '../scripts/bootstrap.ts';
+import { privateTestDirectory } from './test-path.ts';
+
+test('bootstrap keeps private runtime state out of Windows AppData ancestors (source contract)', async()=>{
+  const source=await readFile(new URL('../scripts/bootstrap.ts',import.meta.url),'utf8');
+  assert.match(source,/path\.join\(os\.homedir\(\), '\.local', 'state', 'anstar-business-central'\)/);
+  assert.doesNotMatch(source,/os\.homedir\(\), 'AppData'/);
+});
 
 test('runtime staging cleanup retries transient Windows filesystem locks', async()=>{
   let calls=0;
@@ -15,7 +22,7 @@ test('runtime staging cleanup retries transient Windows filesystem locks', async
 });
 
 test('runtime is content-addressed, installed once and refuses symlinked inputs', async () => {
-  const temp=await mkdtemp(path.join(await realpath(os.tmpdir()),'bc-bootstrap-'));
+  const temp=await privateTestDirectory('bc-bootstrap-');
   try {
     const source=path.join(temp,'source'), cache=path.join(temp,'cache');
     await mkdir(path.join(source,'src'),{recursive:true});
@@ -51,7 +58,7 @@ test('runtime is content-addressed, installed once and refuses symlinked inputs'
 });
 
 test('Windows runtime rejects another-user write ACL before executing cached code', {skip:process.platform!=='win32'}, async()=>{
-  const temp=await mkdtemp(path.join(await realpath(os.tmpdir()),'bc-runtime-acl-'));
+  const temp=await privateTestDirectory('bc-runtime-acl-');
   try {
     const source=path.join(temp,'source'),cache=path.join(temp,'cache');
     await mkdir(path.join(source,'src'),{recursive:true});

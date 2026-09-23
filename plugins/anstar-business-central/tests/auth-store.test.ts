@@ -2,12 +2,12 @@ import test from 'node:test';
 import fsPromises from 'node:fs/promises';
 import { syncBuiltinESMExports } from 'node:module';
 import assert from 'node:assert/strict';
-import { mkdtemp, realpath, rm, stat, mkdir, symlink, chmod, utimes, link, readdir, readFile } from 'node:fs/promises';
+import { rm, stat, mkdir, symlink, chmod, utimes, link, readdir, readFile } from 'node:fs/promises';
 import { execFile, spawn } from 'node:child_process';
 import { promisify } from 'node:util';
-import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { AuthStore, AuthStoreError } from '../src/auth-store.ts';
+import { privateTestDirectory } from './test-path.ts';
 
 const windows = process.platform === 'win32';
 const lockWaitMs = windows ? 60_000 : 5_000;
@@ -19,7 +19,7 @@ test('Windows guard includes volume-root ACL before descending (source contract)
 });
 
 async function fixture() {
-  const root = await mkdtemp(join(await realpath(tmpdir()), 'bc-auth-test-'));
+  const root = await privateTestDirectory('bc-auth-test-');
   return { root, directory: join(root, 'cache'), cleanup: () => rm(root, { recursive: true, force: true }) };
 }
 
@@ -218,13 +218,15 @@ test('Windows rejects junctions and aliased/nonlocal paths', { skip: !windows },
   } finally { await f.cleanup(); }
 });
 
-test('Windows rejects a foreign owner instead of silently resetting it', { skip: !windows }, async () => {
-  // windows-latest runs with the rights needed to assign the Administrators SID.
+test('Windows rejects a foreign owner instead of silently resetting it', { skip: !windows }, async t => {
+  // windows-latest runs with the rights needed to assign the Administrators
+  // SID. Ordinary desktop users may not hold that privilege.
   const f = await fixture();
   try {
     const store = new AuthStore(f.directory, 'fixture-context');
     await store.transaction(async state => { state.cache = 'generation-1'; });
-    await windowsAcl(join(f.directory, 'auth-cache.json'), 'wrong-owner');
+    try { await windowsAcl(join(f.directory, 'auth-cache.json'), 'wrong-owner'); }
+    catch { t.skip('Current Windows user cannot assign a foreign owner'); return; }
     await rejectsBeforeWork(store);
   } finally { await f.cleanup(); }
 });
