@@ -1,6 +1,6 @@
 {
   "name": "anstar-business-central",
-  "version": "0.3.0-preview.1",
+  "version": "0.3.0-preview.2",
   "description": "Read-only Business Central Production adapter with personal Microsoft sign-in.",
   "author": {
     "name": "Anstar",

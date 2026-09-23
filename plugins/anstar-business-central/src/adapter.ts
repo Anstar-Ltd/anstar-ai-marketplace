@@ -21,7 +21,7 @@ export const TOOLS: Tool[] = [
 ];
 
 export function createAdapterServer(handlers: AdapterHandlers): Server {
-  const server = new Server({ name: 'anstar-business-central', version: '0.3.0-preview.1' }, { capabilities: { tools: {} } });
+  const server = new Server({ name: 'anstar-business-central', version: '0.3.0-preview.2' }, { capabilities: { tools: {} } });
   server.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: TOOLS }));
   server.setRequestHandler(CallToolRequestSchema, async request => {
     try {

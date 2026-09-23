@@ -7,7 +7,11 @@ import { fileURLToPath } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 
-const base = await mkdtemp(path.join(await realpath(os.tmpdir()), 'bc-install-'));
+// Keep the isolated Windows home directly below the real profile: PowerShell
+// 5.1 ACL APIs still hit legacy path limits on a deep node_modules tree.
+const base = process.platform === 'win32'
+  ? await mkdtemp(path.join(os.homedir(), '.bci-'))
+  : await mkdtemp(path.join(await realpath(os.tmpdir()), 'bc-install-'));
 try {
   const source = fileURLToPath(new URL('..', import.meta.url));
   const clean = path.join(base, 'marketplace with spaces', 'plugin');

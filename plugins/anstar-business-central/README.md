@@ -1,6 +1,6 @@
 # Anstar Business Central
 
-**Available for installation.** Version `0.3.0-preview.1` starts personal Microsoft sign-in on first Business Central use and targets **Production / Anstar Ltd / Anstar AI Read Only**. Production sign-in, process-restart reuse, and one-row reads of Items, Item Ledger Entries and Sales Orders passed; no writes were attempted. Clean install/reuse passes on macOS, Windows and Linux. See [verification.md](verification.md).
+**Available for installation.** Version `0.3.0-preview.2` starts personal Microsoft sign-in on first Business Central use and targets **Production / Anstar Ltd / Anstar AI Read Only**. Production sign-in, process-restart reuse, and one-row reads of Items, Item Ledger Entries and Sales Orders passed; no writes were attempted. Clean install/reuse passes on macOS, Windows and Linux. See [verification.md](verification.md).
 
 ## What it provides
 
@@ -48,8 +48,7 @@ Codex/desktop → local Anstar adapter → Microsoft Entra / Microsoft BC MCP. B
 
 MSAL cache data, including refresh tokens, is stored **unencrypted at rest** in a permission-restricted, nonsynced per-user directory outside the plugin/repository:
 
-- macOS/Linux: `~/.local/state/anstar-business-central/auth/<connection-hash>/`
-- Windows: `%USERPROFILE%\AppData\Local\Anstar\anstar-business-central\auth\<connection-hash>\`
+- All platforms: `~/.local/state/anstar-business-central/auth/<connection-hash>/` (on Windows, `~` is the local user profile)
 
 Require disk encryption, protected backups and trusted same-user software. This is not an OS keychain or a boundary against same-user processes. Cache identity includes the client, tenant, target and scope. Full read/refresh/save transactions are locked across processes; crashed-owner locks are never stolen automatically. Login PKCE/state remain in memory and expire after ten minutes. Logs omit tokens, business rows and raw OAuth errors; do not enable SDK debug logging.
 
