@@ -170,7 +170,6 @@ class MvpContractTests(unittest.TestCase):
             {
                 "anstar-dataverse",
                 "anstar-sales",
-                "anstar-sales-crm",
                 "ms-365-mcp-server",
                 "clickup",
                 "github",
@@ -181,6 +180,7 @@ class MvpContractTests(unittest.TestCase):
         )
         for entry in entries.values():
             self.assertTrue((ROOT / entry["source"]["path"]).is_dir())
+        self.assertNotIn("anstar-sales-crm", entries)
         self.assertEqual(entries["github"]["category"], "Developer Tools")
 
         self.assertEqual(

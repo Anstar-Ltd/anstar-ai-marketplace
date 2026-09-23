@@ -70,7 +70,7 @@ Neither plugin should create, update, or delete CRM records.
 
 ## Existing Anstar Sales CRM users
 
-**Anstar Sales CRM** (`anstar-sales-crm`) is the legacy combined package. Do not remove it until the new Anstar Dataverse + Anstar Sales pair has been verified. Follow `docs/PLUGIN-MIGRATION.md` for the migration sequence.
+**Anstar Sales CRM** (`anstar-sales-crm`) is the legacy combined package and is no longer listed for installation. Removing its listing does not uninstall it from an existing app. Do not remove an existing installation until the new Anstar Dataverse + Anstar Sales pair has been verified. Follow `docs/PLUGIN-MIGRATION.md` for the migration sequence.
 
 ## Optional productivity plugins
 

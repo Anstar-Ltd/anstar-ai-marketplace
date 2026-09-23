@@ -4,7 +4,7 @@ This repository is Anstar's public marketplace for plugins, MCP connections, and
 
 ## Current product boundary
 
-- The current Anstar Sales CRM MVP is read-only and supports customer/account briefs, pipeline review, and bounded CRM research.
+- Anstar Dataverse provides the read-only CRM connection and bounded research. Anstar Sales provides read-only customer/account briefs, pipeline review, and seller workflows. The legacy combined Anstar Sales CRM package is unlisted.
 - The local tool policy exposes only `read_query`, `search`, `search_data`, and `describe`.
 - Local tool hiding is not a server-side authorization boundary. Preserve genuinely read-only Dataverse permissions and state this limitation honestly.
 - Do not create, update, or delete CRM records as a verification step.
