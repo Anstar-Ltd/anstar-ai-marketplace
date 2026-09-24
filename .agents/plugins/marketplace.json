@@ -41,18 +41,6 @@
       "category": "Productivity"
     },
     {
-      "name": "anstar-sales-crm",
-      "source": {
-        "source": "local",
-        "path": "./plugins/anstar-sales-crm"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Productivity"
-    },
-    {
       "name": "ms-365-mcp-server",
       "source": {
         "source": "local",

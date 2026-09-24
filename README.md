@@ -32,9 +32,9 @@ Role-first seller workflows for:
 
 Anstar Sales is a deliberately small adaptation of OpenAI’s MIT-licensed Sales role plugin. It resolves the abstract `CRM` source through the installed **Anstar Dataverse** plugin and does not duplicate OAuth or MCP configuration. See `THIRD_PARTY_NOTICES.md` for attribution.
 
-### Legacy migration package
+### Existing legacy installations
 
-**Anstar Sales CRM** (`anstar-sales-crm`) is the previous combined package. It remains available temporarily for migration but is not the recommended path for new installs. See `docs/PLUGIN-MIGRATION.md`.
+**Anstar Sales CRM** (`anstar-sales-crm`) was the previous combined package. It is no longer listed in the marketplace. Existing users can follow `docs/PLUGIN-MIGRATION.md` to move to the two-plugin setup.
 
 ### Shared productivity plugins
 

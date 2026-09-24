@@ -4,7 +4,7 @@ The marketplace now separates the reusable source from the seller workflows:
 
 1. **Anstar Dataverse** (`anstar-dataverse`) owns Microsoft OAuth, the official Dataverse MCP connection, generic bounded research, and the canonical CRM read-safety contract.
 2. **Anstar Sales** (`anstar-sales`) owns the role-first Sales router and focused seller workflows.
-3. **Anstar Sales CRM** (`anstar-sales-crm`) is the legacy combined package retained temporarily for migration.
+3. **Anstar Sales CRM** (`anstar-sales-crm`) is the legacy combined package. It is no longer listed in the marketplace, though its source remains in this repository for existing installations and migration reference.
 
 ## Recommended migration sequence
 
@@ -20,7 +20,7 @@ The marketplace now separates the reusable source from the seller workflows:
 
 A clean isolated test installed the legacy package and the new Dataverse package together without a server-key error; one effective four-tool `anstar-dataverse` server remained. However, both packages loaded skills named `index` and `crm-read-safety`, making activation ambiguous.
 
-Coexistence is technically tolerated but is not recommended for normal use. The public marketplace keeps the legacy package available during the first migration release, but new users should install **Anstar Dataverse** followed by **Anstar Sales**. Existing users should verify the new pair, then disable or remove `anstar-sales-crm`.
+Coexistence is technically tolerated but is not recommended for normal use. New users should install **Anstar Dataverse** followed by **Anstar Sales**. Existing users should verify the new pair, then disable or remove `anstar-sales-crm`. Removing the marketplace listing does not uninstall an existing installation.
 
 ## ChatGPT web
 

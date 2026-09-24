@@ -2,7 +2,7 @@
 
 If the click-only marketplace flow is unavailable or unreliable on a user's app version, provide a setup plugin/skill that lets the user ask:
 
-> “Set up Anstar Sales CRM for me.”
+> “Set up Anstar Dataverse and Anstar Sales for me.”
 
 ## Intended behaviour
 
@@ -11,8 +11,8 @@ The assistant should:
 1. Check the ChatGPT/Codex app version and plugin support.
 2. Check whether the `anstar-ai` marketplace is already registered.
 3. Add or refresh the public marketplace through the app/host integration.
-4. Install and enable `anstar-sales-crm`.
-5. Verify that the bundled MCP policy enables only `read_query`, `search`, `search_data`, and `describe`.
+4. Install and enable `anstar-dataverse`, then `anstar-sales`.
+5. Verify that the Dataverse MCP policy enables only `read_query`, `search`, `search_data`, and `describe`.
 6. Start the native Microsoft OAuth flow and stop while the user completes sign-in.
 7. Verify authentication without printing tokens.
 8. Run a harmless bounded CRM read.
@@ -24,7 +24,7 @@ The assistant should:
 - Ask only questions that change the setup path.
 - Never ask for a Microsoft password, access token, client secret, device code, or recovery code in chat.
 - Use native masked/browser authentication.
-- Show progress as short stages: Marketplace → Plugin → Microsoft sign-in → Read-only check → Test.
+- Show progress as short stages: Marketplace → Dataverse and Sales → Microsoft sign-in → Read-only check → Test.
 - Stop on permission boundaries instead of seeking elevation.
 
 ## Implementation options
