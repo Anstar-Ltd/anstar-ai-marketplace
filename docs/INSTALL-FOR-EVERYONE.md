@@ -92,11 +92,12 @@ Refresh **Anstar AI**, install **Anstar Business Central**, then send a Business
 
 ### Connect Softeria Microsoft 365
 
-1. Install **Softeria Microsoft 365** from **Anstar AI**.
-2. Start a new chat and select **Connect my Microsoft 365 account using device-code sign-in**, or ask Codex to do this. Installing the plugin alone does not open Microsoft sign-in because Softeria runs as a local MCP; its device-code authentication starts on first use.
-3. Codex should call Softeria's `login` tool. Use the Microsoft URL and one-time code it shows, then complete the Microsoft page yourself using your normal Anstar account.
-4. Tell Codex when the Microsoft page is complete. Codex should call `verify-login` and must not describe the connection as ready until verification succeeds.
-5. Test one Teams item or SharePoint file that you already know you can access.
+1. Confirm Node.js 20 or later is installed on Windows. A standard system or user installation is sufficient; the bundled launcher finds Node.js even when Codex did not inherit `npx` on `PATH`.
+2. Install **Softeria Microsoft 365** from **Anstar AI**.
+3. Start a new chat and select **Connect my Microsoft 365 account using device-code sign-in**, or ask Codex to do this. Installing the plugin alone does not open Microsoft sign-in because Softeria runs as a local MCP; its device-code authentication starts on first use.
+4. Codex should call Softeria's `login` tool. Use the Microsoft URL and one-time code it shows, then complete the Microsoft page yourself using your normal Anstar account.
+5. Tell Codex when the Microsoft page is complete. Codex should call `verify-login` and must not describe the connection as ready until verification succeeds.
+6. Test one Teams item or SharePoint file that you already know you can access.
 
 The plugin includes a `microsoft-365-first` skill. In a new task, Codex should check Softeria before using browser or desktop automation for Outlook, Teams, SharePoint, OneDrive and other Microsoft 365 requests. If Softeria cannot complete the request, Codex should state whether the limitation is availability, authentication, permission or missing capability before suggesting a fallback.
 
@@ -108,6 +109,8 @@ The plugin runs Softeria in organisation mode using delegated Microsoft authenti
 - write-capable tools retain Codex approval handling and cannot exceed the employee's Microsoft permissions.
 
 Some delegated Microsoft Graph scopes may require Anstar tenant administrator consent. That consent lets the Softeria client request the approved delegated scope; it does not give an employee access to content that their own account cannot access.
+
+The marketplace currently excludes Softeria's ad hoc call-transcript tools added in `0.151.0`, preserving the delegated permission set used by the previous plugin release. Do not enable those tools or request `CallTranscripts.Read.All` until Anstar has reviewed and approved that separate permission expansion.
 
 ### Connect ClickUp
 
@@ -172,7 +175,7 @@ Before broad deployment, IT should complete one clean installation using a secon
 - **Marketplace already added:** select the existing **Anstar AI** source instead of adding it again.
 - **Anstar Sales cannot find CRM:** confirm **Anstar Dataverse** is installed, enabled, and authenticated.
 - **A productivity plugin cannot connect:** confirm the employee completed that service's own sign-in and is entitled to use the account.
-- **Teams or SharePoint tools are missing:** refresh **Anstar AI**, confirm Softeria is the marketplace version that runs in organisation mode, then restart the app.
+- **Teams or SharePoint tools are missing:** refresh **Anstar AI**, confirm Softeria is the marketplace version that runs in organisation mode, then restart the app. The current launcher resolves standard Node.js installations without relying on Codex's inherited `PATH`; if it reports that Node.js is absent, install the current Node.js LTS release before reopening Codex.
 - **Microsoft requests administrator approval:** stop and send the exact consent request to IT. Do not switch to an administrator account.
 - **A SharePoint result looks over-broad:** stop using the plugin and report the site, signed-in account and non-sensitive reproduction steps to IT. Do not open or share additional files.
 - **Microsoft shows `AADSTS50011` or says the localhost redirect URI is invalid:** stop the browser-callback attempt and ask Codex to restart Softeria's device-code sign-in through its `login` tool. Do not try to cure the redirect error by signing in as an administrator. If the employee account separately requires administrator approval, Anstar IT should grant tenant consent, then the employee should repeat device-code sign-in with their own account.

@@ -40,7 +40,7 @@ Anstar Sales is a deliberately small adaptation of OpenAI’s MIT-licensed Sales
 
 The marketplace packages Anstar's portable MCP connections as installable plugins:
 
-- **Softeria Microsoft 365** — delegated work-account access through Softeria's MCP server in organisation mode, pinned to version `0.148.2`; each employee signs in with their own Microsoft account and retains the same Microsoft 365 access boundary.
+- **Softeria Microsoft 365** — delegated work-account access through Softeria's MCP server in organisation mode, pinned to version `0.151.0`; each employee signs in with their own Microsoft account and retains the same Microsoft 365 access boundary.
 - **ClickUp** — ClickUp's official Codex app binding and hosted MCP endpoint with per-user authentication and Codex approval handling for task updates.
 - **GitHub** — GitHub's official hosted MCP endpoint for repository reads and approval-gated writes, including issues, file changes and pull requests.
 - **Plaud** — Plaud recordings, transcripts, and notes through the npm MCP package pinned to version `0.3.10`.
@@ -60,7 +60,7 @@ The Softeria plugin uses interactive delegated authentication. It does not conta
 
 Organisation mode preserves Softeria's current read and write capabilities. Codex still applies approval handling to write tools, and Microsoft 365 permissions remain the final authorization boundary.
 
-The bundled `microsoft-365-first` skill tells Codex to check Softeria before browser or desktop automation for Outlook, Teams, SharePoint, OneDrive and other Microsoft 365 work. On a new employee's first use, it starts Softeria's device-code login, presents the Microsoft URL and one-time code, then verifies the connection before continuing. The plugin deliberately omits Softeria's `--auth-browser` option because its localhost callback can fail when that redirect URI is not registered. It also requires Codex to explain any connection, authentication, permission or capability limitation before using a fallback.
+The bundled `microsoft-365-first` skill tells Codex to check Softeria before browser or desktop automation for Outlook, Teams, SharePoint, OneDrive and other Microsoft 365 work. On a new employee's first use, it starts Softeria's device-code login, presents the Microsoft URL and one-time code, then verifies the connection before continuing. The plugin deliberately omits Softeria's `--auth-browser` option because its localhost callback can fail when that redirect URI is not registered. Its Windows launcher finds standard system, user, npm, NVM and Volta Node.js installations even when Codex did not inherit `npx` on `PATH`. The `0.151.0` upgrade excludes the two new ad hoc call-transcript tools so the existing delegated Microsoft permission set is preserved; `CallTranscripts.Read.All` must be reviewed separately before those tools are enabled. The skill also requires Codex to explain any connection, authentication, permission or capability limitation before using a fallback.
 
 The bundled `github-first` skill applies the same direct-integration rule to GitHub. Codex should use GitHub MCP before a browser or GitHub CLI, keep writes within the user's requested scope and report any connection, authentication or capability limitation before suggesting a fallback.
 
@@ -71,7 +71,8 @@ The bundled `github-first` skill applies the same direct-integration rule to Git
 3. Use source `https://github.com/Anstar-Ltd/anstar-ai-marketplace.git` and Git ref `main`.
 4. Install **Anstar Dataverse** and complete normal-user Microsoft sign-in.
 5. Install **Anstar Sales**.
-6. Install **Softeria Microsoft 365**, start a new chat and select **Connect my Microsoft 365 account using device-code sign-in**. Installing this local MCP does not itself open Microsoft sign-in; authentication starts on first use through Softeria's `login` tool.
+6. Confirm Node.js 20 or later is installed on Windows. The normal Node.js LTS installer is sufficient; the plugin launcher does not require `npx` to be visible on Codex's inherited `PATH`.
+7. Install **Softeria Microsoft 365**, start a new chat and select **Connect my Microsoft 365 account using device-code sign-in**. Installing this local MCP does not itself open Microsoft sign-in; authentication starts on first use through Softeria's `login` tool.
 
 See `docs/INSTALL-FOR-EVERYONE.md` for the click-by-click guide.
 

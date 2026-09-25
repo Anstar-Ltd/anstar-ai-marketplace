@@ -209,14 +209,21 @@ class MvpContractTests(unittest.TestCase):
         ms365 = json.loads((MS365_PLUGIN / ".mcp.json").read_text())["mcpServers"]["ms365"]
         self.assertEqual(ms365["command"], "cmd")
         self.assertEqual(
-            ms365["args"][:4],
-            ["/c", "npx", "-y", "@softeria/ms-365-mcp-server@0.148.2"],
+            ms365["args"],
+            ["/d", "/s", "/c", "scripts\\start-ms365.cmd"],
         )
-        self.assertIn("--org-mode", ms365["args"])
-        self.assertNotIn("--read-only", ms365["args"])
-        self.assertNotIn("--auth-browser", ms365["args"])
-        self.assertNotIn("--login", ms365["args"])
-        self.assertNotIn("env", ms365)
+        self.assertEqual(ms365["cwd"], ".")
+        self.assertEqual(
+            ms365["env"],
+            {"ENABLED_TOOLS": "^(?!.*adhoc-call-transcript).*$"},
+        )
+
+        ms365_launcher = (MS365_PLUGIN / "scripts/start-ms365.cmd").read_text().lower()
+        self.assertIn("@softeria/ms-365-mcp-server@0.151.0", ms365_launcher)
+        self.assertIn("--org-mode", ms365_launcher)
+        self.assertNotIn("--read-only", ms365_launcher)
+        self.assertNotIn("--auth-browser", ms365_launcher)
+        self.assertNotIn("--login", ms365_launcher)
 
         clickup = json.loads((CLICKUP_PLUGIN / ".mcp.json").read_text())["mcpServers"]["clickup"]
         self.assertEqual(clickup["type"], "http")
