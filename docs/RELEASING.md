@@ -26,6 +26,10 @@ codex plugin marketplace upgrade anstar-ai
 
 ClickUp and GitHub update their hosted services independently. ClickUp also depends on its official Codex app binding in `.app.json`. Changes to an endpoint URL, app identifier, OAuth behaviour, tool surface or authorization boundary still require a reviewed marketplace release and an employee-account smoke test.
 
+## Dataverse local adapter
+
+Keep the Dataverse package, lockfile, bootstrap and connection metadata together. Run `npm ci --ignore-scripts`, `npm run typecheck`, and `npm test` in `plugins/anstar-dataverse`, then the marketplace validator and Python contract suite. CI also checks a fresh dependency install and cache reuse on Windows, macOS and Linux. Check the first-use Microsoft link and code with a normal employee account, confirm `dv_status`, and perform one bounded metadata read through `dv_tools` and `dv_call`. Do not use a CRM mutation as a smoke test. The plugin now authenticates on first use; installing it alone does not show a sign-in page.
+
 ## Microsoft 365 access invariant
 
 The normal employee Softeria plugin must use delegated interactive authentication. Do not add a client secret, application-only token, shared service identity or administrator credential. Organisation mode may expose Teams and SharePoint tools, but Microsoft Graph must continue to evaluate every request against the signed-in employee's own permissions.

@@ -9,11 +9,11 @@ Public marketplace for Anstar plugins, MCP connections, and skills used by ChatG
 Reusable read-only source plugin for:
 
 - Microsoft’s official Dataverse MCP endpoint;
-- per-user Microsoft OAuth;
+- per-user Microsoft device-code sign-in on first use;
 - schema-first bounded Dataverse research;
 - shared CRM evidence, privacy, blank-handling, and read-safety rules.
 
-Its local Codex policy enables only:
+Its local adapter exposes `dv_status`, `dv_connect`, `dv_tools` and `dv_call`. The dispatcher permits only these upstream reads:
 
 - `read_query`
 - `search`
@@ -69,7 +69,7 @@ The bundled `github-first` skill applies the same direct-integration rule to Git
 1. Open **Plugins Directory** in Work or Codex mode.
 2. Choose **Add marketplace**.
 3. Use source `https://github.com/Anstar-Ltd/anstar-ai-marketplace.git` and Git ref `main`.
-4. Install **Anstar Dataverse** and complete normal-user Microsoft sign-in.
+4. Install **Anstar Dataverse**. On the first Dataverse request, use the Microsoft link and code shown in chat to sign in with your normal Anstar account.
 5. Install **Anstar Sales**.
 6. Install **Softeria Microsoft 365**, start a new chat and select **Connect my Microsoft 365 account using device-code sign-in**. Installing this local MCP does not itself open Microsoft sign-in; authentication starts on first use through Softeria's `login` tool.
 
@@ -110,9 +110,9 @@ codex plugin list
 codex mcp get anstar-dataverse --json
 ```
 
-A bounded live Dataverse read was previously verified through Codex with the normal delegated Anstar identity. Do not verify by creating or updating a CRM record.
+A bounded live Dataverse metadata read and first-use device-code sign-in were verified through the local adapter with a normal delegated Anstar identity. Do not verify by creating or updating a CRM record.
 
-> **MVP limitation:** the upstream Microsoft Dataverse server advertises additional tools. The packaged local policy enables only the four approved reads, while the signed-in user’s Dataverse roles remain the actual data-access boundary.
+> **MVP limitation:** the upstream Microsoft Dataverse server advertises additional tools. The packaged adapter dispatches only the four approved reads, while the signed-in user’s Dataverse roles remain the actual data-access boundary.
 
 ## ChatGPT web
 

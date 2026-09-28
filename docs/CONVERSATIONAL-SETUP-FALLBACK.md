@@ -12,8 +12,8 @@ The assistant should:
 2. Check whether the `anstar-ai` marketplace is already registered.
 3. Add or refresh the public marketplace through the app/host integration.
 4. Install and enable `anstar-dataverse`, then `anstar-sales`.
-5. Verify that the Dataverse MCP policy enables only `read_query`, `search`, `search_data`, and `describe`.
-6. Start the native Microsoft OAuth flow and stop while the user completes sign-in.
+5. Verify that the adapter exposes only `dv_status`, `dv_connect`, `dv_tools`, and `dv_call`, with `dv_call` restricted to `read_query`, `search`, `search_data`, and `describe`.
+6. Start device-code sign-in on first Dataverse use, show the Microsoft link and one-time code in chat, and wait while the user completes sign-in.
 7. Verify authentication without printing tokens.
 8. Run a harmless bounded CRM read.
 9. Explain any blocker in plain language and identify whether the user, IT, or an Entra administrator needs to act.
@@ -22,8 +22,7 @@ The assistant should:
 ## User interaction rules
 
 - Ask only questions that change the setup path.
-- Never ask for a Microsoft password, access token, client secret, device code, or recovery code in chat.
-- Use native masked/browser authentication.
+- Never ask the user to disclose a Microsoft password, access token, client secret, device code, or recovery code in chat. Show the code returned by the adapter so they can enter it directly on Microsoft's page.
 - Show progress as short stages: Marketplace → Dataverse and Sales → Microsoft sign-in → Read-only check → Test.
 - Stop on permission boundaries instead of seeking elevation.
 

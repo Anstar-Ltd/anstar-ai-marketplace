@@ -1,4 +1,6 @@
-# Entra callback configuration for Codex MVP login
+# Historical Entra callback configuration for Codex MVP login
+
+This records the earlier direct HTTP OAuth pilot. The current Anstar Dataverse plugin uses MSAL device-code sign-in and does not use a localhost callback. See `plugins/anstar-dataverse/README.md` for the current installation and first-use flow.
 
 ## Status: completed and verified
 

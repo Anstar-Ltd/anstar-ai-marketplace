@@ -34,9 +34,10 @@ The source is public, so the app should not request a GitHub login.
 1. In the Plugins Directory, choose the **Anstar AI** marketplace.
 2. Open **Anstar Dataverse**.
 3. Click **Install** or **Enable**.
-4. Complete Microsoft sign-in when prompted using your normal Anstar account.
+4. Start a new chat and ask a Dataverse question. Codex should call `dv_tools` or `dv_call` and show a Microsoft sign-in link and one-time code in chat on this first request.
+5. Open the link, enter the code and sign in with your normal Anstar account. Tell Codex when finished. Codex should confirm `dv_status` and make one small read.
 
-Anstar Dataverse provides the reusable official Microsoft Dataverse MCP connection, bounded research, and the canonical CRM read-safety policy.
+Installing the plugin alone does not open Microsoft sign-in. Node.js 22+ with npm/npx is required; pinned dependencies install on first launch. Anstar Dataverse provides the reusable official Microsoft Dataverse MCP connection, bounded research, and the canonical CRM read-safety policy.
 
 ## Install Anstar Sales second
 
@@ -59,7 +60,7 @@ Ask one of these:
 
 ## Read-only MVP boundary
 
-Anstar Dataverse packages a local tool policy for:
+Anstar Dataverse exposes `dv_status`, `dv_connect`, `dv_tools` and `dv_call`. `dv_call` permits only these upstream reads:
 
 - `read_query`
 - `search`
@@ -160,7 +161,7 @@ Softeria and Plaud are pinned to reviewed package versions. An update is deliver
 
 Before broad deployment, IT should complete one clean installation using a second normal employee account and verify:
 
-- Anstar Dataverse returns only records permitted to that employee;
+- Anstar Dataverse signs in with the employee's own account and returns only records permitted to that employee;
 - Softeria can access an expected Teams item and SharePoint file but cannot access an administrator-selected negative test location;
 - GitHub OAuth completes and the plugin cannot make repository changes;
 - ClickUp and Plaud expose only workspaces or recordings available to the signed-in account;
