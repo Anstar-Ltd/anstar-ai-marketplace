@@ -1,4 +1,6 @@
 import json
+import os
+import subprocess
 import unittest
 from pathlib import Path
 
@@ -15,15 +17,31 @@ class EmployeeRolloutTests(unittest.TestCase):
         server = self.load_server("ms-365-mcp-server", "ms365")
         self.assertEqual(server["command"], "cmd")
         self.assertEqual(
-            server["args"][:4],
-            ["/c", "npx", "-y", "@softeria/ms-365-mcp-server@0.148.2"],
+            server["args"],
+            ["/d", "/s", "/c", "scripts\\start-ms365.cmd"],
         )
-        self.assertIn("--org-mode", server["args"])
-        self.assertNotIn("--read-only", server["args"])
-        self.assertNotIn("--auth-browser", server["args"])
-        self.assertNotIn("--login", server["args"])
-        self.assertNotIn("env", server)
+        self.assertEqual(server["cwd"], ".")
+        self.assertEqual(
+            server["env"],
+            {"ENABLED_TOOLS": "^(?!.*adhoc-call-transcript).*$"},
+        )
         self.assertNotIn("env_vars", server)
+
+        launcher = ROOT / "plugins/ms-365-mcp-server/scripts/start-ms365.cmd"
+        launcher_text = launcher.read_text(encoding="utf-8").lower()
+        self.assertIn("@softeria/ms-365-mcp-server@0.151.0", launcher_text)
+        self.assertIn("--org-mode", launcher_text)
+        self.assertNotIn("--read-only", launcher_text)
+        self.assertNotIn("--auth-browser", launcher_text)
+        self.assertNotIn("--login", launcher_text)
+        for location in (
+            "%programfiles%\\nodejs\\npx.cmd",
+            "%localappdata%\\programs\\nodejs\\npx.cmd",
+            "%appdata%\\npm\\npx.cmd",
+            "%nvm_symlink%\\npx.cmd",
+            "%volta_home%\\bin\\npx.cmd",
+        ):
+            self.assertIn(location, launcher_text)
 
         manifest = json.loads(
             (ROOT / "plugins/ms-365-mcp-server/.codex-plugin/plugin.json").read_text(
@@ -46,6 +64,7 @@ class EmployeeRolloutTests(unittest.TestCase):
             "before opening a browser",
             "mcp__ms365__verify_login",
             "mcp__ms365__login",
+            "do not edit an installed plugin cache",
             "device_code_required",
             "do not replace this with browser-callback authentication",
             "aadsts50011",
@@ -57,6 +76,39 @@ class EmployeeRolloutTests(unittest.TestCase):
             "availability, authentication, permission or capability limitation",
         ):
             self.assertIn(wording, skill)
+
+    @unittest.skipUnless(os.name == "nt", "Windows launcher integration test")
+    def test_softeria_launcher_finds_node_when_npx_is_missing_from_path(self):
+        plugin = ROOT / "plugins/ms-365-mcp-server"
+        fixture_root = ROOT / "tests/fixtures/softeria-user-node"
+
+        env = os.environ.copy()
+        env["LOCALAPPDATA"] = str(fixture_root)
+        env["APPDATA"] = str(fixture_root / "roaming")
+        env.pop("NVM_SYMLINK", None)
+        env.pop("VOLTA_HOME", None)
+        env["PATH"] = str(Path(env.get("SystemRoot", r"C:\Windows")) / "System32")
+
+        result = subprocess.run(
+            [
+                env.get("COMSPEC", r"C:\Windows\System32\cmd.exe"),
+                "/d",
+                "/s",
+                "/c",
+                r"scripts\start-ms365.cmd",
+            ],
+            cwd=plugin,
+            env=env,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(
+            result.stdout.strip(),
+            '-y "@softeria/ms-365-mcp-server@0.151.0" --org-mode',
+        )
 
     def test_plaud_uses_portable_pinned_package(self):
         server = self.load_server("plaud", "plaud")
@@ -120,6 +172,8 @@ class EmployeeRolloutTests(unittest.TestCase):
             "second normal employee account",
             "aadsts50011",
             "device-code sign-in",
+            "bundled launcher finds node.js",
+            "calltranscripts.read.all",
         ):
             self.assertIn(wording, guide)
 
