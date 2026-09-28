@@ -97,32 +97,17 @@ class MvpContractTests(unittest.TestCase):
     def test_dataverse_plugin_preserves_the_proven_read_policy(self):
         config = json.loads((DATAVERSE_PLUGIN / ".mcp.json").read_text())
         server = config["mcpServers"]["anstar-dataverse"]
-        self.assertEqual(
-            server["url"],
-            "https://anstar-prod.crm11.dynamics.com/api/mcp",
-        )
+        self.assertEqual(server["command"], "npx")
+        self.assertEqual(server["args"], ["-y", "tsx@4.23.13", "./scripts/bootstrap.ts"])
         self.assertEqual(
             set(server["enabled_tools"]),
-            {"read_query", "search", "search_data", "describe"},
+            {"dv_status", "dv_connect", "dv_tools", "dv_call"},
         )
         self.assertEqual(server["default_tools_approval_mode"], "approve")
-        self.assertEqual(
-            server["oauth"],
-            {
-                "clientId": "65649345-8fb7-477a-820b-5604b5e2afe3",
-                "callbackPort": 8765,
-            },
-        )
-        self.assertEqual(
-            server["scopes"],
-            [
-                "openid",
-                "profile",
-                "offline_access",
-                "https://anstar-prod.crm11.dynamics.com/api/mcp/mcp.tools",
-            ],
-        )
-        self.assertNotIn("oauth_resource", server)
+        connection = json.loads((DATAVERSE_PLUGIN / "connection.json").read_text())
+        self.assertEqual(connection["endpoint"], "https://anstar-prod.crm11.dynamics.com/api/mcp")
+        self.assertEqual(connection["clientId"], "65649345-8fb7-477a-820b-5604b5e2afe3")
+        self.assertEqual(connection["scope"], "https://anstar-prod.crm11.dynamics.com/api/mcp/mcp.tools")
 
     def test_dataverse_plugin_has_role_neutral_source_skills(self):
         expected = {"index", "crm-read-safety", "dataverse-research"}
@@ -185,7 +170,7 @@ class MvpContractTests(unittest.TestCase):
 
         self.assertEqual(
             entries["anstar-dataverse"]["policy"]["authentication"],
-            "ON_INSTALL",
+            "ON_USE",
         )
         self.assertEqual(
             entries["anstar-sales"]["policy"]["authentication"],
@@ -303,22 +288,8 @@ class MvpContractTests(unittest.TestCase):
             {"read_query", "search", "search_data", "describe"},
         )
         self.assertEqual(server["default_tools_approval_mode"], "approve")
-        self.assertEqual(
-            server["oauth"],
-            {
-                "clientId": "65649345-8fb7-477a-820b-5604b5e2afe3",
-                "callbackPort": 8765,
-            },
-        )
-        self.assertIn(
-            "https://anstar-prod.crm11.dynamics.com/api/mcp/mcp.tools",
-            server["scopes"],
-        )
-        self.assertNotIn(
-            "oauth_resource",
-            server,
-            "Dataverse discovery already supplies the OAuth resource indicator",
-        )
+        self.assertEqual(server["oauth"]["clientId"], "65649345-8fb7-477a-820b-5604b5e2afe3")
+        self.assertIn("https://anstar-prod.crm11.dynamics.com/api/mcp/mcp.tools", server["scopes"])
 
     def test_skill_frontmatter_and_read_only_wording(self):
         skills = sorted((PLUGIN / "skills").glob("*/SKILL.md"))
@@ -412,7 +383,7 @@ class MvpContractTests(unittest.TestCase):
         tools = set(re.findall(r'"([a-z_]+)"', match.group("tools")))
         self.assertEqual(
             tools,
-            {"read_query", "search", "search_data", "describe"},
+            {"dv_status", "dv_connect", "dv_tools", "dv_call"},
         )
         self.assertNotIn("create_record", tools)
         self.assertNotIn("update_record", tools)

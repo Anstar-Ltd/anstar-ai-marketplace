@@ -1,6 +1,6 @@
 {
   "name": "anstar-dataverse",
-  "version": "0.1.0-mvp.1",
+  "version": "0.2.0-preview.1",
   "description": "Bounded read-only access to Anstar Dataverse.",
   "author": {
     "name": "Anstar",
@@ -14,13 +14,13 @@
   "interface": {
     "displayName": "Anstar Dataverse",
     "shortDescription": "Read approved Dataverse evidence",
-    "longDescription": "Inspect schemas and answer bounded questions from Dataverse data available to the signed-in Anstar user without changing records.",
+    "longDescription": "Sign in with your own Anstar Microsoft account on first use, then inspect schemas and answer bounded Dataverse questions without changing records.",
     "developerName": "Anstar",
     "category": "Productivity",
     "capabilities": ["Read"],
     "websiteURL": "https://anstar.com",
     "defaultPrompt": [
-      "What can Anstar Dataverse help me research?",
+      "Connect my Anstar Dataverse account and show the Microsoft sign-in link and code.",
       "Describe the available schema for this business question.",
       "Answer this bounded Dataverse question using explicit evidence."
     ],

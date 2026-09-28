@@ -7,7 +7,7 @@ description: Keep Anstar Dataverse access bounded and read-only.
 
 Apply this foundational read-only policy whenever an Anstar workflow uses the installed `anstar-dataverse` MCP.
 
-- Allowed tools are `search`, `search_data`, `describe`, and `read_query` only.
+- The local adapter exposes only `dv_status`, `dv_connect`, `dv_tools`, and `dv_call`. Use `dv_call` only with upstream `search`, `search_data`, `describe`, and `read_query`.
 - Never call create, update, delete, mutation, upload, send, scheduling, or Dataverse skill-management tools.
 - Client tool filtering is not server-side authorization. Preserve the signed-in user's Dataverse roles, row access, and field security.
 - Inspect schema when field names, lookups, choices, or relationships are uncertain.

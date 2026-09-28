@@ -4,16 +4,16 @@
 [plugins."anstar-dataverse@anstar-ai".mcp_servers.anstar-dataverse]
 enabled = true
 default_tools_approval_mode = "prompt"
-enabled_tools = ["read_query", "search", "search_data", "describe"]
+enabled_tools = ["dv_status", "dv_connect", "dv_tools", "dv_call"]
 
-[plugins."anstar-dataverse@anstar-ai".mcp_servers.anstar-dataverse.tools.read_query]
+[plugins."anstar-dataverse@anstar-ai".mcp_servers.anstar-dataverse.tools.dv_status]
 approval_mode = "approve"
 
-[plugins."anstar-dataverse@anstar-ai".mcp_servers.anstar-dataverse.tools.search]
+[plugins."anstar-dataverse@anstar-ai".mcp_servers.anstar-dataverse.tools.dv_connect]
 approval_mode = "approve"
 
-[plugins."anstar-dataverse@anstar-ai".mcp_servers.anstar-dataverse.tools.search_data]
+[plugins."anstar-dataverse@anstar-ai".mcp_servers.anstar-dataverse.tools.dv_tools]
 approval_mode = "approve"
 
-[plugins."anstar-dataverse@anstar-ai".mcp_servers.anstar-dataverse.tools.describe]
+[plugins."anstar-dataverse@anstar-ai".mcp_servers.anstar-dataverse.tools.dv_call]
 approval_mode = "approve"
